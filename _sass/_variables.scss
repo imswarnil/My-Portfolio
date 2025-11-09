@@ -1,0 +1,272 @@
+// ======================================================================
+// _variables.scss — pure SCSS tokens + maps + helpers + mixins
+// ======================================================================
+
+// ------------------------------
+// Breakpoints (px)
+// ------------------------------
+$bp-sm: 540px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+
+// ------------------------------
+// Z-index scale
+// ------------------------------
+$z-base: 1;
+$z-header: 1000;
+$z-overlay: 1100;
+$z-modal: 1200;
+$z-toast: 1300;
+
+// ------------------------------
+// Spacing (rem)
+// ------------------------------
+$sp-1: 0.125rem;
+$sp-2: 0.25rem;
+$sp-3: 0.375rem;
+$sp-4: 0.5rem;
+$sp-5: 0.625rem;
+$sp-6: 0.75rem;
+$sp-7: 1rem;
+$sp-8: 1.25rem;
+$sp-9: 1.375rem;
+$sp-10: 1.5rem;
+$sp-12: 2rem;
+$sp-14: 2.25rem;
+$sp-16: 2.5rem;
+$sp-20: 3rem;
+
+// ------------------------------
+// Radii
+// ------------------------------
+$radius-1: 6px;
+$radius-2: 8px;
+$radius-3: 10px;
+$radius-4: 14px;
+$radius-5: 18px;
+$radius-6: 24px;
+$radius-pill: 999px;
+
+// ------------------------------
+// Typography
+// ------------------------------
+$ff-body: "Geist",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, system-ui, sans-serif;
+$ff-head: $ff-body;
+$ff-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", Consolas, monospace;
+
+$fw-regular: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+
+// Font sizes (rem)
+$fs-1: 0.8125rem; // small
+$fs-2: 0.875rem;
+$fs-3: 1rem;      // base
+$fs-4: 1.125rem;
+$fs-5: 1.25rem;
+$fs-6: 1.5rem;
+$fs-7: 1.75rem;
+$fs-8: 2rem;
+$fs-9: 2.25rem;
+$fs-10: 2.75rem;  // large h1 on md+
+
+// Aliases
+$fs-small: $fs-2;
+$fs-large: $fs-5;
+
+// Line-heights
+$lh-tight: 1.2;
+$lh-base: 1.6;
+
+// ------------------------------
+// Layout (use consistent units)
+// ------------------------------
+$navbar-height: 3.625rem;      // 58px -> 3.625rem
+$island-width: 68.75rem;       // 1100px -> 68.75rem
+$container-gutter: 1rem;       // used in calc with rem — safe
+
+// ------------------------------
+// Shadows
+// ------------------------------
+$shadow-light: 0 10px 30px -10px rgba(0, 0, 0, 0.20), 0 4px 10px -6px rgba(0, 0, 0, 0.16);
+$shadow-dark:  0 20px 60px -10px rgba(0, 0, 0, 0.40), 0 4px 20px -8px rgba(0, 0, 0, 0.40);
+
+// ------------------------------
+// Durations / Easing
+// ------------------------------
+$dur-1: 180ms;
+$dur-2: 260ms;
+$ease-in-out: cubic-bezier(.25, 1, .5, 1);
+
+// ------------------------------
+// Buttons sizing
+// ------------------------------
+$btn-height: 2.5rem;
+$btn-height-sm: 2.25rem;
+$btn-pad-y: 0.5rem;
+$btn-pad-x: 1.25rem;
+$btn-pad-x-sm: 1rem;
+
+// ------------------------------
+// Forms
+// ------------------------------
+$input-pad-y: 0.625rem;
+$input-pad-x: 0.75rem;
+$input-radius: $radius-3;
+$input-border-w: 1px;
+$focus-ring-width: 3px;
+
+// ------------------------------
+// Tables
+// ------------------------------
+$table-pad-y: 0.625rem;
+$table-pad-x: 0.75rem;
+
+// ------------------------------
+// Code blocks
+// ------------------------------
+$code-pad-y: 0.875rem;
+$code-pad-x: 1rem;
+$code-radius: $radius-4;
+
+// ------------------------------
+// Badges
+// ------------------------------
+$badge-radius: $radius-pill;
+$badge-font: $fs-2;
+
+// ------------------------------
+// Light/Dark themes (tone keys)
+// ------------------------------
+$theme-light: (
+  accent: #000000,
+  contrast: #000000,
+  foreground: #4d4d4d,
+  secondary: #757575,
+
+  background: #ffffff,
+  background-100: #f3f3f3,
+  background-200: #ededed,
+  surface: #ffffff,
+  muted: #f1f1f1,
+
+  border: rgba(0,0,0,0.20),
+
+  white: #ffffff,
+  black: #000000,
+
+  success: #16a34a,
+  warning: #d97706,
+  danger:  #dc2626
+);
+
+$theme-dark: (
+  accent: #ffffff,
+  contrast: #ffffff,
+  foreground: #c9c9c9,
+  secondary: #9a9a9a,
+
+  background: #111113,
+  background-100: #1a1a1c,
+  background-200: #2c2c2f,
+  surface: #151518,
+  muted: #1c1c1f,
+
+  border: rgba(255,255,255,0.12),
+
+  white: #ffffff,
+  black: #000000,
+
+  success: #22c55e,
+  warning: #f59e0b,
+  danger:  #ef4444
+);
+
+// ------------------------------
+// Helper: theme color fetcher
+// ------------------------------
+@function tone($key, $mode: light) {
+  @if $mode == dark {
+    @return map-get($theme-dark, $key);
+  } @else {
+    @return map-get($theme-light, $key);
+  }
+}
+
+// ------------------------------
+// Mixins
+// ------------------------------
+
+// Apply content when the <html> has light theme
+@mixin theme-block {
+  html[data-color-scheme="light"] & { @content; }
+}
+
+// Apply content when the <html> has dark theme
+@mixin theme-block-dark {
+  html[data-color-scheme="dark"] & { @content; }
+}
+
+// Container helper (center column with side gutters)
+@mixin container {
+  width: $island-width;
+  max-width: calc(100% - 2 * #{$container-gutter});
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Button base (structure only)
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5em;
+  min-height: $btn-height;
+  padding: $btn-pad-y $btn-pad-x;
+  font-size: $fs-2;
+  font-weight: $fw-semibold;
+  border: 1px solid transparent;
+  border-radius: $radius-pill;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform $dur-1 $ease-in-out,
+    box-shadow $dur-1 $ease-in-out,
+    background-color $dur-1 $ease-in-out,
+    color $dur-1 $ease-in-out;
+}
+
+// Input base
+@mixin input-base {
+  display: block;
+  width: 100%;
+  padding: $input-pad-y $input-pad-x;
+  border-radius: $input-radius;
+  border: $input-border-w solid;
+  font: inherit;
+  line-height: $lh-base;
+  background: transparent;
+
+  @include theme-block {
+    color: tone(contrast, light);
+    border-color: tone(border, light);
+    background-color: tone(surface, light);
+  }
+  @include theme-block-dark {
+    color: tone(contrast, dark);
+    border-color: tone(border, dark);
+    background-color: tone(surface, dark);
+  }
+
+  &:focus {
+    outline: $focus-ring-width solid rgba(106,166,255,0.35);
+    outline-offset: 2px;
+  }
+}
+
+// Simple up media query
+@mixin mq-up($breakpoint) {
+  @media (min-width: $breakpoint) { @content; }
+}

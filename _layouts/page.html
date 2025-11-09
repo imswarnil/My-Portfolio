@@ -1,0 +1,131 @@
+---
+layout: default
+---
+
+<div class="container container--page-narrow">
+  <div class="page">
+
+    <div class="page-layout">
+      <!-- Main -->
+      <main class="page-main">
+        <article class="page-article typeset">
+          {% if paginator.posts %}
+            {% assign collectiondata = site.collections | where: "label", page.collectionpage | first %}
+            <h1 class="page-title">{{ collectiondata.title }}</h1>
+            {{ collectiondata.description | markdownify }}
+          {% else %}
+            <nav class="page-breadcrumb" aria-label="Breadcrumb">
+              <a href="{{ '/' | relative_url }}">Home</a>
+              <span aria-hidden="true">/</span>
+              <span>{{ page.title }}</span>
+            </nav>
+
+            <h1 class="page-title">{{ page.title }}</h1>
+            <p class="page-meta">
+              <i class="ph-bold ph-calendar-blank" aria-hidden="true"></i>
+              <time datetime="{{ page.date | date_to_xmlschema }}">
+                {{ page.date | date: site.date_format | default: "%d %b %Y" }}
+              </time>
+              {% if page.author or site.author %}
+              <span class="dot">•</span>
+              <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
+              <span>{{ page.author | default: site.author }}</span>
+              {% endif %}
+            </p>
+
+            {{ content }}
+          {% endif %}
+        </article>
+      </main>
+
+      {% if page.aside != false %}
+      <!-- Unique “rail” sidebar (sticky on desktop) -->
+      <aside class="page-rail" aria-label="Page sidebar">
+        <!-- Quick section index (auto TOC injected) -->
+        <section class="rail-card rail-card--toc" id="page-toc" hidden>
+          <h3 class="rail-title"><i class="ph-bold ph-list-bullets"></i> On this page</h3>
+          <nav class="rail-toc" aria-label="On this page">
+            <ul class="rail-toc__list"></ul>
+          </nav>
+        </section>
+
+        <!-- About -->
+        <section class="rail-card">
+          <h3 class="rail-title"><i class="ph-bold ph-info"></i> About</h3>
+          <p class="rail-text">{{ site.description }}</p>
+        </section>
+
+        <!-- Social (chips) -->
+        {% if site.social_links %}
+        <section class="rail-card">
+          <h3 class="rail-title"><i class="ph-bold ph-share-network"></i> Connect</h3>
+          <ul class="rail-chips">
+            {% for pair in site.social_links %}
+              {% assign name = pair[0] %}
+              {% assign url  = pair[1] %}
+              {% assign icon = 'link' %}
+              {% case name %}
+                {% when 'Twitter'  %}{% assign icon = 'twitter-logo'  %}
+                {% when 'LinkedIn' %}{% assign icon = 'linkedin-logo' %}
+                {% when 'GitHub'   %}{% assign icon = 'github-logo'   %}
+                {% when 'RSS'      %}{% assign icon = 'rss'           %}
+              {% endcase %}
+              <li><a href="{{ url }}" target="_blank" rel="me noopener" class="chip">
+                <i class="ph-bold ph-{{ icon }}" aria-hidden="true"></i><span>{{ name }}</span>
+              </a></li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        <!-- CTA -->
+        <section class="rail-card rail-card--cta">
+          <h3 class="rail-title"><i class="ph-bold ph-rocket-launch"></i> Work with me</h3>
+          <p class="rail-text">Have a project or idea? Let’s make it real.</p>
+          <a class="btn button" href="mailto:{% if site.email %}{{ site.email }}{% else %}hello@example.com{% endif %}">
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact</span>
+          </a>
+        </section>
+      </aside>
+      {% endif %}
+    </div>
+
+    <!-- Optional footer band for pages (non-island) -->
+    <div class="page-footnote">
+      <p>Found an issue or suggestion? <a href="{{ site.repo | default: 'https://github.com' }}">Open an issue</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Phosphor icons (once) -->
+<script defer src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<!-- Tiny TOC generator (h2/h3) -->
+<script>
+(function(){
+  var art = document.querySelector('.page-article');
+  var toc = document.getElementById('page-toc');
+  if(!art || !toc) return;
+
+  var heads = art.querySelectorAll('h2, h3');
+  if(!heads.length) return;
+
+  var list = toc.querySelector('.rail-toc__list');
+  function slug(txt){
+    return String(txt||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+  }
+
+  heads.forEach(function(h){
+    if(!h.id){ h.id = slug(h.textContent); }
+    var li = document.createElement('li');
+    li.className = 'rail-toc__item ' + (h.tagName === 'H3' ? 'is-sub' : 'is-top');
+    var a = document.createElement('a');
+    a.className = 'rail-toc__link';
+    a.href = '#'+h.id;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+  toc.hidden = false;
+})();
+</script>

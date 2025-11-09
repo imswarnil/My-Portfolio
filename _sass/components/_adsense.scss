@@ -1,0 +1,170 @@
+// ======================================================================
+// adsense.scss — Responsive AdSense + theme-aware placeholder (fixed)
+// Depends on: _variables.scss
+// ======================================================================
+
+@use "variables" as *;
+
+/* Wrapper spacing + centering */
+.ad {
+  margin-block: clamp($sp-10, 4vw, $sp-16);
+
+  /* Constrain to parent; don't bleed past gutters */
+  width: 100%;
+  max-width: 100%;
+
+  /* Create space for the top ribbon label */
+  padding-top: $sp-7;
+
+  /* Layer context for the ribbon */
+  position: relative;
+
+  /* Center the slot without forcing extra width */
+  display: grid;
+  place-items: center;
+}
+
+
+/* Core slot: fluid within parent, no overflow */
+.adsbygoogle.ad__slot {
+  display: block;
+  width: 100%;
+  max-width: 100%;          /* never exceed wrapper width */
+  border-radius: $radius-3;
+  overflow: hidden;         /* safety if iframe tries to overflow */
+  position: relative;
+  z-index: 1;               /* under the ribbon */
+
+  /* Placeholder surface while loading */
+  @include theme-block {
+    background: linear-gradient(180deg, tone(background-100, light), tone(surface, light));
+    border: 1px solid rgba(0,0,0,.08);
+  }
+  @include theme-block-dark {
+    background: linear-gradient(180deg, tone(background-200, dark), tone(surface, dark));
+    border: 1px solid rgba(255,255,255,.12);
+  }
+}
+
+/* ---------- Responsive variants (pure CSS) ---------- */
+
+/* Square family */
+.ad--square .ad__slot {
+  aspect-ratio: 1 / 1;
+  max-width: clamp(200px, 48vw, 336px);
+  margin-inline: auto;
+  min-height: clamp(180px, 40vw, 336px);
+}
+
+.ad--square-small .ad__slot {
+  aspect-ratio: 1 / 1;
+  max-width: clamp(160px, 40vw, 250px);
+  margin-inline: auto;
+  min-height: clamp(140px, 34vw, 250px);
+}
+
+.ad--square-large .ad__slot {
+  aspect-ratio: 1 / 1;
+  max-width: clamp(250px, 56vw, 420px);
+  margin-inline: auto;
+  min-height: clamp(220px, 50vw, 420px);
+}
+
+/* Horizontal (leaderboard-like) — fluid inside parent, but capped */
+.ad--horizontal .ad__slot {
+  width: 100%;
+  max-width: 970px;                   /* typical cap for large leaderboards */
+  margin-inline: auto;
+  min-height: clamp(50px, 10vw, 90px);
+}
+
+/* Vertical (skyscraper-like) */
+.ad--vertical .ad__slot {
+  max-width: clamp(120px, 44vw, 300px);
+  margin-inline: auto;
+  min-height: clamp(300px, 60vh, 600px);
+}
+
+/* Fluid / In-article / Autorelaxed — let height breathe, width = parent */
+.ad--fluid .ad__slot      { width: 100%; max-width: 100%; min-height: 200px; }
+.ad--in_article .ad__slot { width: 100%; max-width: 100%; min-height: 180px; }
+.ad--autorelaxed .ad__slot{ width: 100%; max-width: 100%; min-height: 240px; }
+
+/* Slightly tweak at breakpoints */
+@include mq-up($bp-md) {
+  .ad--horizontal .ad__slot { min-height: clamp(60px, 7vw, 90px); }
+  .ad--vertical   .ad__slot { min-height: clamp(400px, 60vh, 700px); }
+}
+@include mq-up($bp-lg) {
+  .ad--square .ad__slot       { max-width: 336px; }
+  .ad--square-small .ad__slot { max-width: 250px; }
+  .ad--square-large .ad__slot { max-width: 420px; }
+}
+
+
+// ======================================================================
+// ads-rails.scss — Floating rails, each with a fixed 160×600 unit
+// Depends on: _variables.scss + adsense.scss
+// ======================================================================
+
+@use "variables" as *;
+
+// how far from the screen edge the rails sit
+$rail-edge-gap: $sp-8; // ~1.25rem
+
+/* Hide on smaller screens so they don’t overlay content */
+.ad-rails { display: none; }
+
+@media (min-width: 1300px) {
+  .ad-rails { display: block; }
+
+  /* Full-height rails, centered content, non-interfering with page clicks */
+  .ad-rail {
+    position: fixed;
+    height: 100%;
+    top: 0;
+    bottom: 0;                 // full height
+    width: 160px;              // wide skyscraper width
+    z-index: $z-base;
+    display: flex;             // center the ad vertically
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;      // rail itself doesn’t trap clicks/scroll
+  }
+
+  /* Offset from the viewport edges (not from the island) */
+  .ad-rail--left  { left:  $rail-edge-gap; }
+  .ad-rail--right { right: $rail-edge-gap; }
+
+  /* The ad wrapper inside the rail: fixed 160×600 area, clickable */
+  .ad-rail .ad {
+    pointer-events: auto;      // allow clicking the ad
+    width: 160px;
+    max-width: 160px;
+    height: 600px;
+    max-height: 100%;
+    margin: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  /* The actual AdSense slot: lock to 160×600 */
+  .ad-rail .ad__slot {
+    width: 160px;
+    max-width: 160px;
+    height: 100%;
+    aspect-ratio: auto;        // don’t let aspect-ratio override fixed size
+    overflow: hidden;
+  }
+
+  /* Keep the “Advertisement” ribbon from overlapping the unit */
+  .ad-rail .ad::before {
+    transform: translate(-50%, -70%);
+  }
+}
+
+/* Optional: nudge rails a bit further inward on ultra-wide screens */
+@media (min-width: 1800px) {
+  .ad-rail--left  { left:  calc(#{$rail-edge-gap} + #{$sp-6}); }
+  .ad-rail--right { right: calc(#{$rail-edge-gap} + #{$sp-6}); }
+}

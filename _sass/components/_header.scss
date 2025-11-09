@@ -1,0 +1,517 @@
+// ======================================================================
+// _header.scss — island header with desktop icons, fixed mobile bar,
+// floating bento panel, animated theme switcher, inline navbar search
+// (relies on tokens/mixins from _variables.scss)
+// ======================================================================
+
+// ---------- Navbar ----------
+.island-navbar {
+  @include container;
+  position: sticky;
+  top: $container-gutter;
+  z-index: $z-header;
+
+  margin: 0 auto $sp-6;
+  display: flex; align-items: center; justify-content: space-between; gap: $sp-6;
+
+  padding: $sp-3 $sp-6; // compact
+  border-radius: $radius-6;
+  border: 1px solid;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  transition:
+    background-color $dur-2 $ease-in-out,
+    border-color $dur-2 $ease-in-out,
+    border-radius $dur-2 $ease-in-out,
+    box-shadow $dur-2 $ease-in-out;
+
+  @include theme-block {
+    background-color: rgba(255,255,255,0.72);
+    border-color: tone(border, light);
+    box-shadow: $shadow-light;
+  }
+  @include theme-block-dark {
+    background-color: rgba(20,20,22,0.74);
+    border-color: tone(border, dark);
+    box-shadow: $shadow-dark;
+  }
+
+  &.is-open {
+    border-bottom-left-radius: $radius-4;
+    border-bottom-right-radius: $radius-4;
+  }
+}
+
+// Mobile: fixed, centered island
+@media (max-width: $bp-lg) {
+  .island-navbar {
+    @include container;
+    position: fixed;
+    top: $container-gutter;
+    left: $container-gutter;
+    right: $container-gutter;
+    width: auto;
+    margin: 0 auto;
+    border-radius: $radius-6;
+  }
+
+  // spacing below the fixed island
+  body.has-fixed-nav {
+    padding-top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
+  }
+}
+
+/* --- Floating mobile panel under the centered island --- */
+.island-panel {
+  position: fixed;
+  left: $container-gutter; right: $container-gutter;
+  margin-left: auto; margin-right: auto; max-width: $island-width;
+
+  // sit just below header island
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
+
+  // rounded all corners (separate floating card)
+  border: 1px solid;
+  border-top-left-radius: $radius-6;
+  border-top-right-radius: $radius-6;
+  border-bottom-left-radius: $radius-6;
+  border-bottom-right-radius: $radius-6;
+
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+
+  z-index: $z-overlay;
+  transform: translateY(-6px);
+  transition: max-height 500ms $ease-in-out, opacity 300ms ease, transform 350ms $ease-in-out, box-shadow $dur-2 $ease-in-out;
+
+  max-height: 0; opacity: 0; overflow: clip; pointer-events: none;
+
+  @include theme-block      { background: rgba(255,255,255,0.92); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(18,18,20,0.96);    border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+
+  &.is-open {
+    opacity: 1; transform: translateY(0); pointer-events: auto;
+    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
+  }
+
+  .island-panel__inner {
+    padding: $sp-8; display: grid; gap: $sp-6;
+    max-height: calc(100vh - var(--nav-h, #{$navbar-height}));
+    overflow: auto;
+  }
+
+  @include mq-up($bp-lg) { display: none; }
+}
+
+/* bento grid: 2 cols → 3 on wider phones */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $sp-5;
+  @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
+}
+
+.bento-card {
+  display: flex; align-items: center; gap: $sp-4;
+  padding: $sp-5; border-radius: $radius-4; border: 1px solid;
+  transition: transform $dur-1 ease, background $dur-1 ease;
+
+  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  }
+
+  &:hover {
+    transform: translateY(-2px);
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
+  }
+
+  .bento-icon {
+    width: 2.25rem; height: 2.25rem; display: grid; place-items: center;
+    border-radius: $radius-3; border: 1px solid;
+    @include theme-block      { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark); }
+    i { font-size: $fs-4; }
+  }
+  .bento-title {
+    font-weight: $fw-semibold; font-size: $fs-3;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
+  }
+  .bento-sub {
+    font-size: $fs-2;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
+  }
+}
+
+// ---------- Brand ----------
+.navbar-brand {
+  display: flex; align-items: center; gap: $sp-5; text-decoration: none;
+
+  .navbar-avatar {
+    width: 2rem; height: 2rem; border-radius: 50%; object-fit: cover;
+    border: 2px solid;
+    @include theme-block      { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark); }
+  }
+
+  .brand-text { display: grid; line-height: 1.1; }
+  .logo {
+    font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
+  }
+  .logo-sub {
+    font-size: $fs-1;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
+  }
+}
+
+// ---------- Desktop menu ----------
+.navbar-menu {
+  ul { display: flex; align-items: center; gap: $sp-2; margin: 0; padding: 0; list-style: none; }
+
+  a {
+    display: inline-flex; align-items: center; gap: .5em;
+    padding: $sp-3 $sp-5;
+    font-size: $fs-3; font-weight: $fw-medium;
+    border-radius: $radius-pill;
+    transition: background-color $dur-1, color $dur-1;
+
+    i { font-size: $fs-4; line-height: 1; }
+
+    @include theme-block {
+      color: tone(secondary, light);
+      &:hover, &.active { color: tone(contrast, light); background: tone(background-100, light); }
+    }
+    @include theme-block-dark {
+      color: tone(secondary, dark);
+      &:hover, &.active { color: tone(contrast, dark); background: tone(background-100, dark); }
+    }
+  }
+
+  @media (max-width: $bp-lg) { display: none; }
+}
+
+// ---------- Right-side actions ----------
+.navbar-actions {
+  display: flex; align-items: center; gap: $sp-3;
+
+  // circular icon button (search, menu, etc.)
+  .nav-icon {
+    display: inline-grid; place-items: center;
+    width: $btn-height-sm; height: $btn-height-sm; border-radius: 50%;
+    border: 1px solid; padding: 0;
+    font-size: $fs-4; line-height: 1;
+    cursor: pointer; user-select: none;
+    background: transparent;
+    transition: background-color $dur-1, color $dur-1, border-color $dur-1;
+
+    @include theme-block {
+      color: tone(secondary, light); border-color: tone(border, light);
+      &:hover { color: tone(contrast, light); background: tone(background-200, light); }
+    }
+    @include theme-block-dark {
+      color: tone(secondary, dark); border-color: tone(border, dark);
+      &:hover { color: tone(contrast, dark); background: tone(background-200, dark); }
+    }
+  }
+
+  // Theme toggle (animated swap)
+  .theme-toggle-button {
+    @extend .nav-icon;
+    position: relative; overflow: hidden;
+
+    i {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      opacity: 0; transform: rotate(-90deg) scale(.8);
+      transition: opacity $dur-2 ease, transform $dur-2 $ease-in-out;
+    }
+    @include theme-block { .icon-sun  { opacity: 1; transform: rotate(0) scale(1); } }
+    @include theme-block-dark { .icon-moon { opacity: 1; transform: rotate(0) scale(1); } }
+  }
+
+  // GitHub CTA
+  .nav-cta {
+    display: inline-flex; align-items: center; gap: .5em;
+    min-height: $btn-height-sm; padding: 0.35rem $btn-pad-x-sm;
+    border-radius: $radius-pill; border: 1px solid transparent;
+    font-size: $fs-2; font-weight: $fw-semibold; cursor: pointer; user-select: none;
+    transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, background-color $dur-1, color $dur-1;
+
+    @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
+    @include theme-block-dark { background: tone(white, dark);    color: tone(black, dark);  }
+
+    &:hover { transform: translateY(-2px); }
+
+    span { display: none; }
+    @include mq-up($bp-md) { span { display: inline; } }
+  }
+
+  .mobile-menu-toggle { display: none; }
+  @media (max-width: $bp-lg) { .mobile-menu-toggle { display: inline-grid; } }
+}
+
+// ---------- Mobile panel height rules on wider phones ----------
+.island-panel.is-open {
+  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
+}
+.island-panel .island-panel__inner {
+  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
+  overflow: auto;
+}
+
+/* ===================================================================== */
+/* INLINE NAVBAR SEARCH (NEW) — animation + dark mode + result behavior  */
+/* ===================================================================== */
+
+/* Animations */
+@keyframes ims-search-reveal {
+  0%   { opacity: 0; transform: scaleX(.88) translateX(8px); }
+  100% { opacity: 1; transform: scaleX(1) translateX(0); }
+}
+@keyframes ims-results-drop {
+  0%   { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Global backdrop blur when search is active (page dims/blur; results sit above) */
+body.search-active::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: $z-overlay - 2; // below results, above page
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0,0,0,.18);
+  @include theme-block-dark { background: rgba(0,0,0,.28); }
+  pointer-events: auto; // allows click-away close handler to catch
+}
+
+/* Search form occupies navbar center when active */
+.navbar-search {
+  // No inner border; island’s own border frames the area
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+
+  display: none;
+  align-items: center;
+  gap: $sp-3;
+  height: $btn-height-sm;
+  padding-left: $sp-4;   // breathing room since no inner border
+  padding-right: $sp-2;
+
+  // animate from the right (icon side)
+  transform-origin: right center;
+
+  // (icons inside search)
+  i {
+    opacity: .9;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 0; // enable truncation inside grid
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-size: $fs-3;
+
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+
+    &::placeholder {
+      opacity: .9;
+      @include theme-block      { color: mix(tone(secondary, light), transparent, 90%); }
+      @include theme-block-dark { color: mix(tone(secondary, dark),  transparent, 90%); }
+    }
+  }
+
+  // Cancel (×) rounded exactly like search/theme buttons
+  .search-cancel {
+    @extend .nav-icon;
+    width: $btn-height-sm;
+    height: $btn-height-sm;
+    padding: 0;
+    background: transparent;
+  }
+}
+
+/* When active, hide brand/menu/cta; make room for search + animate */
+body.search-active {
+  .navbar-search { display: flex; animation: ims-search-reveal $dur-2 $ease-in-out both; }
+  .navbar-brand, .navbar-menu, .navbar-actions .cta-github { display: none; }
+  .island-navbar { gap: $sp-3; display: grid; grid-template-columns: 1fr auto; z-index: $z-overlay + 1; }
+}
+
+@media (max-width: $bp-lg) {
+  body.search-active .island-navbar { grid-template-columns: 1fr auto; }
+}
+
+/* Results container: hidden by default; matches island width; centered; sits above blur */
+.search-results {
+  position: sticky;
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
+  z-index: $z-overlay; // above backdrop
+
+  // match island width and center it
+  max-width: $island-width;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: none;        // invisible until .is-open
+  border: 0;            // no hard line
+  box-shadow: none;     // no shadow while hidden
+  background: transparent;
+  overflow: hidden;
+  border-radius: $radius-6;
+}
+
+/* On mobile: mirror island insets so widths match exactly */
+@media (max-width: $bp-lg) {
+  .search-results {
+    position: fixed;
+    left: $container-gutter;
+    right: $container-gutter;
+    top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
+  }
+}
+
+/* Only visible when JS adds .is-open (user typed/results exist) */
+.search-results.is-open {
+  display: block;
+  animation: ims-results-drop $dur-2 $ease-in-out both;
+
+  // soft surface without hard borders
+  @include theme-block      { background: tone(background, light);   box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); box-shadow: $shadow-dark; }
+}
+
+/* Comfortable spacing & item polish */
+.search-list {
+  list-style: none;
+  margin: 0;
+  padding: $sp-6;       // generous inner padding
+  display: grid;
+  gap: $sp-4;           // space between rows
+}
+
+/* Result row:
+   - full-row clickable (cursor pointer)
+   - subtle hover elevation and underline on title
+   - strictly clipped text areas to keep within island width */
+.search-item {
+  display: grid; grid-template-columns: 2.5rem 1fr auto; // thumb | text | cta
+  align-items: center; gap: $sp-4;
+  padding: $sp-5;       // thicker row padding
+  border-radius: $radius-5;
+  cursor: pointer;
+
+  @include theme-block      { &:hover, &[aria-selected="true"] { background: tone(background-100, light); } }
+  @include theme-block-dark { &:hover, &[aria-selected="true"] { background: tone(background-100, dark);  } }
+
+  &:hover .search-title { text-decoration: underline; }
+}
+
+.search-thumb {
+  width: 2.5rem; height: 2.5rem;
+  border-radius: $radius-4; overflow: hidden;
+  display: grid; place-items: center; border: 1px solid;
+
+  @include theme-block      { border-color: tone(border, light); background: tone(background-100, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: tone(background-100, dark);  }
+
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  i   { font-size: $fs-4; @include theme-block { color: tone(secondary, light);} @include theme-block-dark { color: tone(secondary, dark);} }
+}
+
+/* Text column: clamp title to 1 line, excerpt to 2 lines.
+   Ensure clipping even on narrow screens (min-width:0 triggers flex shrink behavior). */
+.search-main {
+  min-width: 0; // allow children to truncate
+}
+.search-title {
+  font-weight: $fw-semibold;
+  line-height: 1.15;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+.search-excerpt {
+  margin-top: .2rem;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2; // 2-line clamp
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* CTA on the right */
+.search-cta {
+  font-size: $fs-2;
+  text-decoration: none;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+
+  &:hover { text-decoration: underline; }
+}
+
+/* ===================================================================== */
+/* MOBILE MENU: hamburger → full panel; close (×) at top-right            */
+/* ===================================================================== */
+
+/* When the panel is open, float the toggle as a close button in the panel’s top-right. */
+.island-panel.is-open + .whatever { /* placeholder to avoid accidental matches */ }
+.island-panel.is-open ~ .noop { /* nothing */ }
+
+/* Reposition the existing hamburger button when panel is open */
+.island-panel.is-open ~ .ignore { /* safety */ }
+
+.island-panel.is-open { /* scope helper only */ }
+
+.island-panel.is-open,
+body.panel-open {
+  /* Move the same toggle button (hamburger) to the panel top-right and style as close (×) */
+  .mobile-menu-toggle {
+    position: fixed;
+    z-index: $z-overlay + 2;
+    top: calc(var(--nav-h, #{$navbar-height}) + $container-gutter);
+    right: calc($container-gutter + 2px);
+    @extend .nav-icon; // rounded, bordered circle
+    background: transparent;
+
+    /* When aria-expanded=true (panel open), draw an "×" instead of the hamburger icon */
+    &[aria-expanded="true"] {
+      i { opacity: 0; } // hide the list icon
+      &::after {
+        content: "×";
+        display: grid; place-items: center;
+        position: absolute; inset: 0;
+        font-size: $fs-4;
+        @include theme-block      { color: tone(contrast, light); }
+        @include theme-block-dark { color: tone(contrast, dark);  }
+      }
+    }
+  }
+}
+
+/* Make the panel feel “full island menu” on mobile: larger grid, comfy spacing */
+@media (max-width: $bp-lg) {
+  .island-panel.is-open .island-panel__inner {
+    padding-top: calc($sp-8 + $btn-height-sm + $sp-4); // space for top-right close button
+  }
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $sp-5;
+  }
+}
+
+/* Optional hover affordance for bento items (looks tappable) */
+.bento-card { cursor: pointer; }

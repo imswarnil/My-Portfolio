@@ -1,0 +1,129 @@
+<!-- ====================================================================== -->
+<!--  SIMPLE, VIDEO-FREE, DARK-MODE ENABLED FOOTER (CONTAINER PARENT)       -->
+<!--  Mobile:                                                               -->
+<!--   - About (full width)                                                 -->
+<!--   - Quick Links (1/2) + Contact & Legal (1/2)                          -->
+<!--   - Newsletter (full width)                                            -->
+<!--  Desktop: 4 columns                                                    -->
+<!--  Uses _config.yml for links/social/email/etc                           -->
+<!-- ====================================================================== -->
+
+<div class="container footer-wrap">
+  <footer class="footer-island" role="contentinfo" aria-label="Site footer">
+    <div class="footer-inner">
+
+      <!-- 1) ABOUT (full width on mobile) -->
+      <section class="footer-col footer-about">
+        <h4 class="footer-title"><i class="ph-bold ph-user"></i> About</h4>
+        <p class="footer-text">
+          {{ site.description | default: "A thoughtful, cinematic space for code and creativity." }}
+        </p>
+
+        {% if site.social_links %}
+        <nav class="footer-social" aria-label="Social links">
+          {% if site.social_links.Twitter %}
+            <a href="{{ site.social_links.Twitter }}" aria-label="Twitter" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i></a>
+          {% endif %}
+          {% if site.social_links.LinkedIn %}
+            <a href="{{ site.social_links.LinkedIn }}" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i></a>
+          {% endif %}
+          {% if site.social_links.GitHub %}
+            <a href="{{ site.social_links.GitHub }}" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i></a>
+          {% endif %}
+          {% if site.social_links.RSS %}
+            <a href="{{ site.baseurl }}{{ site.social_links.RSS }}" aria-label="RSS"><i class="ph-bold ph-rss"></i></a>
+          {% endif %}
+          {% if site.social_links.link %}
+            <a href="{{ site.social_links.link }}" aria-label="Website" target="_blank" rel="noopener"><i class="ph-bold ph-link-simple"></i></a>
+          {% endif %}
+        </nav>
+        {% endif %}
+      </section>
+
+      <!-- 2) QUICK LINKS (1/2 width on mobile) -->
+      <section class="footer-col footer-links">
+        <h4 class="footer-title"><i class="ph-bold ph-compass"></i> Quick Links</h4>
+        <ul class="footer-list">
+          {% assign nav_items = site.navigation_header %}
+          {% if nav_items and nav_items.size > 0 %}
+            {% for item in nav_items %}
+              {% assign href = item.url %}
+              {% assign is_external = false %}
+              {% if href contains '://' %}{% assign is_external = true %}{% endif %}
+              <li>
+                <a href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
+                   {% if is_external %}target="_blank" rel="noopener"{% endif %}>
+                  <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
+                  {{ item.title }}
+                </a>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li><a href="{{ '/' | relative_url }}"><i class="ph-bold ph-house"></i> Home</a></li>
+            <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i> Blog</a></li>
+            <li><a href="{{ '/categories/' | relative_url }}"><i class="ph-bold ph-tag"></i> Categories</a></li>
+            <li><a href="{{ '/search/' | relative_url }}"><i class="ph-bold ph-magnifying-glass"></i> Search</a></li>
+          {% endif %}
+        </ul>
+      </section>
+
+      <!-- 3) CONTACT & LEGAL (1/2 width on mobile) -->
+      <section class="footer-col footer-contact">
+        <h4 class="footer-title"><i class="ph-bold ph-map-pin"></i> Contact & Legal</h4>
+        <address class="footer-address">
+          <p><i class="ph-bold ph-buildings"></i> {{ site.title | default: "Your Site" }}</p>
+          <p><i class="ph-bold ph-map-trifold"></i> {{ site.timezone | default: "Worldwide" }}</p>
+          {% if site.email %}
+            <p><i class="ph-bold ph-envelope"></i> <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+          {% endif %}
+          {% if site.url %}
+            <p><i class="ph-bold ph-link-simple"></i> <a href="{{ site.url | default: '/' }}" target="_blank" rel="noopener">{{ site.url | default: "/" }}</a></p>
+          {% endif %}
+        </address>
+
+        <ul class="footer-list footer-legal">
+          {% comment %}
+            Use navigation_footer if provided; else show Privacy/Terms defaults.
+          {% endcomment %}
+          {% assign foot_nav = site.navigation_footer %}
+          {% if foot_nav and foot_nav.size > 0 %}
+            {% for item in foot_nav %}
+              {% assign href = item.url %}
+              {% assign is_external = false %}
+              {% if href contains '://' %}{% assign is_external = true %}{% endif %}
+              <li>
+                <a href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
+                   {% if is_external %}target="_blank" rel="noopener"{% endif %}>
+                  <i class="ph-bold ph-link-simple"></i>
+                  {{ item.title }}
+                </a>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li><a href="{{ '/privacy/' | relative_url }}"><i class="ph-bold ph-lock-key"></i> Privacy</a></li>
+            <li><a href="{{ '/terms/' | relative_url }}"><i class="ph-bold ph-scale"></i> Terms</a></li>
+          {% endif %}
+        </ul>
+      </section>
+
+      <!-- 4) NEWSLETTER (full width on mobile) -->
+      <section class="footer-col footer-newsletter">
+        <h4 class="footer-title"><i class="ph-bold ph-megaphone-simple"></i> Newsletter</h4>
+        <p class="footer-text">Get stories, updates & behind-the-scenes once a month. No spam.</p>
+
+        <form class="footer-form" action="#" method="post" novalidate>
+          <label class="footer-field" aria-label="Email">
+            <i class="ph-bold ph-at"></i>
+            <input type="email" name="email" placeholder="Your email" required />
+          </label>
+          <button type="submit" class="footer-submit" aria-label="Subscribe">
+            <i class="ph-bold ph-paper-plane-tilt"></i>
+            <span>Subscribe</span>
+          </button>
+          <p class="footer-hint">You can unsubscribe at any time.</p>
+        </form>
+      </section>
+
+    </div>
+  </footer>
+</div>

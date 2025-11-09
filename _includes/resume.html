@@ -1,0 +1,242 @@
+{%- comment -%}
+Usage:
+  1) Put resume data in _config.yml under `resume:`
+  2) Ensure @phosphor-icons/web is loaded globally
+  3) Include this component in any page or layout:
+     {% include resume.html %}
+{%- endcomment -%}
+
+<section class="resume" aria-label="Resume">
+  <!-- Identity -->
+  <header class="resume__head island stack--tight" role="banner">
+    <div class="resume__id">
+      <div class="resume__avatar">
+        <img src="{{ site.resume.avatar | default: site.avatarurl | relative_url }}" alt="{{ site.resume.name | default: site.title }}">
+      </div>
+      <div class="resume__who">
+        <h1>{{ site.resume.name | default: site.title }}</h1>
+        <p>{{ site.resume.tagline | default: site.job_title | default: "Software Engineer • Filmmaker • Creator" }}</p>
+      </div>
+    </div>
+
+    <div class="resume__meta" role="contentinfo" aria-label="Contact">
+      {%- assign c = site.resume.contact -%}
+      {%- if c.location -%}<span><i class="ph ph-map-pin icon-sm"></i> {{ c.location }}</span>{%- endif -%}
+      {%- if c.email -%}<span><i class="ph ph-envelope icon-sm"></i> {{ c.email }}</span>{%- endif -%}
+      {%- if c.site -%}<span><i class="ph ph-globe icon-sm"></i> {{ c.site }}</span>{%- endif -%}
+      {%- if c.linkedin -%}<span><i class="ph ph-linkedin-logo icon-sm"></i> {{ c.linkedin }}</span>{%- endif -%}
+      {%- if c.github -%}<span><i class="ph ph-github-logo icon-sm"></i> {{ c.github }}</span>{%- endif -%}
+      {%- if c.youtube -%}<span><i class="ph ph-youtube-logo icon-sm"></i> {{ c.youtube }}</span>{%- endif -%}
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <div class="resume__grid">
+    <!-- LEFT -->
+    <div class="resume__row">
+
+      <!-- Experience -->
+      <section class="island" aria-label="Experience">
+        <div class="section-head">
+          <i class="ph ph-briefcase icon"></i>
+          <h3>Experience</h3>
+          <span class="hint">impact • outcomes</span>
+        </div>
+        <div class="section-body">
+          <div class="timeline">
+            <div class="timeline__rail" aria-hidden="true"></div>
+            {%- assign exp = site.resume.experience -%}
+            {%- for item in exp -%}
+            {%- assign mapped = site.resume.company_icons[item.org] -%}
+            <article class="t-item">
+              <span class="t-dot" aria-hidden="true"></span>
+              <span class="t-icon" aria-hidden="true"><i class="ph {{ item.icon | default: mapped.icon | default: 'ph-buildings' }}"></i></span>
+
+              <div class="cluster">
+                {%- if mapped.logo -%}
+                  <span class="company"><img src="{{ mapped.logo | relative_url }}" alt=""><span class="c-name">{{ item.org }}</span></span>
+                {%- else -%}
+                  <span class="company"><i class="ph {{ mapped.icon | default: 'ph-buildings' }}"></i><span class="c-name">{{ item.org }}</span></span>
+                {%- endif -%}
+              </div>
+
+              <div class="t-head"><h4 class="t-role">{{ item.role }}</h4><span class="t-org"> · {{ item.org }}</span></div>
+              <div class="t-meta">{{ item.when }} · {{ item.where }}</div>
+
+              {%- if item.body -%}<div class="t-body">{{ item.body }}</div>{%- endif -%}
+              {%- if item.points -%}
+              <ul style="margin:0;padding-left:1.25rem">
+                {%- for p in item.points -%}<li>{{ p }}</li>{%- endfor -%}
+              </ul>
+              {%- endif -%}
+              {%- if item.tags -%}
+              <div class="t-tags">{% for tg in item.tags %}<span class="tag">{{ tg }}</span>{% endfor %}</div>
+              {%- endif -%}
+            </article>
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section class="island" aria-label="Education">
+        <div class="section-head">
+          <i class="ph ph-graduation-cap icon"></i>
+          <h3>Education</h3>
+        </div>
+        <div class="section-body">
+          <div class="timeline">
+            <div class="timeline__rail" aria-hidden="true"></div>
+            {%- assign edu = site.resume.education -%}
+            {%- for e in edu -%}
+            <article class="t-item">
+              <span class="t-dot" aria-hidden="true"></span>
+              <span class="t-icon" aria-hidden="true"><i class="ph {{ e.icon | default: 'ph-graduation-cap' }}"></i></span>
+              <div class="t-head"><h4 class="t-role">{{ e.degree }}</h4><span class="t-org"> · {{ e.school }}</span></div>
+              <div class="t-meta">{{ e.when }} · {{ e.where }}</div>
+              {%- if e.body -%}<div class="t-body">{{ e.body }}</div>{%- endif -%}
+              {%- if e.tags -%}<div class="t-tags">{% for tg in e.tags %}<span class="tag">{{ tg }}</span>{% endfor %}</div>{%- endif -%}
+            </article>
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
+
+      <!-- Workflow -->
+      <section class="island" aria-label="Workflow">
+        <div class="section-head">
+          <i class="ph ph-rocket-launch icon"></i>
+          <h3>Workflow</h3>
+          <span class="hint">light motion • clear stages</span>
+        </div>
+        <div class="stepper">
+          <ol class="steps" role="list">
+            {%- for st in site.resume.steps -%}
+            <li class="step">
+              <span class="badge-num">{{ forloop.index }}</span>
+              <div>
+                <h4>{{ st.title }}</h4>
+                {%- if st.text -%}<p>{{ st.text }}</p>{%- endif -%}
+                {%- if st.bullets -%}
+                <ul style="list-style:disc;margin:$sp-6 0 0;padding-left:1.25rem">
+                  {%- for b in st.bullets -%}<li>{{ b }}</li>{%- endfor -%}
+                </ul>
+                {%- endif -%}
+              </div>
+            </li>
+            {%- endfor -%}
+          </ol>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- RIGHT (Sidebar) -->
+    <aside class="resume__row">
+      <!-- Quick Stats -->
+      <section class="island--soft">
+        <div class="section-head" style="border-bottom:none;padding-bottom:0">
+          <i class="ph ph-chart-line-up icon"></i>
+          <h3>Quick Stats</h3>
+        </div>
+        <div class="stats">
+          {%- for s in site.resume.stats -%}
+          <div class="stat">
+            <i class="ph {{ s.icon | default: 'ph-sparkle' }} icon"></i>
+            <div class="kv">
+              <div class="k">{{ s.k }}</div>
+              <div class="v">{{ s.v }}</div>
+            </div>
+          </div>
+          {%- endfor -%}
+        </div>
+      </section>
+
+      <!-- Links -->
+      <section class="island">
+        <div class="section-head" style="border-bottom:none;padding-bottom:0">
+          <i class="ph ph-link-simple icon"></i>
+          <h3>Links</h3>
+        </div>
+        <nav class="links" aria-label="Profiles">
+          {%- for l in site.resume.links -%}
+          <a href="{{ l.href }}" target="_blank" rel="noopener">
+            <i class="ph {{ l.icon | default: 'ph-link-simple' }}"></i> {{ l.label }}
+          </a>
+          {%- endfor -%}
+        </nav>
+      </section>
+
+      <!-- Awards -->
+      <section class="island">
+        <div class="section-head" style="border-bottom:none;padding-bottom:0">
+          <i class="ph ph-trophy icon"></i>
+          <h3>Awards</h3>
+        </div>
+        <div class="awards">
+          {%- for a in site.resume.awards -%}
+          <div class="award">
+            <i class="ph {{ a.icon | default: 'ph-medal' }} icon"></i>
+            <div>
+              <p class="award__title">{{ a.title }}</p>
+              <p class="award__meta">{{ a.meta }}</p>
+            </div>
+          </div>
+          {%- endfor -%}
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- Projects -->
+  <section class="island" aria-label="Projects">
+    <div class="section-head">
+      <i class="ph ph-folders icon"></i>
+      <h3>Projects</h3>
+      <span class="hint">selected work</span>
+    </div>
+    <div class="projects">
+      <div class="projects__grid">
+        {%- for pr in site.resume.projects -%}
+        <article class="project">
+          {%- if pr.cover -%}
+          <div class="project__media"><img class="project__img" src="{{ pr.cover | relative_url }}" alt=""></div>
+          {%- endif -%}
+          <div class="project__body">
+            <h4 class="project__title">
+              {%- if pr.url -%}<a href="{{ pr.url }}" target="_blank" rel="noopener">{{ pr.title }}</a>{%- else -%}{{ pr.title }}{%- endif -%}
+            </h4>
+            {%- if pr.meta -%}<p class="project__meta">{{ pr.meta }}</p>{%- endif -%}
+            {%- if pr.desc -%}<p>{{ pr.desc }}</p>{%- endif -%}
+            {%- if pr.tags -%}
+            <div class="project__tags">
+              {%- for tg in pr.tags -%}<span class="tag">{{ tg }}</span>{%- endfor -%}
+            </div>
+            {%- endif -%}
+          </div>
+          <div class="project__foot">
+            <span class="cluster">
+              {%- if pr.repo -%}<a href="{{ pr.repo }}" target="_blank" rel="noopener" class="button-transparent"><i class="ph ph-github-logo"></i><span>Repo</span></a>{%- endif -%}
+              {%- if pr.demo -%}<a href="{{ pr.demo }}" target="_blank" rel="noopener" class="button-transparent"><i class="ph ph-arrow-up-right"></i><span>Live</span></a>{%- endif -%}
+            </span>
+            {%- if pr.time -%}<time class="small">{{ pr.time }}</time>{%- endif -%}
+          </div>
+        </article>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <!-- One-liners -->
+  <section class="island--soft" aria-label="One-liners">
+    <div class="section-head" style="border-bottom:none;padding-bottom:0">
+      <i class="ph ph-sparkle icon"></i>
+      <h3>One-liners</h3>
+    </div>
+    <div class="section-body" style="padding-top:0">
+      <ul style="list-style:disc;margin:$sp-6 0 0;padding-left:1.25rem">
+        {%- for li in site.resume.lines -%}<li>{{ li }}</li>{%- endfor -%}
+      </ul>
+    </div>
+  </section>
+</section>

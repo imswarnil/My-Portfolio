@@ -1,0 +1,77 @@
+// Uses your tokens/mixins from _variables.scss and base.scss
+
+.search-page {
+  @include container;
+  margin-top: $sp-12;
+  margin-bottom: $sp-16;
+  padding-inline: $container-gutter;
+
+  &__grid {
+    display: grid; gap: $sp-16;
+    grid-template-columns: 1fr;
+    @include mq-up($bp-lg) { grid-template-columns: 1.8fr .9fr; }
+  }
+
+  &__head { margin-bottom: $sp-8; }
+  &__title { display:flex; align-items:center; gap:$sp-6; margin:0; font-size: $fs-6; }
+  &__hint  { @include theme-block { color:tone(secondary,light);} @include theme-block-dark{color:tone(secondary,dark);} }
+
+  // Form "island"
+  .island {
+    border: 1px solid; border-radius: $radius-6; padding: $sp-12;
+    @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+    @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+  }
+
+  &__field {
+    display:grid; grid-template-columns:auto 1fr auto; gap:$sp-6; align-items:center;
+    padding: $sp-4 $sp-6; border:1px solid; border-radius:$radius-6; margin-bottom:$sp-8;
+
+    @include theme-block      { background:tone(surface,light); border-color:tone(border,light); }
+    @include theme-block-dark { background:tone(surface,dark);  border-color:tone(border,dark);  }
+
+    .input { border:0; background:transparent; padding:0; font:inherit; line-height:$lh-base;
+      @include theme-block      { color:tone(contrast,light); }
+      @include theme-block-dark { color:tone(contrast,dark);  }
+      &:focus { outline:none; }
+    }
+  }
+
+  // Results list
+  &__list {
+    display:grid; gap:$sp-8; list-style:none; margin:0; padding:0;
+  }
+
+  &__result {
+    border:1px solid; border-radius:$radius-6; overflow:hidden;
+    @include theme-block      { background:tone(surface,light); border-color:tone(border,light); box-shadow:$shadow-light; }
+    @include theme-block-dark { background:tone(surface,dark);  border-color:tone(border,dark);  box-shadow:$shadow-dark;  }
+    .article { padding:$sp-8; display:grid; gap:$sp-5; }
+  }
+  &__result-title { margin:0; font-size:$fs-4; line-height:$lh-tight; font-weight:$fw-semibold; }
+  &__result-excerpt { margin:0; font-size:$fs-3; }
+
+  &__empty {
+    padding:$sp-8; text-align:center; border:1px dashed; border-radius:$radius-6;
+    @include theme-block      { border-color:tone(border,light); color:tone(secondary,light); }
+    @include theme-block-dark { border-color:tone(border,dark);  color:tone(secondary,dark);  }
+  }
+
+  // Sidebar
+  &__side { display:grid; gap:$sp-12; }
+  &__card { padding:0; } // section-head + section-body control inner padding
+
+  // Ads
+  &__ad {
+    border-radius:$radius-6; overflow:hidden; border:1px dashed; padding:$sp-6;
+    @include theme-block      { border-color:tone(border,light); background:tone(background-100,light); }
+    @include theme-block-dark { border-color:tone(border,dark);  background:tone(background-100,dark);  }
+    &--banner { margin-bottom:$sp-8; }
+    &--infeed { margin-top:$sp-8; }
+    &--side   { }
+  }
+
+  // Icon sizing helpers
+  .icon { font-size:$fs-4; line-height:1; }
+  .icon-sm { font-size:$fs-3; line-height:1; }
+}

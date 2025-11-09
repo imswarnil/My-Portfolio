@@ -1,0 +1,339 @@
+<!-- _includes/header.html -->
+<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
+  <a href="{{ '/' | relative_url }}" class="navbar-brand">
+    <img
+      src="{{ site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/64?u=j' }}"
+      alt="{{ site.title | default: 'Site' | escape }}"
+      class="navbar-avatar"
+      width="32" height="32" loading="lazy"
+    />
+    <span class="brand-text">
+      <span class="logo">{{ site.title | default: 'John Doe' }}</span>
+      <span class="logo-sub">{{ site.job_title | default: 'Software Engineer' }}</span>
+    </span>
+  </a>
+
+  <!-- Desktop menu (from _config.yml → navigation_header) -->
+  <nav class="navbar-menu" aria-label="Desktop Navigation">
+    <ul>
+      {% assign nav_items = site.navigation_header %}
+      {% if nav_items and nav_items.size > 0 %}
+        {% for item in nav_items %}
+          {% assign href = item.url %}
+          {% assign is_external = false %}
+          {% if href contains '://' %}{% assign is_external = true %}{% endif %}
+          <li>
+            <a
+              href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
+              {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
+              class="{% if page.url == href %}active{% endif %}"
+            >
+              <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
+              {{ item.title }}
+            </a>
+          </li>
+        {% endfor %}
+      {% else %}
+        <li><a href="{{ '/#about' | relative_url }}"><i class="ph-bold ph-user"></i>About</a></li>
+        <li><a href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i>Projects</a></li>
+        <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i>Blog</a></li>
+        <li><a href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <!-- Inline navbar search -->
+  <form class="navbar-search" id="navbar-search" role="search" aria-label="Site search" autocomplete="off">
+    <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+    <input class="search-input" id="navbar-search-input" type="search"
+           placeholder="Search {{ site.title | escape }}…" aria-label="Search" />
+    <button type="button" class="search-cancel" id="navbar-search-cancel" aria-label="Cancel search">
+      <i class="ph-bold ph-x"></i>
+    </button>
+  </form>
+
+  <!-- Actions -->
+  <div class="navbar-actions">
+    <!-- Use this to OPEN inline search (prevents navigation) -->
+    <a href="{{ '/search/' | relative_url }}" id="search-open" class="nav-icon" aria-label="Search">
+      <i class="ph-bold ph-magnifying-glass"></i>
+    </a>
+
+    <button class="theme-toggle-button" aria-label="Toggle theme" id="theme-toggle">
+      <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
+      <i class="ph-bold ph-moon icon-moon" aria-hidden="true"></i>
+    </button>
+
+    <a href="{{ site.repo | default: site.github_url | default: 'https://github.com/your-username' }}"
+       target="_blank" rel="noopener noreferrer" class="nav-cta cta-github">
+      <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
+    </a>
+
+    <button class="mobile-menu-toggle nav-icon" id="mobile-menu-toggle"
+            aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+      <i class="ph-bold ph-list"></i>
+    </button>
+  </div>
+</header>
+
+<!-- Floating mobile island panel (builds from navigation_header too) -->
+<section id="mobile-panel" class="island-panel" aria-hidden="true">
+  <div class="island-panel__inner">
+    <div class="bento-grid" role="menu" aria-label="Quick actions">
+      {% assign mobile_items = site.navigation_header %}
+      {% if mobile_items and mobile_items.size > 0 %}
+        {% for item in mobile_items %}
+          {% assign href = item.url %}
+          {% assign is_external = false %}
+          {% if href contains '://' %}{% assign is_external = true %}{% endif %}
+          <a class="bento-card"
+             href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
+             {% if is_external %}target="_blank" rel="noopener"{% endif %}
+             role="menuitem">
+            <span class="bento-icon"><i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i></span>
+            <span>
+              <div class="bento-title">{{ item.title }}</div>
+              <div class="bento-sub">{{ item.sub | default: 'Open' }}</div>
+            </span>
+          </a>
+        {% endfor %}
+      {% else %}
+        <a class="bento-card" href="{{ '/#about' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-user"></i></span><span><div class="bento-title">About</div><div class="bento-sub">Who I am</div></span></a>
+        <a class="bento-card" href="{{ '/#projects' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-folder"></i></span><span><div class="bento-title">Projects</div><div class="bento-sub">Featured builds</div></span></a>
+        <a class="bento-card" href="{{ '/blog/' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-article"></i></span><span><div class="bento-title">Blog</div><div class="bento-sub">Notes & essays</div></span></a>
+        <a class="bento-card" href="{{ '/#contact' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-paper-plane-tilt"></i></span><span><div class="bento-title">Contact</div><div class="bento-sub">Say hello</div></span></a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Results panel, docked under the island -->
+<section id="search-results" class="search-results" aria-live="polite" aria-label="Search results"></section>
+
+<!-- Phosphor Icons (if not included in your <head>) -->
+<script>
+  /* assets/scripts/header.js */
+
+/* FOUC guard — you likely already run something similar in <head> */
+(function () {
+  var KEY = "color-scheme";
+  try {
+    var saved = localStorage.getItem(KEY);
+    var system = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    var theme = saved || system || "light";
+    document.documentElement.setAttribute("data-color-scheme", theme);
+  } catch(e){}
+})();
+
+document.addEventListener("DOMContentLoaded", function () {
+  var root    = document.documentElement;
+  var header  = document.getElementById('site-navbar');
+  var panel   = document.getElementById('mobile-panel');
+  var toggle  = document.getElementById('mobile-menu-toggle');
+  var themeBtn = document.getElementById('theme-toggle');
+
+  // --- Theme toggle (persist) ---
+  var KEY = "color-scheme";
+  function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
+  function setTheme(theme){
+    root.setAttribute("data-color-scheme", theme);
+    try { localStorage.setItem(KEY, theme); } catch(e){}
+    if (themeBtn) themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
+  }
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved && saved !== getTheme()) setTheme(saved);
+  } catch(e){}
+  themeBtn && themeBtn.addEventListener("click", function () {
+    setTheme(getTheme() === "light" ? "dark" : "light");
+  });
+
+  // --- Compute nav height for mobile spacing ---
+  function setNavHeightVar() {
+    var h = header ? header.getBoundingClientRect().height : 58;
+    root.style.setProperty("--nav-h", h + "px");
+  }
+  function applyMobileMode() {
+    var isMobile = window.matchMedia("(max-width: 991px)").matches;
+    document.body.classList.toggle("has-fixed-nav", isMobile);
+    setNavHeightVar();
+  }
+  applyMobileMode();
+  window.addEventListener("resize", setNavHeightVar);
+  window.addEventListener("orientationchange", setNavHeightVar);
+  window.setTimeout(setNavHeightVar, 120);
+
+  // --- Mobile panel open/close ---
+  function setPanelHeight(open){
+    if (!panel) return;
+    if (open) {
+      panel.style.maxHeight = "0px";
+      requestAnimationFrame(function(){ panel.style.maxHeight = panel.scrollHeight + "px"; });
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      requestAnimationFrame(function(){ panel.style.maxHeight = "0px"; });
+    }
+  }
+  function openPanel(){
+    header && header.classList.add("is-open");
+    panel && panel.classList.add("is-open");
+    panel && panel.setAttribute("aria-hidden","false");
+    toggle && toggle.setAttribute("aria-expanded","true");
+    document.body.classList.add("panel-open");
+    setPanelHeight(true);
+  }
+  function closePanel(){
+    header && header.classList.remove("is-open");
+    panel && panel.classList.remove("is-open");
+    panel && panel.setAttribute("aria-hidden","true");
+    toggle && toggle.setAttribute("aria-expanded","false");
+    document.body.classList.remove("panel-open");
+    setPanelHeight(false);
+  }
+  function togglePanel(){ panel && (panel.classList.contains("is-open") ? closePanel() : openPanel()); }
+  toggle && toggle.addEventListener("click", togglePanel);
+  panel && panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
+  var mq = window.matchMedia("(min-width: 992px)");
+  mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
+
+  // ===========================
+  // Inline Navbar Search (NEW)
+  // ===========================
+  var body    = document.body;
+  var openBtn = document.getElementById("search-open");
+  var form    = document.getElementById("navbar-search");
+  var input   = document.getElementById("navbar-search-input");
+  var cancel  = document.getElementById("navbar-search-cancel");
+  var results = document.getElementById("search-results");
+  var endpoint = "{{ '/assets/search.json' | relative_url }}"; // Jekyll will resolve
+  var PAGES = [];
+
+  // Load index once
+  if (endpoint) {
+    fetch(endpoint)
+      .then(function(r){ return r.json(); })
+      .then(function(data){ PAGES = data || []; })
+      .catch(function(){ PAGES = []; });
+  }
+
+  function openSearch() {
+    body.classList.add("search-active");
+    if (results) results.classList.add("is-open");
+    setTimeout(function(){ input && input.focus(); }, 10);
+  }
+  function clearResults(){ if (results) results.innerHTML = ""; }
+  function closeSearch() {
+    body.classList.remove("search-active");
+    if (results) results.classList.remove("is-open");
+    clearResults();
+    if (input) input.value = "";
+  }
+
+  // Cancel btn
+  cancel && cancel.addEventListener("click", closeSearch);
+
+  // Open trigger: prevent navigating to /search/
+  openBtn && openBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    openSearch();
+  });
+
+  // Click-away to close
+  document.addEventListener("click", function(e){
+    if (!body.classList.contains("search-active")) return;
+    if (e.target.closest(".island-navbar") || e.target.closest("#search-results")) return;
+    closeSearch();
+  });
+
+  // Keyboard shortcuts + nav
+  document.addEventListener("keydown", function(e){
+    if (e.key === "/" && !body.classList.contains("search-active")) {
+      e.preventDefault(); openSearch();
+    } else if (e.key === "Escape" && body.classList.contains("search-active")) {
+      e.preventDefault(); closeSearch();
+    } else if (body.classList.contains("search-active") && ["ArrowDown","ArrowUp","Enter"].includes(e.key)) {
+      var opts = Array.from(results.querySelectorAll('.search-item[role="option"]'));
+      if (!opts.length) return;
+      var cur = opts.findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; });
+      if (e.key === "ArrowDown") { cur = (cur+1) % opts.length; highlight(cur); e.preventDefault(); }
+      if (e.key === "ArrowUp")   { cur = (cur-1+opts.length) % opts.length; highlight(cur); e.preventDefault(); }
+      if (e.key === "Enter" && cur >= 0) { opts[cur].click(); }
+    }
+  });
+
+  // Debounced type → filter
+  var timer = null;
+  input && input.addEventListener("input", function(){
+    clearTimeout(timer);
+    var q = (this.value || "").trim();
+    timer = setTimeout(function(){ renderSearch(q); }, 120);
+    if (q && results && !results.classList.contains("is-open")) results.classList.add("is-open");
+    if (!q && results && results.classList.contains("is-open")) results.classList.remove("is-open");
+  });
+
+  // Prevent form navigation
+  form && form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var first = results && results.querySelector('.search-item[role="option"] a[href]');
+    if (first) { window.location.href = first.getAttribute("href"); closeSearch(); }
+  });
+
+  function findResults(term, pages) {
+    if (!term) return [];
+    var regex = new RegExp(term, "gi");
+    return (pages || []).filter(function(item){
+      return (item.title && item.title.match(regex)) || (item.content && item.content.match(regex));
+    });
+  }
+
+  function renderSearch(q) {
+    var arr = findResults(q, PAGES).slice(0, 12);
+    if (!results) return;
+    if (!q || !arr.length) {
+      results.innerHTML = '<div class="search-list"><div class="search-item" aria-disabled="true" style="opacity:.75">No results</div></div>';
+      return;
+    }
+
+    var html = ['<ul class="search-list" role="listbox">']
+      .concat(arr.map(function(item, i){
+        var thumb = item.image
+          ? '<div class="search-thumb"><img src="'+item.image+'" alt=""></div>'
+          : '<div class="search-thumb"><i class="ph-bold ph-file-text"></i></div>';
+        var url = item.url || "#";
+        var safeTitle = item.title || "Untitled";
+        var excerpt = item.excerpt || "";
+        return (
+          '<li class="search-item" role="option" data-index="'+i+'" tabindex="-1">'+
+            thumb+
+            '<div class="search-main">'+
+              '<div class="search-title">'+safeTitle+'</div>'+
+              '<div class="search-excerpt">'+excerpt+'</div>'+
+            '</div>'+
+            '<a class="search-cta" href="'+url+'">Open</a>'+
+          '</li>'
+        );
+      }))
+      .concat(['</ul>']).join('');
+    results.innerHTML = html;
+    highlight(0);
+
+    results.querySelectorAll('.search-item').forEach(function(li){
+      li.addEventListener("click", function(e){
+        if (e.target.tagName.toLowerCase() !== "a") {
+          var a = li.querySelector("a[href]");
+          if (a) { window.location.href = a.getAttribute("href"); }
+        }
+        closeSearch();
+      });
+    });
+  }
+
+  function highlight(idx){
+    var opts = results.querySelectorAll('.search-item[role="option"]');
+    opts.forEach(function(el){ el.setAttribute("aria-selected","false"); });
+    if (opts[idx]) { opts[idx].setAttribute("aria-selected","true"); opts[idx].scrollIntoView({block: "nearest"}); }
+  }
+});
+
+</script>

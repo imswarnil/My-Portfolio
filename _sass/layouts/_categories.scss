@@ -1,0 +1,205 @@
+// ======================================================================
+// category.scss — Categories index + sticky aside
+// Depends on: _variables.scss
+// ======================================================================
+
+@use "variables" as *;
+
+/* Shell */
+.category {
+  display: block;
+  padding-block: clamp($sp-10, 4vw, $sp-16);
+}
+
+/* Header */
+.category-header {
+  margin-bottom: clamp($sp-10, 4vw, $sp-16);
+}
+.category-title {
+  margin: 0 0 $sp-4 0;
+  font-size: clamp($fs-8, 5.6vw, $fs-10);
+  font-weight: $fw-bold;
+  line-height: $lh-tight;
+}
+.category-subtitle {
+  margin: 0;
+  font-size: $fs-3;
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+}
+
+/* Layout: main + optional aside */
+.category-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp($sp-10, 3vw, $sp-16);
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: minmax(0, 1fr) 320px; /* main | aside */
+    align-items: start;
+  }
+}
+
+/* Section header */
+.category-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-6;
+  margin-bottom: $sp-6;
+}
+.category-section__title {
+  margin: 0;
+  font-size: clamp($fs-6, 2.4vw, $fs-8);
+  line-height: $lh-tight;
+}
+
+/* Badge */
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2ch;
+  padding: 0 $sp-5;
+  height: 1.6rem;
+  border-radius: $radius-pill;
+  font-size: $fs-2;
+  font-weight: $fw-semibold;
+
+  @include theme-block      { background: tone(background-100, light); color: tone(contrast, light); border: 1px solid tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  color: tone(contrast, dark);  border: 1px solid tone(border, dark);  }
+}
+
+/* List of posts for a category */
+.category-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $sp-8;
+
+  @include mq-up($bp-md) {
+    grid-template-columns: 1fr 1fr; /* two-up on tablets+ */
+    gap: $sp-10;
+  }
+}
+.category-item { min-width: 0; }
+
+/* Post card */
+.category-card {
+  display: grid;
+  gap: $sp-5;
+  padding: $sp-8;
+  border-radius: $radius-5;
+  border: 1px solid;
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.category-card__title {
+  margin: 0;
+  font-size: clamp($fs-5, 2vw, $fs-6);
+  line-height: $lh-tight;
+
+  a {
+    text-decoration: none;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
+  }
+}
+
+.category-card__meta {
+  margin: 0;
+  font-size: $fs-2;
+  display: flex; align-items: center; gap: $sp-4;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
+}
+.category-dot { opacity: .55; }
+
+.category-card__thumb {
+  display: block; border-radius: $radius-3; overflow: hidden; border: 1px solid;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+
+  img { width: 100%; height: auto; display: block; object-fit: cover; }
+}
+
+.category-card__excerpt {
+  margin: 0;
+  font-size: $fs-3;
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
+}
+
+/* Divider */
+.category-hr {
+  border: 0; height: 0; margin: $sp-12 0;
+  border-top: 1px solid;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+}
+
+/* Empty state */
+.category-empty {
+  padding: $sp-12;
+  border-radius: $radius-4;
+  text-align: center;
+  border: 1px dashed;
+
+  @include theme-block      { color: tone(secondary, light); border-color: tone(border, light); background: tone(background-100, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  border-color: tone(border, dark);  background: tone(background-100, dark);  }
+}
+
+/* Sidebar */
+.category-aside {
+  position: sticky;
+  top: calc(#{$navbar-height} + #{$sp-8});
+  align-self: start;
+  display: none; /* hidden by default on small screens */
+
+  @include mq-up($bp-lg) { display: block; }
+}
+
+.category-aside__box {
+  padding: $sp-8;
+  border-radius: $radius-5;
+  border: 1px solid;
+
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+}
+.category-aside__title {
+  margin: 0 0 $sp-6 0;
+  font-size: $fs-5;
+  font-weight: $fw-semibold;
+}
+
+/* Sidebar nav */
+.category-nav__list {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; gap: $sp-5;
+}
+.category-nav__link {
+  display: flex; align-items: center; justify-content: space-between; gap: $sp-6;
+  padding: $sp-5 $sp-6;
+  border-radius: $radius-3;
+  border: 1px solid transparent;
+  text-decoration: none;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark);  }
+  }
+}
+.category-nav__name { font-size: $fs-3; }

@@ -1,0 +1,98 @@
+---
+layout: default
+title: Categories
+permalink: /categories/
+aside: true
+---
+<div class="container">
+<div class="category">
+  <header class="category-header">
+    <h1 class="category-title">{{ page.title | default: "Categories" }}</h1>
+    <p class="category-subtitle">Browse everything by topic.</p>
+  </header>
+
+  <div class="category-layout">
+    <!-- Main: all category sections -->
+    <div class="category-main">
+      {%- assign sorted_categories = site.categories | sort %}
+      {%- assign has_categories = false -%}
+
+      {%- for cat in sorted_categories -%}
+        {%- assign name = cat | first -%}
+        {%- assign posts = site.categories[name] | sort: "date" | reverse -%}
+        {%- assign count = posts | size -%}
+        {%- assign has_categories = true -%}
+
+        <section id="{{ name | slugify }}" class="category-section">
+          <div class="category-section__head">
+            <h2 class="category-section__title">{{ name }}</h2>
+            <span class="category-badge">{{ count }}</span>
+          </div>
+
+          <ul class="category-list">
+            {%- for post in posts -%}
+              <li class="category-item">
+                <article class="category-card">
+                  <h3 class="category-card__title">
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                  </h3>
+
+                  <p class="category-card__meta">
+                    {%- assign fmt = site.date_format | default: "%-d %B %Y" -%}
+                    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: fmt }}</time>
+                    {%- if post.reading_time -%}
+                      <span class="category-dot">•</span>
+                      <span>{{ post.reading_time }} min read</span>
+                    {%- endif -%}
+                  </p>
+
+                  {%- if post.image -%}
+                    <a class="category-card__thumb" href="{{ post.url | relative_url }}">
+                      <img src="{{ post.image | relative_url }}" alt="{{ post.title | escape }}">
+                    </a>
+                  {%- endif -%}
+
+                  <p class="category-card__excerpt">
+                    {{ post.excerpt | default: post.content | strip_html | truncatewords: 48 }}
+                  </p>
+                </article>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </section>
+
+        {%- unless forloop.last -%}<hr class="category-hr"/>{%- endunless -%}
+      {%- endfor -%}
+
+      {%- if has_categories != true -%}
+        <section class="category-empty">
+          <p>No posts have been categorised yet.</p>
+        </section>
+      {%- endif -%}
+    </div>
+
+    {%- if page.aside != false -%}
+    <!-- Sidebar: index of categories -->
+    <aside class="category-aside" aria-label="Category index">
+      <div class="category-aside__box">
+        <h3 class="category-aside__title">Index</h3>
+        <nav class="category-nav">
+          <ul class="category-nav__list">
+            {%- for cat in sorted_categories -%}
+              {%- assign name = cat | first -%}
+              {%- assign count = site.categories[name] | size -%}
+              <li>
+                <a class="category-nav__link" href="#{{ name | slugify }}">
+                  <span class="category-nav__name">{{ name }}</span>
+                  <span class="category-badge">{{ count }}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </div>
+    </aside>
+    {%- endif -%}
+  </div>
+</div>
+</div>

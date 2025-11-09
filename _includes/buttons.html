@@ -1,0 +1,77 @@
+{%- comment -%}
+Usage:
+  1) Ensure _sass/_button.scss is imported in your main bundle.
+  2) Ensure Phosphor icons are loaded: <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  3) Include this file where you want to render the button gallery or copy snippets.
+
+All buttons are <a> for demo; feel free to switch to <button type="button"> in forms.
+{%- endcomment -%}
+
+<section class="section" aria-label="Buttons">
+  <h2>Buttons</h2>
+
+  <!-- Sizes -->
+  <div class="stack">
+    <h3 class="small">Sizes</h3>
+    <div class="cluster">
+      <a class="btn is-sm" href="#"><i class="ph ph-lightning"></i><span>Small</span></a>
+      <a class="btn is-md" href="#"><i class="ph ph-lightning"></i><span>Medium</span></a>
+      <a class="btn is-lg" href="#"><i class="ph ph-lightning"></i><span>Large</span></a>
+      <button class="btn is-icon" aria-label="Star">
+        <i class="ph ph-star"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Variants -->
+  <div class="stack">
+    <h3 class="small">Variants</h3>
+    <div class="cluster">
+      <a class="btn" href="#"><i class="ph ph-rocket-launch"></i><span>Primary</span></a>
+      <a class="btn btn--outline" href="#"><i class="ph ph-circle"></i><span>Outline</span></a>
+      <a class="btn btn--muted" href="#"><i class="ph ph-dots-three-outline"></i><span>Muted</span></a>
+      <a class="btn btn--dark" href="#"><i class="ph ph-moon-stars"></i><span>Dark</span></a>
+      <a class="btn btn--inverted" href="#"><i class="ph ph-sun"></i><span>Inverted</span></a>
+      <a class="btn btn--ghost" href="#"><i class="ph ph-link-simple"></i><span>Ghost</span></a>
+      <button class="btn btn--danger"><i class="ph ph-warning"></i><span>Danger</span></button>
+      <button class="btn btn--success"><i class="ph ph-check-circle"></i><span>Success</span></button>
+    </div>
+  </div>
+
+  <!-- Disabled states -->
+  <div class="stack">
+    <h3 class="small">Disabled</h3>
+    <div class="cluster">
+      <a class="btn" href="#" aria-disabled="true" onclick="return false;" tabindex="-1">Primary</a>
+      <a class="btn btn--outline is-disabled" href="#" tabindex="-1">Outline</a>
+      <button class="btn btn--muted" disabled>Muted</button>
+      <button class="btn is-icon" disabled aria-label="Disabled icon"><i class="ph ph-x"></i></button>
+    </div>
+  </div>
+
+  <!-- Full-width / Toolbar -->
+  <div class="stack">
+    <h3 class="small">Full width</h3>
+    <p class="small">Use <code>.is-block</code> on any button.</p>
+    <p><a class="btn is-block btn--dark" href="#"><i class="ph ph-shopping-cart"></i><span>Buy Now</span></a></p>
+  </div>
+
+  <div class="stack">
+    <h3 class="small">Toolbar (responsive)</h3>
+    <div class="toolbar" role="group" aria-label="Toolbar">
+      <a class="btn btn--outline" href="#"><i class="ph ph-arrow-left"></i><span>Back</span></a>
+      <a class="btn" href="#"><i class="ph ph-floppy-disk"></i><span>Save</span></a>
+      <a class="btn btn--ghost" href="#"><i class="ph ph-share-network"></i><span>Share</span></a>
+    </div>
+  </div>
+
+  <!-- Button group (joined pills) -->
+  <div class="stack">
+    <h3 class="small">Button group</h3>
+    <div class="btn-group" role="group" aria-label="Segment control">
+      <button class="btn btn--outline is-sm"><i class="ph ph-grid-four"></i><span>Grid</span></button>
+      <button class="btn btn--outline is-sm"><i class="ph ph-list-bullets"></i><span>List</span></button>
+      <button class="btn btn--outline is-sm"><i class="ph ph-table"></i><span>Table</span></button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,224 @@
+---
+layout: default
+---
+
+{%- assign HAS_ASIDE = page.aside | default: true -%}
+{%- assign POST_TYPE = page.type | default: 'writing' -%}
+
+<section class="post-hero">
+  <div class="container">
+    <header class="post-header">
+      <p class="post-kicker">
+        {% case POST_TYPE %}
+          {% when 'project' %}Project
+          {% when 'video' %}Video
+          {% when 'podcast' %}Podcast
+          {% when 'guide' %}Guide
+          {% when 'review' %}Review
+          {% when 'trip' %}Travel
+          {% else %}Writing
+        {% endcase %}
+      </p>
+      <h1 class="post-title">{{ page.title }}</h1>
+      <div class="post-meta">
+        <img class="post-avatar" src="{{ page.author_avatar | default: '/assets/img/avatar.jpg' | relative_url }}" alt="{{ page.author | default: site.author }}">
+        <div class="post-byline">
+          <span class="post-author">{{ page.author | default: site.author | default: site.title }}</span>
+          <span class="post-date">{{ page.date | date: "%b %d, %Y" }}</span>
+          {% if page.reading_time %}<span class="post-dot">•</span><span class="post-read">{{ page.reading_time }} min read</span>{% endif %}
+        </div>
+      </div>
+
+      {% if page.cover %}
+      <figure class="post-cover">
+        <img src="{{ page.cover | relative_url }}" alt="{{ page.title }}">
+        {% if page.cover_caption %}<figcaption>{{ page.cover_caption }}</figcaption>{% endif %}
+      </figure>
+      {% endif %}
+
+      <!-- Mobile TOC appears directly after hero -->
+      <nav class="toc toc--mobile" aria-label="Table of contents">
+        <h2 class="toc-title">On this page</h2>
+        <ol class="toc-list" id="toc-mobile"></ol>
+      </nav>
+    </header>
+  </div>
+</section>
+
+<div class="container">
+  <div class="post-layout{% unless HAS_ASIDE %} post-layout--single{% endunless %}">
+    <article class="article">
+      <!-- Type-aware top blocks -->
+      {% case POST_TYPE %}
+        {% when 'project' %}
+          {% if page.facts %}
+          <section class="post-facts">
+            {% for f in page.facts %}
+              <div class="fact"><span class="fact-label">{{ f.label }}</span><span class="fact-value">{{ f.value }}</span></div>
+            {% endfor %}
+          </section>
+          {% endif %}
+        {% when 'video' %}
+          {% if page.video_embed %}
+          <div class="post-media">
+            {{ page.video_embed }}
+          </div>
+          {% endif %}
+        {% when 'podcast' %}
+          {% if page.audio_src %}
+          <div class="post-media">
+            <audio controls preload="none" src="{{ page.audio_src | relative_url }}"></audio>
+          </div>
+          {% endif %}
+        {% when 'review' %}
+          {% if page.rating %}
+          <div class="post-rating" role="img" aria-label="Rating {{ page.rating }} out of 5">
+            <span class="rating-label">Rating</span>
+            <div class="rating-stars" data-score="{{ page.rating }}"></div>
+          </div>
+          {% endif %}
+        {% when 'trip' %}
+          <div class="post-tripmeta">
+            {% if page.location %}<span class="trip-item"><i class="ph-bold ph-map-pin"></i>{{ page.location }}</span>{% endif %}
+            {% if page.days %}<span class="trip-item"><i class="ph-bold ph-calendar-blank"></i>{{ page.days }} days</span>{% endif %}
+            {% if page.cost %}<span class="trip-item"><i class="ph-bold ph-currency-inr"></i>{{ page.cost }}</span>{% endif %}
+          </div>
+        {% else %}
+          <!-- writing/guide defaults have no special block -->
+      {% endcase %}
+
+      <!-- The actual post content -->
+      <div class="content typeset">
+        {{ content }}
+      </div>
+
+      <!-- Tags -->
+      {% if page.tags %}
+      <ul class="post-tags">
+        {% for tag in page.tags %}
+          <li><a href="{{ '/tags/' | append: tag | slugify | relative_url }}">#{{ tag }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <!-- Share -->
+      <section class="post-share" aria-label="Share">
+        <h2 class="sr-only">Share</h2>
+        {% assign u = page.url | absolute_url %}
+        {% assign t = page.title | uri_escape %}
+        <a class="btn btn-ghost" href="https://twitter.com/intent/tweet?url={{ u | uri_escape }}&text={{ t }}" target="_blank" rel="noopener">
+          <i class="ph-bold ph-twitter-logo"></i><span>Twitter</span>
+        </a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/sharing/share-offsite/?url={{ u | uri_escape }}" target="_blank" rel="noopener">
+          <i class="ph-bold ph-linkedin-logo"></i><span>LinkedIn</span>
+        </a>
+        <button class="btn btn-ghost post-share-copy" data-url="{{ u }}">
+          <i class="ph-bold ph-link-simple"></i><span>Copy link</span>
+        </button>
+      </section>
+
+      <!-- Author box -->
+      <section class="post-author">
+        <img class="author-avatar" src="{{ page.author_avatar | default: '/assets/img/avatar.jpg' | relative_url }}" alt="{{ page.author | default: site.author }}">
+        <div class="author-body">
+          <h3 class="author-name">{{ page.author | default: site.author | default: site.title }}</h3>
+          <p class="author-bio">{{ page.author_bio | default: site.author_bio | default: "Filmmaker + Software Engineer. Building cinematic, fast web." }}</p>
+        </div>
+      </section>
+
+      <!-- Prev/Next -->
+      <nav class="post-nav" aria-label="Post navigation">
+        {% if page.previous.url %}
+        <a class="post-prev" href="{{ page.previous.url | relative_url }}">
+          <i class="ph-bold ph-arrow-left"></i>
+          <span class="label">Previous</span>
+          <span class="name">{{ page.previous.title }}</span>
+        </a>
+        {% endif %}
+        {% if page.next.url %}
+        <a class="post-next" href="{{ page.next.url | relative_url }}">
+          <span class="label">Next</span>
+          <span class="name">{{ page.next.title }}</span>
+          <i class="ph-bold ph-arrow-right"></i>
+        </a>
+        {% endif %}
+      </nav>
+    </article>
+
+    {% if HAS_ASIDE %}
+    <aside class="sidebar" aria-label="Sidebar">
+      <!-- Desktop sticky TOC -->
+      <nav class="toc toc--desktop">
+        <h2 class="toc-title">On this page</h2>
+        <ol class="toc-list" id="toc-desktop"></ol>
+      </nav>
+
+      <!-- Square Ad -->
+      {% include adsense.html type="square" %}
+
+      <!-- Tag Cloud -->
+      <section class="tag-cloud" aria-label="Tag cloud">
+        <h2 class="tagcloud-title">Tags</h2>
+        <ul class="tagcloud-list">
+          {% assign tags = site.tags | sort %}
+          {% for tag in tags %}
+            <li>
+              <a href="{{ '/tags/' | append: tag[0] | slugify | relative_url }}"
+                 style="--w: {{ tag[1].size | at_most: 12 | at_least: 4 }}">
+                 {{ tag[0] }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    </aside>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Build TOC from headings -->
+<script>
+(function(){
+  function buildTOC(containerId){
+    var wrap = document.getElementById(containerId);
+    if(!wrap) return;
+    var content = document.querySelector('.article .content');
+    if(!content) return;
+
+    var hs = content.querySelectorAll('h2, h3');
+    var list = document.createDocumentFragment();
+    hs.forEach(function(h, i){
+      if(!h.id){ h.id = 'h-' + (i+1); }
+      var li = document.createElement('li');
+      li.className = 'toc-item toc-' + h.tagName.toLowerCase();
+      var a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+    wrap.appendChild(list);
+  }
+  buildTOC('toc-mobile');
+  buildTOC('toc-desktop');
+
+  // Share copy
+  var btn = document.querySelector('.post-share-copy');
+  if(btn){
+    btn.addEventListener('click', function(){
+      var url = btn.getAttribute('data-url') || location.href;
+      navigator.clipboard.writeText(url).then(function(){
+        btn.classList.add('copied');
+        setTimeout(function(){ btn.classList.remove('copied'); }, 1200);
+      });
+    });
+  }
+
+  // Review stars (simple fill)
+  var stars = document.querySelector('.rating-stars');
+  if(stars){
+    var s = Math.max(0, Math.min(5, parseFloat(stars.dataset.score||0)));
+    stars.style.setProperty('--score', s);
+  }
+})();
+</script>

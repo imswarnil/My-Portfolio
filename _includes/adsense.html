@@ -1,0 +1,36 @@
+{%- comment -%}
+Usage:
+  {% include adsense.html type="square" %}
+  {% include adsense.html type="square-large" %}
+  {% include adsense.html type="horizontal" %}
+  {% include adsense.html type="vertical" %}
+  {% include adsense.html type="autorelaxed" %}
+  {% include adsense.html type="in_article" %}
+  {% include adsense.html type="fluid" %}
+
+Override slot explicitly:
+  {% include adsense.html type="square" slot="1234567890" %}
+
+Optional extra class:
+  {% include adsense.html type="square" class="mt-8" %}
+{%- endcomment -%}
+
+{%- if site.adsense and site.adsense.enabled and site.adsense.client -%}
+  {%- assign type = include.type | default: 'square' -%}
+  {%- assign slot_from_map = site.adsense.placements[type] -%}
+  {%- assign slot = include.slot | default: slot_from_map -%}
+  {%- assign extra = include.class -%}
+
+  {%- if slot -%}
+    <div class="ad ad--{{ type }}{% if extra %} {{ extra }}{% endif %}">
+      <ins class="adsbygoogle ad__slot"
+           data-ad-client="{{ site.adsense.client }}"
+           data-ad-slot="{{ slot }}"></ins>
+    </div>
+
+    <!-- Immediate render (no lazy) -->
+    <script>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>
+  {%- else -%}
+    <!-- Missing slot for type: {{ type }} -->
+  {%- endif -%}
+{%- endif -%}

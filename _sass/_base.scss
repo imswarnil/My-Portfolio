@@ -1,0 +1,188 @@
+// ======================================================================
+// _base.scss — resets, typography, elements, utilities, layout helpers
+// ======================================================================
+
+
+// Reset-ish
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: $ff-body;
+  font-size: $fs-3;
+  line-height: $lh-base;
+  max-width: 100%;
+  overflow-x: clip;
+  @include theme-block      { background-color: tone(background, light); color: tone(foreground, light); }
+  @include theme-block-dark { background-color: tone(background, dark);  color: tone(foreground, dark); }
+}
+
+img, svg, video, canvas { max-width: 100%; height: auto; display: block; }
+img { border-style: none; }
+hr { height: 0; border: 0; border-top: 1px solid; margin: $sp-12 0;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark); }
+}
+
+a {
+  text-decoration: none;
+  transition: color $dur-1 ease;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+
+  &:hover {
+    @include theme-block      { color: tone(accent, light); }
+    @include theme-block-dark { color: tone(accent, dark); }
+  }
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 $sp-6 0;
+  line-height: $lh-tight;
+  font-family: $ff-head;
+  font-weight: $fw-semibold;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
+h1 { font-size: $fs-10; }
+h2 { font-size: $fs-8; }
+h3 { font-size: $fs-6; }
+h4 { font-size: $fs-5; }
+h5 { font-size: $fs-4; }
+h6 { font-size: $fs-3; }
+
+// Text elements
+p { margin: 0 0 $sp-6 0; }
+small, .small {
+  font-size: $fs-1;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
+}
+strong { font-weight: $fw-bold; }
+em { font-style: italic; }
+
+// Lists
+ul, ol { margin: 0 0 $sp-6 0; padding-left: 1.25rem; }
+li { margin-bottom: .25rem; }
+
+// Code
+code, pre { font-family: $ff-mono; }
+code {
+  padding: 0.1em 0.35em;
+  border-radius: $radius-2;
+  border: 1px solid;
+  @include theme-block      { background: tone(muted, light); border-color: tone(border, light); color: tone(contrast, light); }
+  @include theme-block-dark { background: tone(muted, dark);  border-color: tone(border, dark);  color: tone(contrast, dark); }
+}
+pre {
+  padding: $code-pad-y $code-pad-x;
+  border-radius: $code-radius;
+  overflow-x: auto;
+  border: 1px solid;
+
+  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark); }
+}
+pre code { border: 0; background: transparent; padding: 0; }
+
+// Tables
+table { border-collapse: collapse; width: 100%; margin: $sp-10 0; }
+th, td {
+  padding: $table-pad-y $table-pad-x;
+  border-bottom: 1px solid;
+  text-align: left;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark); }
+}
+thead th {
+  font-weight: $fw-semibold;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark); }
+}
+
+// Forms
+input, select, textarea {
+  @include input-base;
+}
+
+// Buttons
+.button { @include button-base;
+  @include theme-block      { background: tone(accent, light); color: tone(white, light); }
+  @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  }
+}
+.button-transparent {
+  @include button-base;
+  background: transparent;
+  border-color: tone(border, light);
+  color: tone(secondary, light);
+
+  &:hover { background: tone(background-100, light); color: tone(contrast, light); }
+
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    color: tone(secondary, dark);
+
+    &:hover { background: tone(background-100, dark); color: tone(contrast, dark); }
+  }
+}
+.button-icon {
+  @include button-base;
+  min-height: $btn-height-sm;
+  width: $btn-height-sm;
+  height: $btn-height-sm;
+  padding: $sp-4;
+  border-radius: 50%;
+}
+.button-sm {
+  min-height: $btn-height-sm;
+  padding: 0.35rem $btn-pad-x-sm;
+  font-size: $fs-2;
+}
+
+// Layout helpers
+.container { @include container; }
+
+.main {
+  padding-inline: $container-gutter;
+  padding-top: calc(#{$navbar-height} + #{$sp-6});
+}
+
+// On large screens (desktop header is sticky island, not fixed),
+// we can reduce the top padding to normal page rhythm.
+@include mq-up($bp-lg) {
+  .main {
+    padding-top: $sp-8; // or keep $sp-12 if you want more air
+  }
+}
+.section {
+  @include container;
+  margin: 0 auto $sp-12;
+  padding: $sp-12;
+  border-radius: $radius-6;
+  border: 1px solid;
+
+  @include theme-block      { background: tone(surface, light);  border-color: tone(border, light);  box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark); box-shadow: $shadow-dark; }
+}
+
+// Utilities
+.hidden { display: none !important; }
+.visually-hidden {
+  position:absolute !important; width:1px; height:1px; clip:rect(1px,1px,1px,1px);
+  overflow:hidden; white-space:nowrap; border:0; padding:0; margin:0;
+}
+.mt-0 { margin-top: 0 !important; }
+.mb-0 { margin-bottom: 0 !important; }
+.mt-6 { margin-top: $sp-6 !important; }
+.mb-6 { margin-bottom: $sp-6 !important; }
+.pad-inline { padding-inline: $container-gutter !important; }

@@ -1,0 +1,176 @@
+// ======================================================================
+// archive.scss — Archive list + sticky aside + built-in meta/pager
+// Depends on: _variables.scss (+ your adsense.scss for ad look)
+// ======================================================================
+
+@use "variables" as *;
+
+.archive { padding-block: clamp($sp-10, 4vw, $sp-16); }
+
+/* Header */
+.archive-header { margin-bottom: clamp($sp-10, 4vw, $sp-16); }
+.archive-title {
+  margin: 0 0 $sp-4 0;
+  font-size: clamp($fs-8, 5.6vw, $fs-10);
+  font-weight: $fw-bold; line-height: $lh-tight;
+}
+.archive-subtitle {
+  margin: 0; font-size: $fs-3;
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark);  }
+}
+
+/* Layout */
+.archive-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp($sp-10, 3vw, $sp-16);
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: minmax(0, 1fr) 320px; /* main | aside */
+    align-items: start;
+  }
+}
+
+/* Main list */
+.archive-main { min-width: 0; }
+.archive-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  gap: $sp-10;
+
+  @include mq-up($bp-md) {
+    grid-template-columns: 1fr 1fr; /* two-up on tablets+ */
+    gap: $sp-12;
+  }
+}
+.archive-item { min-width: 0; }
+.archive-item--ad {
+  @include mq-up($bp-md) { grid-column: 1 / -1; } /* full row */
+}
+
+/* Card */
+.archive-card {
+  display: grid; gap: $sp-6;
+  padding: $sp-8;
+  border-radius: $radius-5;
+  border: 1px solid;
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+
+  &:hover { transform: translateY(-2px); }
+}
+
+.archive-card__thumb {
+  display: block; border-radius: $radius-3; overflow: hidden; border: 1px solid;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+
+  img { width: 100%; height: auto; object-fit: cover; display: block; }
+}
+
+.archive-card__title {
+  margin: 0; font-size: clamp($fs-5, 2vw, $fs-6); line-height: $lh-tight;
+  a {
+    text-decoration: none;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+}
+
+.archive-card__meta {
+  margin: 0; font-size: $fs-2; display: flex; flex-wrap: wrap; gap: $sp-4; align-items: center;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+.archive-dot { opacity: .55; }
+
+/* Category pills inside meta */
+.archive-label {
+  display: inline-flex; align-items: center; height: 1.6rem;
+  border: 1px solid; padding: 0 $sp-5; border-radius: $radius-pill; font-size: $fs-2;
+
+  @include theme-block      { border-color: tone(border, light); background: tone(background-100, light); color: tone(contrast, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: tone(background-100, dark);  color: tone(contrast, dark);  }
+
+  a { text-decoration: none; color: inherit; }
+}
+
+.archive-card__excerpt {
+  margin: 0; font-size: $fs-3;
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark);  }
+}
+
+/* Ads inside list/end */
+.archive-ad { margin-block: clamp($sp-8, 3vw, $sp-12); }
+.archive-ad--end { margin-top: $sp-12; }
+
+/* Pager */
+.archive-pager {
+  margin-top: clamp($sp-12, 4vw, $sp-16);
+  display: flex; flex-wrap: wrap; gap: $sp-6; align-items: center; justify-content: center;
+}
+.archive-page {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: $btn-height-sm; padding: 0 .9rem;
+  border-radius: $radius-pill; border: 1px solid;
+
+  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); background: transparent; }
+  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  background: transparent; }
+
+  &--prev, &--next {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
+  }
+  &.is-disabled { opacity: .5; pointer-events: none; }
+}
+
+/* Aside */
+.archive-aside {
+  display: none;
+  @include mq-up($bp-lg) {
+    display: grid; gap: $sp-8;
+    position: sticky; top: calc(#{$navbar-height} + #{$sp-8}); align-self: start;
+  }
+}
+
+/* Reusable small cards */
+.archive-card--about,
+.archive-card--cats,
+.archive-card--adbox {
+  padding: $sp-8;
+  border-radius: $radius-5; border: 1px solid;
+
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+}
+.archive-card__title { margin: 0 0 $sp-6 0; font-size: $fs-5; font-weight: $fw-semibold; }
+.archive-card__text  { margin: 0; font-size: $fs-3; }
+
+/* Category index */
+.archive-cats { list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-5; }
+.archive-cats__link {
+  display: flex; justify-content: space-between; align-items: center; gap: $sp-6;
+  padding: $sp-5 $sp-6; border-radius: $radius-3; border: 1px solid transparent; text-decoration: none;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark);  }
+  }
+}
+.archive-cats__name { font-size: $fs-3; }
+.archive-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2ch; height: 1.5rem; padding: 0 $sp-5; border-radius: $radius-pill; font-size: $fs-2; font-weight: $fw-semibold;
+  @include theme-block      { background: tone(background-100, light); color: tone(contrast, light); border: 1px solid tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  color: tone(contrast, dark);  border: 1px solid tone(border, dark);  }
+}
+
+/* Media safety */
+.archive :where(img, video, svg, canvas) { max-width: 100%; height: auto; display: block; }

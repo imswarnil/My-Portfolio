@@ -1,0 +1,200 @@
+// ======================================================================
+// Content Card — responsive post grid + cards
+// Requires tokens/mixins from _variables.scss
+// ======================================================================
+
+/* Grid wrapper for any post list */
+.content-grid {
+  display: grid;
+  gap: $sp-6;
+
+  // smart responsive columns
+  @include mq-up($bp-sm) { grid-template-columns: repeat(2, 1fr); }
+  @include mq-up($bp-lg) { grid-template-columns: repeat(3, 1fr); }
+
+  // allow variant override (e.g., related posts)
+  &.is-compact {
+    @include mq-up($bp-lg) { grid-template-columns: repeat(3, 1fr); }
+    .content-card__excerpt { -webkit-line-clamp: 2; } // shorter text
+  }
+}
+
+/* Card */
+.content-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+  border-radius: $radius-6;
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, border-color $dur-1 $ease-in-out;
+
+  @include theme-block      { background: rgba(255,255,255,.72); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: rgba(18,18,20,.74);   border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+
+  &:hover {
+    transform: translateY(-4px);
+    @include theme-block      { box-shadow: 0 18px 36px -12px rgba(0,0,0,.16), $shadow-light; }
+    @include theme-block-dark { box-shadow: 0 20px 40px -16px rgba(0,0,0,.42), $shadow-dark; }
+  }
+
+  &:focus-within {
+    outline: 2px solid transparent; // avoid default outline bleed
+    @include theme-block      { border-color: tone(contrast, light); }
+    @include theme-block-dark { border-color: tone(contrast, dark);  }
+  }
+}
+
+/* Media */
+.content-card__media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16/9;                 // modern
+  // Fallback if needed: height via padding
+  @supports not (aspect-ratio: 1) {
+    height: 0; padding-top: 56.25%;
+  }
+
+  img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transform: scale(1);
+    transition: transform $dur-2 $ease-in-out, filter $dur-2 $ease-in-out;
+  }
+
+  .content-card__cat {
+    position: absolute; left: $sp-4; top: $sp-4;
+    display: inline-flex; align-items: center; gap: .45rem;
+    padding: .35rem .6rem; border-radius: $radius-pill; border: 1px solid;
+
+    font-size: $fs-2; line-height: 1;
+
+    @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); color: tone(secondary, light); }
+    @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  color: tone(secondary, dark);  }
+
+    a { text-decoration: none; @include theme-block { color: inherit; } @include theme-block-dark { color: inherit; } }
+  }
+}
+
+/* Subtle Ken Burns on hover */
+.content-card:hover .content-card__media img { transform: scale(1.06); }
+
+/* Body */
+.content-card__body {
+  display: grid;
+  gap: $sp-3;
+  padding: $sp-5;
+}
+
+/* Title */
+.content-card__title {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+
+  a {
+    text-decoration: none;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+
+    &:hover { text-decoration: underline; }
+  }
+}
+
+/* Meta */
+.content-card__meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: $sp-3;
+  font-size: $fs-2;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%; opacity: .55;
+    @include theme-block      { background: tone(secondary, light); }
+    @include theme-block-dark { background: tone(secondary, dark);  }
+  }
+
+  .post-meta { // existing partial styles will cascade
+    margin: 0; display: inline-flex; gap: $sp-3; align-items: center;
+    a { text-decoration: none; @include theme-block { color: inherit; } @include theme-block-dark { color: inherit; } }
+  }
+}
+
+/* Excerpt */
+.content-card__excerpt {
+  margin: 0;
+  font-size: $fs-3;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;        // clamp to 3 lines
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Footer CTA */
+.content-card__footer {
+  margin-top: auto;
+  padding: 0 $sp-5 $sp-5;
+
+  .readmore {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-size: $fs-3; text-decoration: none;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+
+    i { font-size: $fs-4; line-height: 1; transition: transform $dur-1 $ease-in-out; }
+    &:hover i { transform: translateX(3px); }
+  }
+}
+
+/* List -> Card bridge (so your existing markup classes don’t fight it) */
+.list--posts {
+  list-style: none;
+  margin: 0; padding: 0;
+
+  // swap the default list for the grid
+  display: block;
+  > .item--post { margin: 0; padding: 0; }
+}
+
+/* Make the UL inside section become the grid */
+.section .list--posts { @extend .content-grid; }
+
+/* Related posts compact layout */
+.list--related { @extend .content-grid; @extend .is-compact; }
+
+/* Pagination tweaks (optional polish) */
+.nav--paginator {
+  margin-top: $sp-8;
+  display: flex; align-items: center; justify-content: space-between; gap: $sp-4;
+  .pagination {
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+    &--previous, &--next {
+      text-decoration: none;
+      @include theme-block      { color: tone(contrast, light); }
+      @include theme-block-dark { color: tone(contrast, dark);  }
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+/* Category label (from your partial) */
+.label--category {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .25rem .55rem; border-radius: $radius-pill; border: 1px solid;
+  font-size: $fs-2; line-height: 1;
+
+  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); color: tone(secondary, light); }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  color: tone(secondary, dark);  }
+
+  a { text-decoration: none; @include theme-block { color: inherit; } @include theme-block-dark { color: inherit; } }
+}

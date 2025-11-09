@@ -1,0 +1,187 @@
+---
+layout: default
+---
+<!-- =========================
+     HERO
+========================= -->
+<section class="home-hero" itemscope itemtype="https://schema.org/Person">
+  <div class="container">
+    <div class="home-hero__grid">
+      <!-- Copy -->
+      <div class="home-hero__copy">
+        <p class="home-hero__hello">
+          <i class="ph-bold ph-hand-waving" aria-hidden="true"></i><span>Hi,</span>
+        </p>
+        <h1 class="home-hero__name" itemprop="name">I’m Swarnil Singhai</h1>
+        <p class="home-hero__sub">Creative Engineer &amp; Filmmaker</p>
+        <p class="home-hero__bio">
+          I craft clean, scalable product surfaces and tell stories that stay with people.
+        </p>
+
+        <nav class="home-hero__cta" aria-label="Primary actions">
+          <a class="button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact me</span>
+          </a>
+          <a class="button-transparent" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
+          </a>
+        </nav>
+
+        <div class="home-hero__meta">
+          <div class="home-hero__meta-row">
+            <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
+            <span>Software Engineer @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
+          </div>
+          <div class="home-hero__meta-row">
+            <i class="ph-bold ph-map-pin" aria-hidden="true"></i>
+            <span>{{ site.location | default: 'Bengaluru, India' }}</span>
+          </div>
+        </div>
+
+        <!-- Slim pill stats -->
+        <ul class="home-hero__stats" role="list" aria-label="Quick stats">
+          <li class="pill"><span class="pill__val">{{ page.stats_youtube | default: '17K+' }}</span><span class="pill__label">YT Subs</span></li>
+          <li class="pill"><span class="pill__val">{{ page.stats_experience | default: '5+ yrs' }}</span><span class="pill__label">Experience</span></li>
+          <li class="pill"><span class="pill__val">{{ page.stats_views | default: '2.4M' }}</span><span class="pill__label">Video Views</span></li>
+        </ul>
+      </div>
+
+      <!-- Art (Square) + Social rail -->
+      <div class="home-hero__art-wrap">
+        <figure class="home-hero__art" itemprop="image" aria-label="Portrait">
+          <img
+            src="{{ page.hero_image | default: 'https://images.pexels.com/photos/10570189/pexels-photo-10570189.jpeg' }}"
+            alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
+            width="1000" height="1000" loading="eager" fetchpriority="high">
+          <!-- Socials: half inside border -->
+          <ul class="home-hero__social" role="list" aria-label="Social links">
+            <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email"><i class="ph-bold ph-envelope"></i></a></li>
+            <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
+            <li><a href="{{ site.social_links.LinkedIn | default: 'https://www.linkedin.com' }}" aria-label="LinkedIn"><i class="ph-bold ph-linkedin-logo"></i></a></li>
+            <li><a href="{{ site.social_links.Twitter | default: 'https://twitter.com' }}" aria-label="Twitter"><i class="ph-bold ph-twitter-logo"></i></a></li>
+            <li><a href="{{ site.social_links.Youtube | default: '/videos/' }}" aria-label="YouTube"><i class="ph-bold ph-youtube-logo"></i></a></li>
+          </ul>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     QUICK BENTO
+========================= -->
+<section class="home-bento" aria-label="Quick actions">
+  <div class="container">
+    <ul class="home-bento__grid" role="list">
+      <!-- Projects (GitHub-like) -->
+      <li class="home-bento__item">
+        <a class="home-bento__tile home-bento__tile--github" href="{{ '/projects/' | relative_url }}">
+          <span class="home-bento__icon"><i class="ph-bold ph-github-logo"></i></span>
+          <div class="gh-head">
+            <span class="gh-repo">imswarnil / portfolio</span>
+          </div>
+          <div class="gh-meta">
+            <span class="dot"></span> TypeScript • SCSS
+            <span class="spacer"></span>
+            <i class="ph-bold ph-star"></i> 1.2k
+          </div>
+        </a>
+      </li>
+
+      <!-- Videos (YouTube-like) -->
+      <li class="home-bento__item">
+        <a class="home-bento__tile home-bento__tile--video" href="{{ '/videos/' | relative_url }}">
+          <span class="home-bento__icon"><i class="ph-bold ph-youtube-logo"></i></span>
+          <div class="yt-frame"><div class="yt-thumb"></div></div>
+          <div class="yt-title">Watch my latest</div>
+        </a>
+      </li>
+
+      <!-- Blog -->
+      <li class="home-bento__item">
+        <a class="home-bento__tile home-bento__tile--blog" href="{{ '/blog/' | relative_url }}">
+          <span class="home-bento__icon"><i class="ph-bold ph-newspaper-clipping"></i></span>
+          <div class="blog-title">Read the blog</div>
+          <p class="blog-excerpt">Cinematic dev, product notes, travel & stories.</p>
+        </a>
+      </li>
+
+      <!-- Resume -->
+      <li class="home-bento__item">
+        <a class="home-bento__tile home-bento__tile--resume" href="{{ '/resume/' | relative_url }}">
+          <span class="home-bento__icon"><i class="ph-bold ph-identification-card"></i></span>
+          <div class="cv-line">Resume • Work & Skills</div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- =========================
+     MY CONTENT (featured + grouped)
+========================= -->
+<section class="home-content" aria-label="My content">
+  <div class="container">
+    <div class="home-content__head">
+      <h2>My content</h2>
+      <a class="button-transparent home-content__all" href="{{ '/archive/' | relative_url }}">
+        <i class="ph-bold ph-layout"></i> View all
+      </a>
+    </div>
+
+    <!-- Featured card -->
+    <article class="home-content__featured">
+      <div class="feat-copy">
+        <h3>Creating useful things, consistently</h3>
+        <p>From engineering write-ups to travel films—here’s the latest.</p>
+      </div>
+      <a class="feat-cta button" href="{{ '/archive/' | relative_url }}"><i class="ph-bold ph-arrow-right"></i> Browse archive</a>
+    </article>
+
+    <!-- Grouped by front matter `type` -->
+    <div class="home-content__groups">
+      {% assign grouped = site.posts | group_by_exp: 'p', 'p.type | default: "writing"' %}
+      {% for grp in grouped %}
+        <section class="home-content__group">
+          <h3 class="group-title">{{ grp.name | capitalize }}</h3>
+          <ul class="group-list" role="list">
+            {% for p in grp.items limit: 4 %}
+              <li class="group-item">
+                <a class="group-card" href="{{ p.url | relative_url }}">
+                  <div class="g-meta small">{{ p.date | date: site.date_format | default: "%d %b %Y" }}</div>
+                  <h4 class="g-title">{{ p.title }}</h4>
+                  <p class="g-excerpt">{{ p.excerpt | strip_html | truncatewords: 18 }}</p>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     PORTFOLIO (from site.resume.projects)
+========================= -->
+<section class="home-portfolio" aria-label="Portfolio">
+  <div class="container">
+    <h2 class="home-portfolio__title">Selected work</h2>
+    <ul class="home-portfolio__grid" role="list">
+      {% for pr in site.resume.projects %}
+      <li class="home-portfolio__item">
+        <a class="home-portfolio__tile" href="{{ pr.demo | default: pr.repo | default: '#' }}">
+          <div class="hp-cover" style="--bg:url('{{ pr.cover | default: site.image }}')"></div>
+          <div class="hp-copy">
+            <h3 class="hp-title">{{ pr.title }}</h3>
+            <p class="hp-meta small">{{ pr.meta }}</p>
+            <p class="hp-desc">{{ pr.desc }}</p>
+          </div>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<!-- Icons -->

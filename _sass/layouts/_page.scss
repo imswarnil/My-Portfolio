@@ -1,0 +1,199 @@
+// ======================================================================
+// page.scss — Flat content + unique “rail” sidebar + narrower page width
+// Depends on: _variables.scss
+// ======================================================================
+
+@use "variables" as *;
+
+/* Make this layout slightly narrower than the site-wide container */
+.container--page-narrow {
+  width: calc(#{$island-width} - 3rem);
+  max-width: calc(100% - 2 * (#{$container-gutter} + .5rem));
+  margin-inline: auto;
+}
+
+/* Page padding */
+.page { padding-block: clamp($sp-10, 4vw, $sp-16); }
+
+/* Grid: main + optional rail */
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp($sp-10, 3vw, $sp-16);
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: minmax(0, 1fr) 300px; // main | rail
+    align-items: start;
+  }
+}
+
+/* MAIN — flat, no island */
+.page-main { min-width: 0; }
+.page-article {
+  padding: 0; // flat content — you can add rhythm inside your Markdown styles
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+
+  .page-title {
+    margin: 0 0 $sp-8 0;
+    font-size: clamp($fs-8, 5.6vw, $fs-10);
+    line-height: $lh-tight;
+    font-weight: $fw-bold;
+  }
+
+  .page-breadcrumb {
+    display: inline-flex;
+    gap: $sp-5;
+    align-items: center;
+    margin-bottom: $sp-6;
+    font-size: $fs-2;
+
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+
+    a {
+      text-decoration: none;
+      @include theme-block      { color: tone(contrast, light); }
+      @include theme-block-dark { color: tone(contrast, dark);  }
+      &:hover {
+        @include theme-block      { color: tone(accent, light); }
+        @include theme-block-dark { color: tone(accent, dark); }
+      }
+    }
+  }
+
+  .page-meta {
+    display: flex; flex-wrap: wrap; gap: $sp-6;
+    margin: -$sp-4 0 $sp-10;
+    font-size: $fs-2;
+
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+
+    .dot { opacity: .6; }
+    i { font-size: 1.05em; }
+  }
+
+  /* media safety */
+  :where(img, video, svg, canvas) { max-width: 100%; height: auto; display: block; }
+  table { display: block; overflow-x: auto; }
+}
+
+/* RAIL — unique look (outline, chips, dashed separators); sticky at desktop */
+.page-rail {
+  display: none;
+
+  @include mq-up($bp-lg) {
+    display: grid;
+    gap: $sp-8;
+    position: sticky;
+    top: calc(#{$navbar-height} + #{$sp-8});
+    align-self: start;
+  }
+}
+
+/* Cards in the rail are *not* islands; they are trimmed, flat containers */
+.rail-card {
+  padding: $sp-8;
+  border-radius: $radius-4;
+  border: 1px dashed;
+
+  @include theme-block      { background: transparent; border-color: tone(border, light); }
+  @include theme-block-dark { background: transparent; border-color: tone(border, dark);  }
+
+  & + .rail-card { margin-top: $sp-4; }
+}
+
+.rail-card--cta {
+  border-style: solid;
+  @include theme-block      { background: tone(background-100, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  }
+}
+
+.rail-title {
+  margin: 0 0 $sp-5 0;
+  font-size: $fs-5;
+  font-weight: $fw-semibold;
+  line-height: $lh-tight;
+
+  i { margin-right: $sp-5; }
+}
+
+.rail-text {
+  margin: 0 0 $sp-6 0;
+  font-size: $fs-3;
+
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark);  }
+}
+
+/* TOC */
+.rail-toc__list {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-3;
+}
+.rail-toc__item.is-sub { padding-left: $sp-6; }
+.rail-toc__link {
+  display: block; padding: $sp-4 $sp-5;
+  border-radius: $radius-3; border: 1px solid transparent; text-decoration: none;
+  font-size: $fs-2;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark);  }
+  }
+}
+
+/* Social chips */
+.rail-chips {
+  list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: $sp-5;
+}
+.chip {
+  display: inline-flex; align-items: center; gap: $sp-5;
+  padding: .4rem .7rem; border-radius: $radius-pill; border: 1px dashed;
+  text-decoration: none; font-size: $fs-2; line-height: 1;
+
+  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
+
+  i { font-size: 1.05em; }
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-200, dark);  }
+  }
+}
+
+/* CTA button reusing your tokens */
+.btn { @include button-base; }
+.button {
+  @include theme-block      { background: tone(accent, light); color: tone(white, light); }
+  @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark); }
+  border-color: transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    @include theme-block      { color: tone(white, light); }
+    @include theme-block-dark { color: tone(black, dark); }
+  }
+}
+
+/* Footer note band */
+.page-footnote {
+  margin-top: clamp($sp-12, 5vw, $sp-20);
+  padding: $sp-8;
+  border-radius: $radius-4;
+  border: 1px dashed;
+
+  @include theme-block      { color: tone(secondary, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  border-color: tone(border, dark);  }
+
+  a {
+    text-decoration: underline;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+}

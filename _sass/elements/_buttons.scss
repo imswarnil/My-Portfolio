@@ -1,0 +1,120 @@
+// Requires: _variables.scss (tokens + mixins) and optional _base.scss
+
+// ===== Base
+.btn {
+  @include button-base; // structure: sizing, border radius, transitions
+  gap: .6em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+
+  // Default: primary (accent on light, white on dark)
+  @include theme-block      { background: tone(accent, light); color: tone(white, light); border-color: transparent; }
+  @include theme-block-dark { background: tone(white, dark);  color: tone(black, dark);  border-color: transparent; }
+
+  // Motion polish
+  &:hover { transform: translateY(-2px); }
+  &:active { transform: translateY(0); }
+  &:focus-visible { outline: $focus-ring-width solid rgba(106,166,255,.35); outline-offset: 2px; }
+
+  // Disabled
+  &[disabled], &.is-disabled, &:disabled {
+    opacity: .6; pointer-events: none; transform: none !important;
+  }
+
+  // Icon size align
+  i[class^="ph"], i[class*=" ph"] { font-size: 1.1em; line-height: 1; }
+}
+
+// ===== Sizes
+.btn.is-sm { min-height: $btn-height-sm; padding: .35rem $btn-pad-x-sm; font-size: $fs-2; }
+.btn.is-md { min-height: $btn-height;    padding: $btn-pad-y $btn-pad-x;  font-size: $fs-2; } // default
+.btn.is-lg { min-height: calc(#{$btn-height} + .25rem); padding: .65rem calc(#{$btn-pad-x} + .25rem); font-size: $fs-3; }
+
+// Full width
+.btn.is-block { display: inline-flex; width: 100%; }
+
+// Icon-only
+.btn.is-icon {
+  width: $btn-height-sm; height: $btn-height-sm; padding: 0;
+  justify-content: center; align-items: center;
+  i[class^="ph"], i[class*=" ph"] { font-size: $fs-4; }
+}
+
+// ===== Color variants
+// Outline
+.btn--outline {
+  @include theme-block      { background: transparent; color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: transparent; color: tone(contrast, dark);  border-color: tone(border, dark);  }
+  &:hover {
+    @include theme-block      { background: tone(muted, light); }
+    @include theme-block-dark { background: tone(muted, dark);  }
+  }
+}
+
+// Muted (surface-friendly)
+.btn--muted {
+  @include theme-block      { background: tone(muted, light); color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(muted, dark);  color: tone(contrast, dark);  border-color: tone(border, dark); }
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
+  }
+}
+
+// Dark (useful in light theme heros)
+.btn--dark {
+  @include theme-block      { background: tone(black, light); color: tone(white, light); border-color: transparent; }
+  @include theme-block-dark { background: tone(black, dark);  color: tone(white, dark);  border-color: transparent; }
+  &:hover { box-shadow: 0 4px 10px rgba(0,0,0,.25); }
+}
+
+// Inverted (reverse of default primary)
+.btn--inverted {
+  @include theme-block      { background: tone(white, light); color: tone(black, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(black, dark);  color: tone(white, dark); border-color: tone(border, dark);  }
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
+  }
+}
+
+// Ghost (text button with subtle hover)
+.btn--ghost {
+  background: transparent; border-color: transparent;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+  &:hover {
+    @include theme-block      { background: tone(muted, light); }
+    @include theme-block-dark { background: tone(muted, dark);  }
+  }
+}
+
+// Danger / Success (optional semantic)
+.btn--success {
+  @include theme-block      { background: map-get($theme-light, success); color: tone(white, light); border-color: transparent; }
+  @include theme-block-dark { background: map-get($theme-dark,  success); color: tone(black, dark);  border-color: transparent; }
+}
+.btn--danger {
+  @include theme-block      { background: map-get($theme-light, danger); color: tone(white, light); border-color: transparent; }
+  @include theme-block-dark { background: map-get($theme-dark,  danger); color: tone(black, dark);  border-color: transparent; }
+}
+
+// ===== Button group (no double borders, nice radius joins)
+.btn-group {
+  display: inline-flex; align-items: stretch; gap: 0;
+
+  .btn {
+    border-radius: 0;              // reset
+    &:not(:last-child) { border-right: 0; }
+  }
+  .btn:first-child  { border-top-left-radius: $radius-pill; border-bottom-left-radius: $radius-pill; }
+  .btn:last-child   { border-top-right-radius: $radius-pill; border-bottom-right-radius: $radius-pill; }
+}
+
+// ===== Block toolbar (full-width group on mobile)
+.toolbar {
+  display: grid; gap: $sp-6; grid-template-columns: 1fr;
+  @include mq-up($bp-sm) { grid-template-columns: repeat(3, 1fr); }
+}

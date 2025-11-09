@@ -1,0 +1,156 @@
+---
+layout: default
+title: Archive
+---
+
+<div class="container">
+  <div class="archive">
+
+    <!-- Header -->
+    <header class="archive-header">
+      {% if paginator.posts and page.collectionpage %}
+        {% assign collectiondata = site.collections | where: "label", page.collectionpage | first %}
+        <h1 class="archive-title">{{ collectiondata.title | default: page.title | default: 'Archive' }}</h1>
+        {% if collectiondata.description %}<p class="archive-subtitle">{{ collectiondata.description }}</p>{% endif %}
+      {% else %}
+        <h1 class="archive-title">{{ page.title | default: 'Archive' }}</h1>
+        {% if page.description %}<p class="archive-subtitle">{{ page.description }}</p>{% endif %}
+      {% endif %}
+    </header>
+
+    <div class="archive-layout">
+      <!-- Main -->
+      <main class="archive-main">
+        {%- assign posts = paginator.posts | default: site.posts -%}
+        {%- assign total = posts | size -%}
+        {%- assign mid = total | divided_by: 2 -%}
+
+        {% if total > 0 %}
+          <ul class="archive-list">
+            {%- for post in posts -%}
+              <li class="archive-item">
+                <article class="archive-card">
+                  {%- if post.image -%}
+                  <a class="archive-card__thumb" href="{{ post.url | relative_url }}">
+                    <img src="{{ post.image | relative_url }}" alt="{{ post.title | escape }}">
+                  </a>
+                  {%- endif -%}
+
+                  <h2 class="archive-card__title">
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                  </h2>
+
+                  <!-- Meta (no include) -->
+                  <p class="archive-card__meta">
+                    {%- comment -%} categories to labels {%- endcomment -%}
+                    {%- assign pills = "" -%}
+                    {%- if post.categories -%}
+                      {%- for c in post.categories -%}
+                        {%- assign pill = '<span class="archive-label"><a href="' | append: site.baseurl | append: '/categories/#' | append: c | downcase | slugify | append: '">' | append: c | append: '</a></span>' -%}
+                        {%- assign pills = pills | append: pill -%}
+                        {%- unless forloop.last -%}{%- assign pills = pills | append: ' ' -%}{%- endunless -%}
+                      {%- endfor -%}
+                    {%- elsif post.category -%}
+                      {%- assign pills = '<span class="archive-label"><a href="' | append: site.baseurl | append: '/categories/#' | append: post.category | downcase | slugify | append: '">' | append: post.category | append: '</a></span>' -%}
+                    {%- endif -%}
+
+                    {%- assign date_format = site.date_format | default: "%d %b %Y" -%}
+                    <span class="archive-meta__cats">{{ pills }}</span>
+                    <span class="archive-dot">•</span>
+                    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: date_format }}</time>
+                    {%- if post.reading_time -%}
+                      <span class="archive-dot">•</span>
+                      <span>{{ post.reading_time }} min read</span>
+                    {%- endif -%}
+                  </p>
+
+                  <p class="archive-card__excerpt">
+                    {{ post.excerpt | default: post.content | strip_html | truncatewords: 60 }}
+                  </p>
+                </article>
+              </li>
+
+              {%- comment -%} Inject a horizontal ad after the 4th item and after midpoint {%- endcomment -%}
+              {%- if forloop.index == 4 or forloop.index == mid -%}
+                <li class="archive-item archive-item--ad">
+                  <div class="archive-ad">
+                    {% if site.adsense and site.adsense.enabled %}
+                      {% include adsense.html type="horizontal" %}
+                    {% endif %}
+                  </div>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+
+          <!-- Extra ad at the end of list -->
+          {% if site.adsense and site.adsense.enabled %}
+          <div class="archive-ad archive-ad--end">
+            {% include adsense.html type="horizontal" %}
+          </div>
+          {% endif %}
+
+          <!-- Pagination (no include) -->
+          {% if paginator %}
+          <nav class="archive-pager" aria-label="Pagination">
+            {% if paginator.previous_page %}
+              <a class="archive-page archive-page--prev" href="{{ paginator.previous_page_path | relative_url }}">&larr; Newer</a>
+            {% else %}
+              <span class="archive-page archive-page--prev is-disabled">&larr; Newer</span>
+            {% endif %}
+
+            <span class="archive-page archive-page--count">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
+
+            {% if paginator.next_page %}
+              <a class="archive-page archive-page--next" href="{{ paginator.next_page_path | relative_url }}">Older &rarr;</a>
+            {% else %}
+              <span class="archive-page archive-page--next is-disabled">Older &rarr;</span>
+            {% endif %}
+          </nav>
+          {% endif %}
+
+        {% else %}
+          <section class="archive-empty">
+            <p>No posts yet.</p>
+          </section>
+        {% endif %}
+      </main>
+
+      {% if page.aside != false %}
+      <!-- Aside (sticky) -->
+      <aside class="archive-aside" aria-label="Archive sidebar">
+        <section class="archive-card archive-card--about">
+          <h3 class="archive-card__title">About this site</h3>
+          <p class="archive-card__text">{{ site.description }}</p>
+        </section>
+
+        <!-- Category index -->
+        <section class="archive-card archive-card--cats">
+          <h3 class="archive-card__title">Categories</h3>
+          <ul class="archive-cats">
+            {%- assign sorted_categories = site.categories | sort -%}
+            {%- for cat in sorted_categories -%}
+              {%- assign name = cat | first -%}
+              {%- assign count = site.categories[name] | size -%}
+              <li>
+                <a class="archive-cats__link" href="{{ '/categories/#' | append: name | slugify | relative_url }}">
+                  <span class="archive-cats__name">{{ name }}</span>
+                  <span class="archive-badge">{{ count }}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </section>
+
+        {% if site.adsense and site.adsense.enabled %}
+        <section class="archive-card archive-card--adbox">
+          <div class="archive-ad">
+            {% include adsense.html type="square" %}
+          </div>
+        </section>
+        {% endif %}
+      </aside>
+      {% endif %}
+    </div>
+  </div>
+</div>

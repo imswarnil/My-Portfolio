@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+{% include head.html %}
+<body class="layout-{{ page.layout }}{% if page.title %} {{ page.title | slugify }}{% endif %}">
+  {% include header.html %}
+{% if page.rails != false %}
+<div class="ad-rails" aria-hidden="false">
+<div class="ad-rail ad-rail--left">{% include adsense.html type="vertical" %}</div>
+ <div class="ad-rail ad-rail--right"> {% include adsense.html type="vertical" %} </div>
+</div>
+{% endif %}
+  <main class="main">
+      {{ content }}
+  {% include adsense.html type="horizontal" %}
+  {% include footer.html %}
+  </main>
+  {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
+  {% include site-before-end.html %}
+</body>
+
+</html>

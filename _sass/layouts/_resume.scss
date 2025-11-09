@@ -1,0 +1,180 @@
+// Uses tokens/mixins from _variables.scss and base rhythm from _base.scss
+
+.stack { display: grid; gap: $sp-12; }
+.stack--tight { gap: $sp-8; }
+.cluster { display: flex; flex-wrap: wrap; gap: $sp-6; align-items: center; }
+
+.island {
+  border: 1px solid; border-radius: $radius-6; overflow: hidden;
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+}
+.island--soft {
+  border: 1px solid; border-radius: $radius-6;
+  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+}
+
+.resume {
+  @include container;
+  padding-inline: $container-gutter;
+  margin-top: $sp-12;   // clear the sticky/fixed navbar zone
+  margin-bottom: $sp-16;
+
+  &__head.island { padding: $sp-12; }
+  &__id { display: flex; gap: $sp-8; align-items: center; }
+  &__avatar {
+    inline-size: 72px; block-size: 72px; border-radius: 50%; border: 1px solid; overflow: hidden;
+    @include theme-block      { border-color: tone(border, light); background: tone(background-100, light); box-shadow: $shadow-light; }
+    @include theme-block-dark { border-color: tone(border, dark);  background: tone(background-100, dark);  box-shadow: $shadow-dark; }
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  }
+  &__who h1 { margin: 0; font-size: $fs-6; line-height: $lh-tight; font-weight: $fw-bold; }
+  &__who p { margin: $sp-3 0 0; font-size: $fs-3;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); } }
+  &__meta { @extend .cluster; font-size: $fs-2;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); } }
+
+  &__grid {
+    display: grid; gap: $sp-16;
+    grid-template-columns: 1fr;
+    margin-top: $sp-12;
+    @include mq-up($bp-lg) { grid-template-columns: 1.6fr .9fr; }
+  }
+  &__row { @extend .stack; }
+}
+
+.section-head {
+  display: flex; align-items: center; gap: $sp-6;
+  padding: $sp-8 $sp-12; border-bottom: 1px solid;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark); }
+  h3 { margin: 0; font-size: $fs-5; line-height: $lh-tight; font-weight: $fw-bold; }
+  .hint { margin-left: auto; font-size: $fs-2;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); } }
+}
+.section-body { padding: $sp-12; }
+
+// Timeline
+.timeline { position: relative; }
+.timeline__rail { position: absolute; inset: 0 0 0 1.15rem; border-left: 2px solid;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark); } }
+.t-item { position: relative; display: grid; gap: $sp-5; padding-left: 2.6rem; }
+.t-item + .t-item { margin-top: $sp-12; }
+.t-dot {
+  position: absolute; left: .65rem; top: .45rem; inline-size: 1rem; block-size: 1rem; border-radius: 50%; border: 2px solid;
+  @include theme-block      { background: tone(background, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+}
+.t-icon {
+  position: absolute; left: -.05rem; top: -.05rem; inline-size: 1.2rem; block-size: 1.2rem;
+  display: grid; place-items: center; border-radius: 50%; border: 1px solid;
+  @include theme-block      { background: tone(background-100, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark); }
+  i { font-size: $fs-4; }
+}
+.t-head { display: flex; align-items: center; gap: .5rem; }
+.t-role { margin: 0; font-size: $fs-4; line-height: $lh-tight; font-weight: $fw-semibold; }
+.t-org { font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); } }
+.t-meta { font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); } }
+.t-body { font-size: $fs-3; line-height: $lh-base; }
+.t-tags { display: flex; flex-wrap: wrap; gap: $sp-3; }
+.tag { display: inline-block; border-radius: $badge-radius; font-size: $badge-font; padding: 0 $sp-6; line-height: 1.9;
+  @include theme-block      { background: tone(muted, light); color: tone(foreground, light); }
+  @include theme-block-dark { background: tone(muted, dark);  color: tone(foreground, dark); } }
+
+// Company pill
+.company {
+  display: inline-flex; align-items: center; gap: $sp-4;
+  padding: .25rem .6rem; border-radius: $radius-pill; border: 1px solid;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark); }
+  img { inline-size: 18px; block-size: 18px; border-radius: 4px; object-fit: cover; }
+  .c-name { font-size: $fs-2; }
+}
+
+// Stepper
+.stepper { padding: 0; }
+.steps { display: grid; gap: $sp-7; list-style: none; margin: 0; padding: $sp-12; }
+.step { display: grid; grid-template-columns: auto 1fr; gap: $sp-7; align-items: start; }
+.badge-num {
+  inline-size: 2rem; block-size: 2rem; border-radius: $radius-pill; display: grid; place-items: center;
+  font-size: $fs-2; font-weight: $fw-bold; border: 1px solid;
+  @include theme-block      { color: tone(contrast, light); background: tone(background-200, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  background: tone(background-200, dark);  border-color: tone(border, dark); }
+}
+.step h4 { margin: .1rem 0 0; font-size: $fs-4; line-height: $lh-tight; font-weight: $fw-semibold; }
+.step p { margin: .25rem 0 0; font-size: $fs-3; }
+
+// Skills
+.skills { padding: $sp-12; display: grid; gap: $sp-8; }
+.skill-grid { display: grid; grid-template-columns: 1fr; gap: $sp-6;
+  @include mq-up($bp-sm) { grid-template-columns: 1fr 1fr; gap: $sp-8; } }
+.skill { display: grid; gap: .4rem; }
+.skill__label { display: flex; justify-content: space-between; font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); } }
+.bar { inline-size: 100%; block-size: .45rem; border-radius: $radius-pill; position: relative; overflow: hidden; border: 1px solid;
+  @include theme-block      { background: tone(background-200, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-200, dark);  border-color: tone(border, dark); } }
+.bar > i { position: absolute; inset: 0 auto 0 0; block-size: 100%; inline-size: var(--val,60%);
+  @include theme-block      { background: tone(background-100, light); }
+  @include theme-block-dark { background: tone(background-100, dark); } }
+
+// Sidebar sections
+.links { display: grid; gap: $sp-4; font-size: $fs-3; padding: $sp-12; }
+.links a {
+  display: inline-flex; gap: $sp-4; align-items: center; text-decoration: none; border: 1px solid; border-radius: $radius-6; padding: .35rem .7rem;
+  @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark); }
+  &:hover { @include theme-block { background: tone(muted, light); } @include theme-block-dark { background: tone(muted, dark); } }
+}
+
+.stats { padding: $sp-12; display: grid; gap: $sp-8; }
+.stat { display: flex; gap: $sp-7; align-items: center; }
+.kv { display: grid; gap: .1rem; }
+.kv .k { font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); } }
+.kv .v { font-size: $fs-4; font-weight: $fw-semibold; }
+
+.awards { padding: $sp-12; display: grid; gap: $sp-6; }
+.award { display: flex; gap: $sp-6; align-items: flex-start; }
+.award__title { font-size: $fs-4; font-weight: $fw-semibold; margin: 0; }
+.award__meta  { font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); } }
+
+// Projects
+.projects { padding: $sp-12; }
+.projects__grid {
+  display: grid; gap: $sp-8; grid-template-columns: 1fr;
+  @include mq-up($bp-sm) { grid-template-columns: repeat(2, 1fr); }
+  @include mq-up($bp-lg) { grid-template-columns: repeat(3, 1fr); }
+}
+.project {
+  display: grid; grid-template-rows: auto 1fr auto;
+  border: 1px solid; border-radius: $radius-6; overflow: hidden;
+  @include theme-block      { background: tone(surface, light); border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(surface, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark; }
+}
+.project__media { aspect-ratio: 16/9; @include theme-block { background: tone(background-100, light); } @include theme-block-dark { background: tone(background-100, dark); } }
+.project__img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.001); }
+.project__body { padding: $sp-8; display: grid; gap: $sp-5; }
+.project__title { font-size: $fs-4; line-height: $lh-tight; margin: 0; font-weight: $fw-semibold; }
+.project__meta { font-size: $fs-2; @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
+.project__tags { display: flex; flex-wrap: wrap; gap: $sp-3; }
+.project__foot { padding: $sp-7 $sp-8; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid;
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark); } }
+
+.icon { font-size: $fs-4; line-height: 1; }
+.icon-sm { font-size: $fs-3; }
