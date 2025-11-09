@@ -22,7 +22,6 @@ exclude:
 - alembic-jekyll-theme.gemspec
 - .jekyll-cache
 
-
 # 2. Installed Gems
 plugins:
 - jekyll-sitemap
