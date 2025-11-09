@@ -102,7 +102,7 @@ baseurl: ""
 repo: "https://github.com/daviddarnes/alembic"
 email: "me@daviddarnes.com"
 location: "Bengaluru, India"
-timezone: "IST (UTC+5:30)"
+timezone: Asia/Kolkata
 work:
   company: "Imswarnil Studio"
   role: "Software Engineer & Filmmaker"
@@ -114,8 +114,8 @@ work:
 # service_worker: false # Will turn off the service worker if set to false
 # short_name: "Al" # The web application short name, defaults to the site title
 css_inline: false # Will insert all styles into a single <style> block in the <head> element and remove the style <link> reference
-
-
+sass:
+ quiet_deps: true
 
 adsense:
   enabled: true

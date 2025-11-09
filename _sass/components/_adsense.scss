@@ -3,8 +3,6 @@
 // Depends on: _variables.scss
 // ======================================================================
 
-@use "variables" as *;
-
 /* Wrapper spacing + centering */
 .ad {
   margin-block: clamp($sp-10, 4vw, $sp-16);
@@ -107,7 +105,6 @@
 // Depends on: _variables.scss + adsense.scss
 // ======================================================================
 
-@use "variables" as *;
 
 // how far from the screen edge the rails sit
 $rail-edge-gap: $sp-8; // ~1.25rem

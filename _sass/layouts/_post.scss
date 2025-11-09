@@ -3,7 +3,6 @@
 // Depends on: _variables.scss
 // ======================================================================
 
-@use "variables" as *;
 
 /* Container helper (local class if you use it in markup) */
 .container { @include container; }

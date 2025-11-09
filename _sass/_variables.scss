@@ -1,3 +1,6 @@
+@use "sass:map";
+@use "sass:color";
+
 // ======================================================================
 // _variables.scss — pure SCSS tokens + maps + helpers + mixins
 // ======================================================================
@@ -189,9 +192,9 @@ $theme-dark: (
 // ------------------------------
 @function tone($key, $mode: light) {
   @if $mode == dark {
-    @return map-get($theme-dark, $key);
+    @return map.get($theme-dark, $key);
   } @else {
-    @return map-get($theme-light, $key);
+    @return map.get($theme-light, $key);
   }
 }
 
@@ -200,14 +203,10 @@ $theme-dark: (
 // ------------------------------
 
 // Apply content when the <html> has light theme
-@mixin theme-block {
-  html[data-color-scheme="light"] & { @content; }
-}
+@mixin theme-block { html[data-color-scheme="light"] & { @content; } }
 
 // Apply content when the <html> has dark theme
-@mixin theme-block-dark {
-  html[data-color-scheme="dark"] & { @content; }
-}
+@mixin theme-block-dark { html[data-color-scheme="dark"] & { @content; } }
 
 // Container helper (center column with side gutters)
 @mixin container {
@@ -267,6 +266,4 @@ $theme-dark: (
 }
 
 // Simple up media query
-@mixin mq-up($breakpoint) {
-  @media (min-width: $breakpoint) { @content; }
-}
+@mixin mq-up($breakpoint) { @media (min-width: $breakpoint) { @content; } }

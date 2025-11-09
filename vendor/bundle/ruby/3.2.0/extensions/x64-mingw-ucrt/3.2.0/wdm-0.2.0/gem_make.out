@@ -1,0 +1,28 @@
+current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/wdm-0.2.0/ext/wdm
+C:/Ruby32-x64/bin/ruby.exe extconf.rb
+checking for -lkernel32... yes
+checking for windows.h... yes
+creating Makefile
+
+current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/wdm-0.2.0/ext/wdm
+make DESTDIR\= sitearchdir\=./.gem.20251109-24132-l0xqsn sitelibdir\=./.gem.20251109-24132-l0xqsn clean
+
+current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/wdm-0.2.0/ext/wdm
+make DESTDIR\= sitearchdir\=./.gem.20251109-24132-l0xqsn sitelibdir\=./.gem.20251109-24132-l0xqsn
+generating wdm_ext-x64-mingw-ucrt.def
+compiling entry.c
+compiling memory.c
+compiling monitor.c
+compiling queue.c
+compiling rb_change.c
+compiling rb_monitor.c
+compiling utils.c
+compiling wdm.c
+linking shared-object wdm_ext.so
+
+current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/wdm-0.2.0/ext/wdm
+make DESTDIR\= sitearchdir\=./.gem.20251109-24132-l0xqsn sitelibdir\=./.gem.20251109-24132-l0xqsn install
+/usr/bin/install -c -m 0755 wdm_ext.so ./.gem.20251109-24132-l0xqsn
+
+current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/wdm-0.2.0/ext/wdm
+make DESTDIR\= sitearchdir\=./.gem.20251109-24132-l0xqsn sitelibdir\=./.gem.20251109-24132-l0xqsn clean

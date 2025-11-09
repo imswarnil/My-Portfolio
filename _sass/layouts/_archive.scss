@@ -3,7 +3,6 @@
 // Depends on: _variables.scss (+ your adsense.scss for ad look)
 // ======================================================================
 
-@use "variables" as *;
 
 .archive { padding-block: clamp($sp-10, 4vw, $sp-16); }
 

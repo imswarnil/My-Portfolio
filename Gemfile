@@ -20,3 +20,5 @@ end
 # Helpers / runtime
 gem "webrick"         # Ruby 3+ local serve
 gem "faraday-retry"   # to enable Faraday v2 retry middleware
+gem "tzinfo-data"
+ gem 'wdm', '>= 0.1.0'
