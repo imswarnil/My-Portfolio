@@ -3,18 +3,18 @@ C:/Ruby32-x64/bin/ruby.exe extconf.rb
 creating Makefile
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-w836sx sitelibdir\=./.gem.20251109-22092-w836sx clean
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-xdm8bn sitelibdir\=./.gem.20251109-26636-xdm8bn clean
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-w836sx sitelibdir\=./.gem.20251109-22092-w836sx
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-xdm8bn sitelibdir\=./.gem.20251109-26636-xdm8bn
 generating ruby_http_parser-x64-mingw-ucrt.def
 compiling ruby_http_parser.c
 compiling ryah_http_parser.c
 linking shared-object ruby_http_parser.so
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-w836sx sitelibdir\=./.gem.20251109-22092-w836sx install
-/usr/bin/install -c -m 0755 ruby_http_parser.so ./.gem.20251109-22092-w836sx
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-xdm8bn sitelibdir\=./.gem.20251109-26636-xdm8bn install
+/usr/bin/install -c -m 0755 ruby_http_parser.so ./.gem.20251109-26636-xdm8bn
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/http_parser.rb-0.8.0/ext/ruby_http_parser
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-w836sx sitelibdir\=./.gem.20251109-22092-w836sx clean
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-xdm8bn sitelibdir\=./.gem.20251109-26636-xdm8bn clean

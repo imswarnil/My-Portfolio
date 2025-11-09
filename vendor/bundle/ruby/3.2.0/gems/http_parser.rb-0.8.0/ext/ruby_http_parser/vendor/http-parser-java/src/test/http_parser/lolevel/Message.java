@@ -104,7 +104,7 @@ public class Message {
         //    }
         //   }
         //String str    = str(b, pos, len);
-        ByteList list = settings.map-get(mes);
+        ByteList list = settings.map.get(mes);
         for (int i=0; i!=len; ++i) {
           list.add(b.get(pos+i));
         }
@@ -237,7 +237,7 @@ public class Message {
         String parsed_frag  = null;
         
         try {
-          parsed_url   = new String(s.map-get("url").toArray(),          "UTF8");
+          parsed_url   = new String(s.map.get("url").toArray(),          "UTF8");
 
           HTTPParserUrl u = new HTTPParserUrl();
           HTTPParser pp = new HTTPParser();

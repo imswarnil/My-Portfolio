@@ -2810,7 +2810,7 @@ public class ConcurrentHashMapV8<K, V>
      * it into the map unless null.  This is equivalent to
      * <pre> {@code
      * if (map.containsKey(key))
-     *   return map-get(key);
+     *   return map.get(key);
      * value = mappingFunction.apply(key);
      * if (value != null)
      *   map.put(key, value);
@@ -2855,7 +2855,7 @@ public class ConcurrentHashMapV8<K, V>
      * its current mapped value. This is equivalent to
      *  <pre> {@code
      *   if (map.containsKey(key)) {
-     *     value = remappingFunction.apply(key, map-get(key));
+     *     value = remappingFunction.apply(key, map.get(key));
      *     if (value != null)
      *       map.put(key, value);
      *     else
@@ -2896,7 +2896,7 @@ public class ConcurrentHashMapV8<K, V>
      * its current mapped value (or {@code null} if there is no current
      * mapping). This is equivalent to
      *  <pre> {@code
-     *   value = remappingFunction.apply(key, map-get(key));
+     *   value = remappingFunction.apply(key, map.get(key));
      *   if (value != null)
      *     map.put(key, value);
      *   else
@@ -2947,7 +2947,7 @@ public class ConcurrentHashMapV8<K, V>
      *   if (!map.containsKey(key))
      *     map.put(value);
      *   else {
-     *     newValue = remappingFunction.apply(map-get(key), value);
+     *     newValue = remappingFunction.apply(map.get(key), value);
      *     if (value != null)
      *       map.put(key, value);
      *     else
@@ -3757,7 +3757,7 @@ public class ConcurrentHashMapV8<K, V>
             Object k, v, r; Map.Entry<?,?> e;
             return ((o instanceof Map.Entry) &&
                     (k = (e = (Map.Entry<?,?>)o).getKey()) != null &&
-                    (r = map-get(k)) != null &&
+                    (r = map.get(k)) != null &&
                     (v = e.getValue()) != null &&
                     (v == r || v.equals(r)));
         }

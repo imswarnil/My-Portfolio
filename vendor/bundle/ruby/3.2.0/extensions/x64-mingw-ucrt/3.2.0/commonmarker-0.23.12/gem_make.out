@@ -4,10 +4,10 @@ checking for whether -std=c99 is accepted as CFLAGS... yes
 creating Makefile
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/commonmarker-0.23.12/ext/commonmarker
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-g2jfqr sitelibdir\=./.gem.20251109-22092-g2jfqr clean
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-vdgi1q sitelibdir\=./.gem.20251109-26636-vdgi1q clean
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/commonmarker-0.23.12/ext/commonmarker
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-g2jfqr sitelibdir\=./.gem.20251109-22092-g2jfqr
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-vdgi1q sitelibdir\=./.gem.20251109-26636-vdgi1q
 generating commonmarker-x64-mingw-ucrt.def
 compiling arena.c
 compiling autolink.c
@@ -65,8 +65,8 @@ compiling xml.c
 linking shared-object commonmarker/commonmarker.so
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/commonmarker-0.23.12/ext/commonmarker
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-g2jfqr sitelibdir\=./.gem.20251109-22092-g2jfqr install
-/usr/bin/install -c -m 0755 commonmarker.so ./.gem.20251109-22092-g2jfqr/commonmarker
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-vdgi1q sitelibdir\=./.gem.20251109-26636-vdgi1q install
+/usr/bin/install -c -m 0755 commonmarker.so ./.gem.20251109-26636-vdgi1q/commonmarker
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/commonmarker-0.23.12/ext/commonmarker
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-g2jfqr sitelibdir\=./.gem.20251109-22092-g2jfqr clean
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-vdgi1q sitelibdir\=./.gem.20251109-26636-vdgi1q clean

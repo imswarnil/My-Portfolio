@@ -11,17 +11,17 @@ checking for cpuid.h... yes
 creating Makefile
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/json-2.16.0/ext/json/ext/parser
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-kgqyeo sitelibdir\=./.gem.20251109-22092-kgqyeo clean
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-5fa0dq sitelibdir\=./.gem.20251109-26636-5fa0dq clean
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/json-2.16.0/ext/json/ext/parser
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-kgqyeo sitelibdir\=./.gem.20251109-22092-kgqyeo
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-5fa0dq sitelibdir\=./.gem.20251109-26636-5fa0dq
 generating parser-x64-mingw-ucrt.def
 compiling parser.c
 linking shared-object json/ext/parser.so
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/json-2.16.0/ext/json/ext/parser
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-kgqyeo sitelibdir\=./.gem.20251109-22092-kgqyeo install
-/usr/bin/install -c -m 0755 parser.so ./.gem.20251109-22092-kgqyeo/json/ext
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-5fa0dq sitelibdir\=./.gem.20251109-26636-5fa0dq install
+/usr/bin/install -c -m 0755 parser.so ./.gem.20251109-26636-5fa0dq/json/ext
 
 current directory: D:/Projects/imswarnil.github.io/vendor/bundle/ruby/3.2.0/gems/json-2.16.0/ext/json/ext/parser
-make DESTDIR\= sitearchdir\=./.gem.20251109-22092-kgqyeo sitelibdir\=./.gem.20251109-22092-kgqyeo clean
+make DESTDIR\= sitearchdir\=./.gem.20251109-26636-5fa0dq sitelibdir\=./.gem.20251109-26636-5fa0dq clean

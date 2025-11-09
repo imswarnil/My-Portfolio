@@ -19,8 +19,10 @@ exclude:
 - CNAME
 - Gemfile
 - Gemfile.lock
-- alembic-jekyll-theme.gemspec
 - .jekyll-cache
+- vendor
+- vendor/**      # all files inside vendor
+- .bundle
 
 # 2. Installed Gems
 plugins:
