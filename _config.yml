@@ -99,7 +99,7 @@ job_title: "Salesforce Developer"     # used under brand name
 avatarurl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGKma77hTKmFWTnWOOnWehJbWac3IsLmX9dg&s"
 logo: "/assets/logos/logo.svg" # Site logo, also used in jekyll-seo-tag
 description: "Alembic is a starting point for Jekyll projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately" # Site description and default description, also used in jekyll-seo-tag
-url: "" # Site url, also used in jekyll-seo-tag
+url: "https://dev.imswarnil.com" # Site url, also used in jekyll-seo-tag
 baseurl: ""
 repo: "https://github.com/daviddarnes/alembic"
 email: "me@daviddarnes.com"
