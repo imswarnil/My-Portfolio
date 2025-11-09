@@ -1,14 +1,7 @@
-# Jekyll
 _site/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
-
-# Locks (optional—many repos commit this)
 Gemfile.lock
 **/Gemfile.lock
 
-# Vendor stuff
-vendor/
-vendor/**        # everything inside
-.bundle/         # Bundler’s config dir
