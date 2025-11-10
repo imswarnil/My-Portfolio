@@ -2,7 +2,7 @@
 source "https://rubygems.org"
 
 # Core
-gem 'jekyll', '~> 4.4', '>= 4.4.1'
+gem 'jekyll'
 
 # Plugins (pins from your gemspec)
 group :jekyll_plugins do
