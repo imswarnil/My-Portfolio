@@ -22,3 +22,6 @@ gem "webrick"         # Ruby 3+ local serve
 gem "faraday-retry"   # to enable Faraday v2 retry middleware
 gem "tzinfo-data"
  gem 'wdm', '>= 0.1.0'
+gem "jekyll-sass-converter", "~> 2.2"
+
+gem "sassc", "~> 2.4"
