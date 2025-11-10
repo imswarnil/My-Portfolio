@@ -1,26 +1,31 @@
-# Gemfile — Standalone build matching alembic-jekyll-theme.gemspec
+# Gemfile
 source "https://rubygems.org"
 
-# Core
-gem 'jekyll'
+ruby ">= 3.1"
 
-# Plugins (pins from your gemspec)
+gem "jekyll", "~> 4.3.3"
+
 group :jekyll_plugins do
-  gem "jekyll-sitemap",         "~> 1.4.0"
-  gem "jekyll-mentions",        "~> 1.6.0"
-  gem "jekyll-paginate",        "~> 1.1.0"
-  gem "jekyll-seo-tag",         "~> 2.7.1"
-  gem "jekyll-redirect-from",   "~> 0.16"
-  gem "jekyll-feed",            "~> 0.15"
-  gem "jekyll-commonmark",      "~> 1.3.1"
-  gem "jekyll-include-cache",   "~> 0.2"
-  gem "jemoji",                 "~> 0.12"
+  gem "jekyll-sitemap",       "~> 1.4"
+  gem "jekyll-mentions",      "~> 1.6"
+  gem "jekyll-paginate",      "~> 1.1"
+  gem "jekyll-seo-tag",       "~> 2.8"
+  gem "jekyll-redirect-from", "~> 0.16"
+  gem "jekyll-feed",          "~> 0.17"
+  gem "jekyll-commonmark",    "~> 1.3"
+  gem "jekyll-include-cache", "~> 0.2"
+  gem "jemoji",               "~> 0.12"
 end
 
-# Helpers / runtime
-gem "webrick"         # Ruby 3+ local serve
-gem "faraday-retry"   # to enable Faraday v2 retry middleware
-gem "tzinfo-data"
-gem 'wdm', '>= 0.1.0'
-gem 'jekyll-sass-converter', '~> 3.1'
+# Use jekyll-sass-converter v2 (uses libsass via sassc). Avoids sass-embedded on CI.
+gem "jekyll-sass-converter", "~> 2.2"
 gem "sassc", "~> 2.4"
+
+# Local dev helpers
+gem "webrick"
+gem "tzinfo-data"
+
+# Windows file watcher – only on Windows
+platforms :mingw, :x64_mingw, :mswin do
+  gem "wdm", ">= 0.1.0"
+end
