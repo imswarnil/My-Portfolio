@@ -96,7 +96,7 @@ job_title: "Salesforce Developer"     # used under brand name
 avatarurl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGKma77hTKmFWTnWOOnWehJbWac3IsLmX9dg&s"
 logo: "/assets/logos/logo.svg" # Site logo, also used in jekyll-seo-tag
 description: "Alembic is a starting point for Jekyll projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately" # Site description and default description, also used in jekyll-seo-tag
-url: "" # Site url, also used in jekyll-seo-tag
+url: "https://dev.imswarnil.com" # Site url, also used in jekyll-seo-tag
 baseurl: ""
 repo: "https://github.com/daviddarnes/alembic"
 email: "me@daviddarnes.com"
@@ -112,7 +112,7 @@ work:
 # google_analytics_anonymize_ip: ""
 # service_worker: false # Will turn off the service worker if set to false
 # short_name: "Al" # The web application short name, defaults to the site title
-css_inline: false # Will insert all styles into a single <style> block in the <head> element and remove the style <link> reference
+css_inline: true # Will insert all styles into a single <style> block in the <head> element and remove the style <link> reference
 sass:
  quiet_deps: true
 
