@@ -2,7 +2,7 @@
 source "https://rubygems.org"
 
 # Core
-gem "jekyll", "~> 4.1"
+gem 'jekyll', '~> 4.4', '>= 4.4.1'
 
 # Plugins (pins from your gemspec)
 group :jekyll_plugins do
@@ -21,7 +21,6 @@ end
 gem "webrick"         # Ruby 3+ local serve
 gem "faraday-retry"   # to enable Faraday v2 retry middleware
 gem "tzinfo-data"
- gem 'wdm', '>= 0.1.0'
-gem "jekyll-sass-converter", "~> 2.2"
-
+gem 'wdm', '>= 0.1.0'
+gem 'jekyll-sass-converter', '~> 3.1'
 gem "sassc", "~> 2.4"
