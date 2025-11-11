@@ -1,9 +1,7 @@
 # Gemfile
 source "https://rubygems.org"
 
-ruby ">= 3.1"
-
-gem "jekyll", "~> 4.3.3"
+gem "jekyll"
 
 group :jekyll_plugins do
   gem "jekyll-sitemap",       "~> 1.4"
@@ -17,9 +15,7 @@ group :jekyll_plugins do
   gem "jemoji",               "~> 0.12"
 end
 
-# Use jekyll-sass-converter v2 (uses libsass via sassc). Avoids sass-embedded on CI.
-gem "jekyll-sass-converter", "~> 2.2"
-gem "sassc", "~> 2.4"
+gem "jekyll-sass-converter"
 
 # Local dev helpers
 gem "webrick"
