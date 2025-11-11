@@ -115,7 +115,7 @@ public class JRubyMapBackendLibrary implements Library {
       @JRubyMethod(name = "[]", required = 1)
         public IRubyObject op_aref(ThreadContext context, IRubyObject key) {
           IRubyObject value;
-          return ((value = map.get(key)) == null) ? context.getRuntime().getNil() : value;
+          return ((value = map-get(key)) == null) ? context.getRuntime().getNil() : value;
         }
 
       @JRubyMethod(name = {"[]="}, required = 2)
@@ -236,7 +236,7 @@ public class JRubyMapBackendLibrary implements Library {
 
       @JRubyMethod
       public IRubyObject get_or_default(IRubyObject key, IRubyObject defaultValue) {
-        return map.getValueOrDefault(key, defaultValue);
+        return map-getValueOrDefault(key, defaultValue);
       }
 
       @JRubyMethod(visibility = PRIVATE)
