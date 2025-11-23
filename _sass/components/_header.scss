@@ -45,7 +45,22 @@
   }
 }
 
-// Mobile: fixed, centered island
+// header modifiers from config
+.island-navbar--fullwidth {
+  max-width: none;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+.island-navbar--square {
+  border-radius: 0;
+}
+.island-navbar--static {
+  position: static;
+  top: auto;
+}
+
+// Mobile: fixed, centered island (unless static)
 @media (max-width: $bp-lg) {
   .island-navbar {
     @include container;
@@ -56,6 +71,17 @@
     width: auto;
     margin: 0 auto;
     border-radius: $radius-6;
+  }
+
+  .island-navbar--fullwidth {
+    left: 0;
+    right: 0;
+  }
+
+  .island-navbar--static {
+    position: static;
+    left: auto;
+    right: auto;
   }
 
   body.has-fixed-nav {
@@ -72,8 +98,8 @@
   margin-right: auto;
   max-width: $island-width;
 
-  // a bit more space below header island
-  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-4});
+  // more breathing room under navbar
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-6});
 
   border: 1px solid;
   border-radius: $radius-6;
@@ -113,6 +139,7 @@
   }
 
   .island-panel__inner {
+    position: relative;
     padding: $sp-8;
     display: grid;
     gap: $sp-6;
@@ -125,7 +152,53 @@
   }
 }
 
-/* bento grid */
+/* Close button inside panel (X) */
+.island-panel__close {
+  position: absolute;
+  top: $sp-6;
+  right: $sp-6;
+  width: $btn-height-sm;
+  height: $btn-height-sm;
+  border-radius: 50%;
+  border: 1px solid;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  background: transparent;
+  transition: background-color $dur-1, color $dur-1, border-color $dur-1;
+
+  @include theme-block {
+    border-color: tone(border, light);
+    color: tone(contrast, light);
+    background: rgba(255,255,255,0.85);
+
+    &:hover {
+      background: tone(background-100, light);
+    }
+  }
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    color: tone(contrast, dark);
+    background: rgba(12,12,14,0.9);
+
+    &:hover {
+      background: tone(background-100, dark);
+    }
+  }
+
+  i {
+    font-size: $fs-4;
+  }
+}
+
+/* Extra top padding on mobile to account for close button */
+@media (max-width: $bp-lg) {
+  .island-panel.is-open .island-panel__inner {
+    padding-top: calc($sp-8 + $btn-height-sm + $sp-4);
+  }
+}
+
+/* bento grid: 2 cols → 3 on wider phones */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -138,8 +211,8 @@
 
 .bento-card {
   display: flex;
-  align-items: center;
-  gap: $sp-4;
+  flex-direction: column;
+  gap: $sp-3;
   padding: $sp-5;
   border-radius: $radius-4;
   border: 1px solid;
@@ -161,6 +234,13 @@
     @include theme-block-dark { background: tone(background-100, dark); }
   }
 
+  .bento-card__main {
+    display: flex;
+    align-items: center;
+    gap: $sp-4;
+    text-decoration: none;
+  }
+
   .bento-icon {
     width: 2.25rem;
     height: 2.25rem;
@@ -168,24 +248,134 @@
     place-items: center;
     border-radius: $radius-3;
     border: 1px solid;
-
-    @include theme-block { border-color: tone(border, light); }
+    @include theme-block      { border-color: tone(border, light); }
     @include theme-block-dark { border-color: tone(border, dark); }
+    i { font-size: $fs-4; }
+  }
+  .bento-title {
+    font-weight: $fw-semibold;
+    font-size: $fs-3;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
+  }
+  .bento-sub {
+    font-size: $fs-2;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
+  }
+}
+
+/* Submenu pills inside bento cards */
+.bento-submenu {
+  margin-top: $sp-3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-2;
+
+  .bento-submenu__link {
+    display: inline-flex;
+    align-items: center;
+    padding: $sp-2 $sp-3;
+    border-radius: $radius-pill;
+    border: 1px dashed;
+    font-size: $fs-2;
+    text-decoration: none;
+
+    @include theme-block {
+      border-color: tone(border, light);
+      color: tone(secondary, light);
+      background: rgba(255,255,255,0.6);
+    }
+    @include theme-block-dark {
+      border-color: tone(border, dark);
+      color: tone(secondary, dark);
+      background: rgba(12,12,14,0.9);
+    }
+
+    &:hover {
+      @include theme-block      { color: tone(contrast, light); background: tone(background-100, light); }
+      @include theme-block-dark { color: tone(contrast, dark);  background: tone(background-100, dark);  }
+    }
+  }
+}
+
+/* Social section inside panel (white / black / silver) */
+.panel-social {
+  margin-top: $sp-2;
+  padding-top: $sp-5;
+  border-top: 1px dashed;
+
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+
+  .panel-social__heading {
+    font-size: $fs-3;
+    font-weight: $fw-semibold;
+    margin-bottom: $sp-4;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+
+  .panel-social__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $sp-4;
+  }
+
+  .panel-social__item {
+    display: inline-flex;
+    align-items: center;
+    gap: $sp-3;
+    padding: $sp-3 $sp-4;
+    border-radius: $radius-pill;
+    border: 1px solid;
+    text-decoration: none;
+    font-size: $fs-2;
+    cursor: pointer;
+    transition: background-color $dur-1, color $dur-1, border-color $dur-1, transform $dur-1 $ease-in-out;
+
+    @include theme-block {
+      background: mix(tone(background-100, light), tone(white, light), 70%);
+      border-color: tone(border, light);
+      color: tone(contrast, light);
+    }
+    @include theme-block-dark {
+      background: mix(tone(background-100, dark), tone(black, dark), 70%);
+      border-color: tone(border, dark);
+      color: tone(contrast, dark);
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      @include theme-block      { background: tone(background-200, light); }
+      @include theme-block-dark { background: tone(background-200, dark);  }
+    }
+  }
+
+  .panel-social__icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    border: 1px solid;
+
+    @include theme-block {
+      border-color: tone(border, light);
+      background: rgba(255,255,255,0.85);
+      color: #111;
+    }
+    @include theme-block-dark {
+      border-color: tone(border, dark);
+      background: rgba(16,16,18,0.9);
+      color: #f5f5f5;
+    }
 
     i { font-size: $fs-4; }
   }
 
-  .bento-title {
-    font-weight: $fw-semibold;
-    font-size: $fs-3;
-    @include theme-block { color: tone(contrast, light); }
-    @include theme-block-dark { color: tone(contrast, dark); }
-  }
-
-  .bento-sub {
-    font-size: $fs-2;
-    @include theme-block { color: tone(secondary, light); }
-    @include theme-block-dark { color: tone(secondary, dark); }
+  .panel-social__label {
+    font-weight: $fw-medium;
   }
 }
 
@@ -202,24 +392,22 @@
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid;
-    @include theme-block { border-color: tone(border, light); }
-    @include theme-block-dark { border-color: tone(border, dark); }
+    @include theme-block      { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark);  }
   }
 
   .brand-text { display: grid; line-height: 1.1; }
-
   .logo {
     font-size: $fs-4;
     font-weight: $fw-semibold;
     letter-spacing: -0.01em;
-    @include theme-block { color: tone(contrast, light); }
-    @include theme-block-dark { color: tone(contrast, dark); }
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
   }
-
   .logo-sub {
     font-size: $fs-1;
-    @include theme-block { color: tone(secondary, light); }
-    @include theme-block-dark { color: tone(secondary, dark); }
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
   }
 }
 
@@ -248,15 +436,72 @@
 
     @include theme-block {
       color: tone(secondary, light);
-      &:hover, &.active { color: tone(contrast, light); background: tone(background-100, light); }
+      &:hover,
+      &.active {
+        color: tone(contrast, light);
+        background: tone(background-100, light);
+      }
     }
     @include theme-block-dark {
       color: tone(secondary, dark);
-      &:hover, &.active { color: tone(contrast, dark); background: tone(background-100, dark); }
+      &:hover,
+      &.active {
+        color: tone(contrast, dark);
+        background: tone(background-100, dark);
+      }
     }
   }
 
   @media (max-width: $bp-lg) { display: none; }
+}
+
+/* desktop submenu */
+.navbar-menu li.nav-item-has-children {
+  position: relative;
+
+  .nav-submenu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    min-width: 11rem;
+    padding: $sp-3;
+    border-radius: $radius-4;
+    border: 1px solid;
+    list-style: none;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity $dur-1, transform $dur-1;
+
+    @include theme-block      { background: tone(background, light);   border-color: tone(border, light);   box-shadow: $shadow-light; }
+    @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);   box-shadow: $shadow-dark; }
+
+    li + li { margin-top: $sp-1; }
+
+    a {
+      display: block;
+      padding: $sp-2 $sp-3;
+      font-size: $fs-2;
+      border-radius: $radius-pill;
+
+      @include theme-block {
+        color: tone(secondary, light);
+        &:hover { color: tone(contrast, light); background: tone(background-100, light); }
+      }
+      @include theme-block-dark {
+        color: tone(secondary, dark);
+        &:hover { color: tone(contrast, dark); background: tone(background-100, dark); }
+      }
+    }
+  }
+
+  &:hover .nav-submenu,
+  &:focus-within .nav-submenu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
 }
 
 // ---------- Right-side actions ----------
@@ -306,8 +551,7 @@
       transform: rotate(-90deg) scale(.8);
       transition: opacity $dur-2 ease, transform $dur-2 $ease-in-out;
     }
-
-    @include theme-block   { .icon-sun  { opacity: 1; transform: rotate(0) scale(1); } }
+    @include theme-block { .icon-sun  { opacity: 1; transform: rotate(0) scale(1); } }
     @include theme-block-dark { .icon-moon { opacity: 1; transform: rotate(0) scale(1); } }
   }
 
@@ -323,7 +567,8 @@
     font-weight: $fw-semibold;
     cursor: pointer;
     user-select: none;
-    transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, background-color $dur-1, color $dur-1;
+    transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out,
+                background-color $dur-1, color $dur-1;
 
     @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
     @include theme-block-dark { background: tone(white, dark);    color: tone(black, dark);  }
@@ -335,7 +580,6 @@
   }
 
   .mobile-menu-toggle { display: none; }
-
   @media (max-width: $bp-lg) {
     .mobile-menu-toggle { display: inline-grid; }
   }
@@ -431,10 +675,10 @@ body.search-active {
   body.search-active .island-navbar { grid-template-columns: 1fr auto; }
 }
 
-/* Results container (match island width, with same top gap as panel) */
+/* Results container: match panel offset */
 .search-results {
   position: sticky;
-  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-4});
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-6});
   z-index: $z-overlay;
   max-width: $island-width;
   margin-left: auto;
@@ -452,7 +696,7 @@ body.search-active {
     position: fixed;
     left: $container-gutter;
     right: $container-gutter;
-    top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-4});
+    top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-6});
   }
 }
 
@@ -527,31 +771,5 @@ body.search-active {
   text-decoration: none;
   @include theme-block      { color: tone(secondary, light); }
   @include theme-block-dark { color: tone(secondary, dark);  }
-
   &:hover { text-decoration: underline; }
-}
-
-/* ===================================================================== */
-/* MOBILE MENU: simple icon swap (hamburger → ×)                         */
-/* ===================================================================== */
-
-@media (max-width: $bp-lg) {
-  .navbar-actions .mobile-menu-toggle[aria-expanded="true"] {
-    position: relative;
-
-    i {
-      opacity: 0;
-    }
-
-    &::after {
-      content: "×";
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      font-size: $fs-4;
-      @include theme-block      { color: tone(contrast, light); }
-      @include theme-block-dark { color: tone(contrast, dark);  }
-    }
-  }
 }

@@ -11,27 +11,27 @@
 encoding: utf-8                 # Make sure the encoding is right
 lang: en-GB                     # Site language
 timezone: Asia/Kolkata          # Local time zone
-
 title: "Swarnil Singhai"        # Site name / title (also jekyll-seo-tag)
 job_title: "Salesforce Developer"     # Used under brand name
-
-description: >
-  Alembic is a starting point for Jekyll projects. Rather than starting from
-  scratch, this boilerplate is designed to get the ball rolling immediately
-
-url: "http://127.0.0.1:4000"    # Site url, also used in jekyll-seo-tag
+description:  Alembic is a starting point for Jekyll projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately
+url: "https://dev.imswarnil.com"    # Site url, also used in jekyll-seo-tag
 baseurl: ""                     # Base URL (for GitHub Pages etc.)
-
 logo: "/assets/logos/logo.svg"  # Site logo (also jekyll-seo-tag)
 avatarurl: "/assets/logos/logo@512px.png"
 email: "me@daviddarnes.com"
 location: "Bengaluru, India"
 repo: "https://github.com/daviddarnes/alembic"
-
 work:
   company: "Imswarnil Studio"
   role: "Software Engineer & Filmmaker"
   url: "https://yourcompany.com"
+
+social_links:              # Appears in sidebar
+  Twitter: https://twitter.com/DavidDarnes
+  LinkedIn: https://www.linkedin.com/in/daviddarnes
+  GitHub: https://github.com/daviddarnes
+  link: https://darn.es
+  RSS: /feed.xml
 
 # AdSense / monetization
 adsense:
@@ -46,27 +46,102 @@ adsense:
     in_article: "6501428979"
   # optional: you can still pass slot="" explicitly in the include to override
 
+# -------------------------------------------------
+# Site basics
+# -------------------------------------------------
+title: "Swarnil Singhai"
+job_title: "Salesforce Developer • Filmmaker"
+url: "https://imswarnil.com"
+baseurl: "" # set if you deploy under subpath
+
+# -------------------------------------------------
+# Social links (used in header, panel, JSON-LD)
+# -------------------------------------------------
+social_links:
+  Twitter: https://twitter.com/DavidDarnes
+  LinkedIn: https://www.linkedin.com/in/daviddarnes
+  GitHub: https://github.com/daviddarnes
+  link: https://darn.es
+  RSS: /feed.xml
+
+# -------------------------------------------------
+# Header UI options
+# -------------------------------------------------
+header:
+  enable: true              # master flag (future-proof)
+  sticky: true              # true = sticky / fixed on mobile
+  fullwidth: false          # true = edge-to-edge, false = container
+  rounded: true             # false = square edges
+  show_search: true         # show search input + shortcut + results
+  show_social: true         # show social section in mobile panel
+  show_avatar: true         # show author avatar in brand
+  show_job_title: true      # show job title under name
+  show_nav_icons: true      # show Phosphor icons in menu
+  show_menu_on_mobile: true # future toggle for mobile panel
+
+# -------------------------------------------------
 # Navigation (header & footer)
+# - "sub" shows as subtitle in mobile cards
+# - "children" renders as submenu (desktop + mobile)
+# -------------------------------------------------
 navigation_header:
   - title: Home
     url: /
     icon: house
+    sub: Start here
+    children:
+      - title: About me
+        url: /about/
+      - title: Selected work
+        url: /#projects
+      - title: Speaking & collabs
+        url: /speaking/
   - title: Elements
     url: /elements/
     icon: squares-four
+    sub: Design system
+    children:
+      - title: Components
+        url: /elements/#components
+      - title: Layouts
+        url: /elements/#layouts
   - title: Archive
     url: /archive/
     icon: article
+    sub: All content
+    children:
+      - title: Blog
+        url: /blog/
+      - title: Videos
+        url: /videos/
   - title: Categories
     url: /categories/
     icon: tag
+    sub: Topics
   - title: Search
     url: /search/
     icon: magnifying-glass
+    sub: Find anything
 
+# Example footer nav if you want later
 navigation_footer:
-  - title: Created by David Darnes
-    url: https://darn.es
+  - title: About
+    url: /about/
+  - title: Work
+    url: /#projects
+  - title: Blog
+    url: /blog/
+  - title: Videos
+    url: /videos/
+  - title: Speaking
+    url: /speaking/
+  - title: Uses
+    url: /uses/
+  - title: Contact
+    url: /contact/
+
+
+
 
 # Social & sharing
 social_links:              # Appears in sidebar
@@ -339,7 +414,7 @@ favicons:            # size: path
   1024: "/assets/logos/logo@1024px.png"
 
 # 5. Build & tooling
-css_inline: true               # Inline all CSS into <head> if true
+css_inline: false               # Inline all CSS into <head> if true
 
 sass:
   quiet_deps: true

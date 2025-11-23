@@ -1,15 +1,59 @@
-<!-- _includes/header.html -->
-<header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
+{% comment %}
+  Header include
+  - Respects site.header settings (sticky, fullwidth, rounded, toggles)
+  - Uses navigation_header with optional children for submenus
+{% endcomment %}
+
+{%- assign header_show_search    = true -%}
+{%- assign header_show_social    = true -%}
+{%- assign header_show_avatar    = true -%}
+{%- assign header_show_job_title = true -%}
+{%- assign header_show_nav_icons = true -%}
+{%- assign header_sticky         = true -%}
+{%- assign header_fullwidth      = false -%}
+{%- assign header_rounded        = true -%}
+
+{%- if site.header -%}
+  {%- if site.header.show_search == false    -%}{%- assign header_show_search    = false -%}{%- endif -%}
+  {%- if site.header.show_social == false    -%}{%- assign header_show_social    = false -%}{%- endif -%}
+  {%- if site.header.show_avatar == false    -%}{%- assign header_show_avatar    = false -%}{%- endif -%}
+  {%- if site.header.show_job_title == false -%}{%- assign header_show_job_title = false -%}{%- endif -%}
+  {%- if site.header.show_nav_icons == false -%}{%- assign header_show_nav_icons = false -%}{%- endif -%}
+  {%- if site.header.sticky == false         -%}{%- assign header_sticky         = false -%}{%- endif -%}
+  {%- if site.header.fullwidth == true       -%}{%- assign header_fullwidth      = true  -%}{%- endif -%}
+  {%- if site.header.rounded == false        -%}{%- assign header_rounded        = false -%}{%- endif -%}
+{%- endif -%}
+
+{%- assign header_classes = 'island-navbar' -%}
+{%- if header_fullwidth -%}
+  {%- assign header_classes = header_classes | append: ' island-navbar--fullwidth' -%}
+{%- endif -%}
+{%- unless header_rounded -%}
+  {%- assign header_classes = header_classes | append: ' island-navbar--square' -%}
+{%- endunless -%}
+{%- unless header_sticky -%}
+  {%- assign header_classes = header_classes | append: ' island-navbar--static' -%}
+{%- endunless -%}
+
+<header class="{{ header_classes }}"
+        role="navigation"
+        aria-label="Primary"
+        id="site-navbar"
+        data-sticky="{{ header_sticky }}">
   <a href="{{ '/' | relative_url }}" class="navbar-brand">
-    <img
-      src="{{ site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/64?u=j' }}"
-      alt="{{ site.title | default: 'Site' | escape }}"
-      class="navbar-avatar"
-      width="32" height="32" loading="lazy"
-    />
+    {% if header_show_avatar %}
+      <img
+        src="{{ site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/64?u=j' }}"
+        alt="{{ site.title | default: 'Site' | escape }}"
+        class="navbar-avatar"
+        width="32" height="32" loading="lazy"
+      />
+    {% endif %}
     <span class="brand-text">
       <span class="logo">{{ site.title | default: 'John Doe' }}</span>
-      <span class="logo-sub">{{ site.job_title | default: 'Software Engineer' }}</span>
+      {% if header_show_job_title %}
+        <span class="logo-sub">{{ site.job_title | default: 'Software Engineer' }}</span>
+      {% endif %}
     </span>
   </a>
 
@@ -22,15 +66,35 @@
           {% assign href = item.url %}
           {% assign is_external = false %}
           {% if href contains '://' %}{% assign is_external = true %}{% endif %}
-          <li>
+
+          {% assign children = item.children %}
+          <li class="{% if children %}nav-item-has-children{% endif %}">
             <a
               href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
               {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
               class="{% if page.url == href %}active{% endif %}"
             >
-              <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
+              {% if header_show_nav_icons %}
+                <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
+              {% endif %}
               {{ item.title }}
             </a>
+
+            {% if children %}
+              <ul class="nav-submenu" aria-label="{{ item.title }} submenu">
+                {% for child in children %}
+                  {% assign ch_href = child.url %}
+                  {% assign ch_is_external = false %}
+                  {% if ch_href contains '://' %}{% assign ch_is_external = true %}{% endif %}
+                  <li>
+                    <a href="{% if ch_is_external %}{{ ch_href }}{% else %}{{ ch_href | relative_url }}{% endif %}"
+                       {% if ch_is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                      {{ child.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
           </li>
         {% endfor %}
       {% else %}
@@ -42,22 +106,26 @@
     </ul>
   </nav>
 
-  <!-- Inline navbar search -->
-  <form class="navbar-search" id="navbar-search" role="search" aria-label="Site search" autocomplete="off">
-    <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
-    <input class="search-input" id="navbar-search-input" type="search"
-           placeholder="Search {{ site.title | escape }}…" aria-label="Search" />
-    <button type="button" class="search-cancel" id="navbar-search-cancel" aria-label="Cancel search">
-      <i class="ph-bold ph-x"></i>
-    </button>
-  </form>
+  {% if header_show_search %}
+    <!-- Inline navbar search -->
+    <form class="navbar-search" id="navbar-search" role="search" aria-label="Site search" autocomplete="off">
+      <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+      <input class="search-input" id="navbar-search-input" type="search"
+             placeholder="Search {{ site.title | escape }}…" aria-label="Search" />
+      <button type="button" class="search-cancel" id="navbar-search-cancel" aria-label="Cancel search">
+        <i class="ph-bold ph-x"></i>
+      </button>
+    </form>
+  {% endif %}
 
   <!-- Actions -->
   <div class="navbar-actions">
-    <!-- Use this to OPEN inline search (prevents navigation) -->
-    <a href="{{ '/search/' | relative_url }}" id="search-open" class="nav-icon" aria-label="Search">
-      <i class="ph-bold ph-magnifying-glass"></i>
-    </a>
+    {% if header_show_search %}
+      <!-- Use this to OPEN inline search (prevents navigation) -->
+      <a href="{{ '/search/' | relative_url }}" id="search-open" class="nav-icon" aria-label="Search">
+        <i class="ph-bold ph-magnifying-glass"></i>
+      </a>
+    {% endif %}
 
     <button class="theme-toggle-button" aria-label="Toggle theme" id="theme-toggle">
       <i class="ph-bold ph-sun icon-sun" aria-hidden="true"></i>
@@ -79,6 +147,12 @@
 <!-- Floating mobile island panel -->
 <section id="mobile-panel" class="island-panel" aria-hidden="true">
   <div class="island-panel__inner">
+    <!-- Close button INSIDE the panel -->
+    <button type="button" class="island-panel__close" id="mobile-panel-close" aria-label="Close menu">
+      <i class="ph-duotone ph-x"></i>
+    </button>
+
+    <!-- Nav tiles -->
     <div class="bento-grid" role="menu" aria-label="Quick actions">
       {% assign mobile_items = site.navigation_header %}
       {% if mobile_items and mobile_items.size > 0 %}
@@ -86,16 +160,39 @@
           {% assign href = item.url %}
           {% assign is_external = false %}
           {% if href contains '://' %}{% assign is_external = true %}{% endif %}
-          <a class="bento-card"
-             href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
-             {% if is_external %}target="_blank" rel="noopener"{% endif %}
-             role="menuitem">
-            <span class="bento-icon"><i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i></span>
-            <span>
-              <div class="bento-title">{{ item.title }}</div>
-              <div class="bento-sub">{{ item.sub | default: 'Open' }}</div>
-            </span>
-          </a>
+          {% assign children = item.children %}
+
+          <div class="bento-card" role="group" aria-label="{{ item.title }}">
+            <a class="bento-card__main"
+               href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
+               {% if is_external %}target="_blank" rel="noopener"{% endif %}
+               role="menuitem">
+              <span class="bento-icon">
+                {% if header_show_nav_icons %}
+                  <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
+                {% endif %}
+              </span>
+              <span>
+                <div class="bento-title">{{ item.title }}</div>
+                <div class="bento-sub">{{ item.sub | default: 'Open' }}</div>
+              </span>
+            </a>
+
+            {% if children %}
+              <div class="bento-submenu" aria-label="{{ item.title }} submenu">
+                {% for child in children %}
+                  {% assign ch_href = child.url %}
+                  {% assign ch_is_external = false %}
+                  {% if ch_href contains '://' %}{% assign ch_is_external = true %}{% endif %}
+                  <a href="{% if ch_is_external %}{{ ch_href }}{% else %}{{ ch_href | relative_url }}{% endif %}"
+                     {% if ch_is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
+                     class="bento-submenu__link">
+                    {{ child.title }}
+                  </a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
         {% endfor %}
       {% else %}
         <a class="bento-card" href="{{ '/#about' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-user"></i></span><span><div class="bento-title">About</div><div class="bento-sub">Who I am</div></span></a>
@@ -104,11 +201,122 @@
         <a class="bento-card" href="{{ '/#contact' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-paper-plane-tilt"></i></span><span><div class="bento-title">Contact</div><div class="bento-sub">Say hello</div></span></a>
       {% endif %}
     </div>
+
+    {% if site.social_links and header_show_social %}
+      <div class="panel-social">
+        <div class="panel-social__heading">Connect</div>
+        <div class="panel-social__grid">
+          {% for pair in site.social_links %}
+            {% assign label = pair[0] %}
+            {% assign url   = pair[1] %}
+
+            {% assign icon_class = '' %}
+            {% case label %}
+              {% when 'Twitter' %}
+                {% assign icon_class = 'twitter-logo' %}
+              {% when 'LinkedIn' %}
+                {% assign icon_class = 'linkedin-logo' %}
+              {% when 'GitHub' %}
+                {% assign icon_class = 'github-logo' %}
+              {% when 'RSS' %}
+                {% assign icon_class = 'rss-simple' %}
+              {% when 'link' %}
+                {% assign icon_class = 'link-simple' %}
+              {% when 'Link' %}
+                {% assign icon_class = 'link-simple' %}
+              {% else %}
+                {% assign icon_class = 'link-simple' %}
+            {% endcase %}
+
+            {% assign is_external = false %}
+            {% if url contains '://' %}{% assign is_external = true %}{% endif %}
+
+            <a class="panel-social__item"
+               href="{% if is_external %}{{ url }}{% else %}{{ url | relative_url }}{% endif %}"
+               {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+              <span class="panel-social__icon">
+                <i class="ph-duotone ph-{{ icon_class }}"></i>
+              </span>
+              <span class="panel-social__label">{{ label }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
   </div>
 </section>
 
-<!-- Results panel, docked under the island -->
-<section id="search-results" class="search-results" aria-live="polite" aria-label="Search results"></section>
+{% if header_show_search %}
+  <!-- Results panel, docked under the island -->
+  <section id="search-results" class="search-results" aria-live="polite" aria-label="Search results"></section>
+{% endif %}
+
+{%- comment -%}
+  JSON-LD for SEO:
+  - Person (you)
+  - SiteNavigationElement (top nav)
+  - WebSite SearchAction (search)
+{%- endcomment -%}
+
+{% assign abs_home = '/' | absolute_url %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "{{ site.author.name | default: site.title | escape }}",
+  "url": "{{ abs_home }}",
+  "jobTitle": "{{ site.job_title | escape }}",
+  "image": "{{ site.avatarurl | default: site.logo | default: '' | absolute_url }}",
+  "sameAs": [
+    {% if site.social_links %}
+      {%- assign first = true -%}
+      {%- for pair in site.social_links -%}
+        {%- assign url = pair[1] -%}
+        {%- unless first -%},{%- endunless -%}
+        "{{ url | absolute_url }}"
+        {%- assign first = false -%}
+      {%- endfor -%}
+    {% endif %}
+  ]
+}
+</script>
+
+{% if site.navigation_header %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SiteNavigationElement",
+  "name": "{{ site.title | escape }} navigation",
+  "url": "{{ abs_home }}",
+  "hasPart": [
+    {%- for item in site.navigation_header -%}
+      {
+        "@type": "WebPage",
+        "name": "{{ item.title | escape }}",
+        "url": "{% if item.url contains '://' %}{{ item.url }}{% else %}{{ item.url | relative_url | absolute_url }}{% endif %}"
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+{% endif %}
+
+{% if header_show_search %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.title | escape }}",
+  "url": "{{ abs_home }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ '/search/' | relative_url | absolute_url }}?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endif %}
 
 <script>
   /* assets/scripts/header.js */
@@ -128,6 +336,7 @@
     var header  = document.getElementById('site-navbar');
     var panel   = document.getElementById('mobile-panel');
     var toggle  = document.getElementById('mobile-menu-toggle');
+    var panelClose = document.getElementById('mobile-panel-close');
     var themeBtn = document.getElementById('theme-toggle');
 
     // --- Theme toggle (persist) ---
@@ -146,19 +355,23 @@
       setTheme(getTheme() === "light" ? "dark" : "light");
     });
 
-    // --- Compute nav height for mobile spacing ---
+    // --- Compute nav height + sticky behaviour ---
     function setNavHeightVar() {
       var h = header ? header.getBoundingClientRect().height : 58;
       root.style.setProperty("--nav-h", h + "px");
     }
     function applyMobileMode() {
       var isMobile = window.matchMedia("(max-width: 991px)").matches;
-      document.body.classList.toggle("has-fixed-nav", isMobile);
+      var isSticky = true;
+      if (header && header.getAttribute("data-sticky") === "false") {
+        isSticky = false;
+      }
+      document.body.classList.toggle("has-fixed-nav", isMobile && isSticky);
       setNavHeightVar();
     }
     applyMobileMode();
-    window.addEventListener("resize", setNavHeightVar);
-    window.addEventListener("orientationchange", setNavHeightVar);
+    window.addEventListener("resize", applyMobileMode);
+    window.addEventListener("orientationchange", applyMobileMode);
     window.setTimeout(setNavHeightVar, 120);
 
     // --- Mobile panel open/close ---
@@ -189,9 +402,17 @@
       setPanelHeight(false);
     }
     function togglePanel(){ panel && (panel.classList.contains("is-open") ? closePanel() : openPanel()); }
+
     toggle && toggle.addEventListener("click", togglePanel);
-    panel && panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
-    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
+    panelClose && panelClose.addEventListener("click", closePanel);
+
+    panel && panel.addEventListener("click", function(e){
+      if(e.target.closest("a")) closePanel();
+    });
+
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel();
+    });
     var mq = window.matchMedia("(min-width: 992px)");
     mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
 
@@ -207,22 +428,24 @@
     var endpoint = "{{ '/assets/search.json' | relative_url }}";
     var PAGES = [];
 
-    if (endpoint) {
+    if (endpoint && results) {
       fetch(endpoint)
         .then(function(r){ return r.json(); })
         .then(function(data){ PAGES = data || []; })
         .catch(function(){ PAGES = []; });
     }
 
-   function openSearch() {
+    function openSearch() {
+      if (!form || !results) return;
       body.classList.add("search-active");
-      if (results) results.classList.add("is-open");
+      results.classList.add("is-open");
       setTimeout(function(){ input && input.focus(); }, 10);
     }
     function clearResults(){ if (results) results.innerHTML = ""; }
     function closeSearch() {
+      if (!form || !results) return;
       body.classList.remove("search-active");
-      if (results) results.classList.remove("is-open");
+      results.classList.remove("is-open");
       clearResults();
       if (input) input.value = "";
     }
@@ -241,6 +464,8 @@
     });
 
     document.addEventListener("keydown", function(e){
+      if (!form || !results) return;
+
       if (e.key === "/" && !body.classList.contains("search-active")) {
         e.preventDefault(); openSearch();
       } else if (e.key === "Escape" && body.classList.contains("search-active")) {
@@ -257,16 +482,18 @@
 
     var timer = null;
     input && input.addEventListener("input", function(){
+      if (!results) return;
       clearTimeout(timer);
       var q = (this.value || "").trim();
       timer = setTimeout(function(){ renderSearch(q); }, 120);
-      if (q && results && !results.classList.contains("is-open")) results.classList.add("is-open");
-      if (!q && results && results.classList.contains("is-open")) results.classList.remove("is-open");
+      if (q && !results.classList.contains("is-open")) results.classList.add("is-open");
+      if (!q && results.classList.contains("is-open")) results.classList.remove("is-open");
     });
 
     form && form.addEventListener("submit", function(e){
+      if (!results) return;
       e.preventDefault();
-      var first = results && results.querySelector('.search-item[role="option"] a[href]');
+      var first = results.querySelector('.search-item[role="option"] a[href]');
       if (first) { window.location.href = first.getAttribute("href"); closeSearch(); }
     });
 
@@ -279,8 +506,8 @@
     }
 
     function renderSearch(q) {
-      var arr = findResults(q, PAGES).slice(0, 12);
       if (!results) return;
+      var arr = findResults(q, PAGES).slice(0, 12);
       if (!q || !arr.length) {
         results.innerHTML = '<div class="search-list"><div class="search-item" aria-disabled="true" style="opacity:.75">No results</div></div>';
         return;
@@ -321,6 +548,7 @@
     }
 
     function highlight(idx){
+      if (!results) return;
       var opts = results.querySelectorAll('.search-item[role="option"]');
       opts.forEach(function(el){ el.setAttribute("aria-selected","false"); });
       if (opts[idx]) { opts[idx].setAttribute("aria-selected","true"); opts[idx].scrollIntoView({block: "nearest"}); }
