@@ -76,7 +76,7 @@
   </div>
 </header>
 
-<!-- Floating mobile island panel (builds from navigation_header too) -->
+<!-- Floating mobile island panel -->
 <section id="mobile-panel" class="island-panel" aria-hidden="true">
   <div class="island-panel__inner">
     <div class="bento-grid" role="menu" aria-label="Quick actions">
@@ -113,7 +113,6 @@
 <script>
   /* assets/scripts/header.js */
 
-  /* FOUC guard */
   (function () {
     var KEY = "color-scheme";
     try {
@@ -208,7 +207,6 @@
     var endpoint = "{{ '/assets/search.json' | relative_url }}";
     var PAGES = [];
 
-    // Load index once
     if (endpoint) {
       fetch(endpoint)
         .then(function(r){ return r.json(); })
@@ -216,7 +214,7 @@
         .catch(function(){ PAGES = []; });
     }
 
-    function openSearch() {
+   function openSearch() {
       body.classList.add("search-active");
       if (results) results.classList.add("is-open");
       setTimeout(function(){ input && input.focus(); }, 10);
@@ -229,23 +227,19 @@
       if (input) input.value = "";
     }
 
-    // Cancel btn
     cancel && cancel.addEventListener("click", closeSearch);
 
-    // Open trigger: prevent navigating to /search/
     openBtn && openBtn.addEventListener("click", function(e){
       e.preventDefault();
       openSearch();
     });
 
-    // Click-away to close
     document.addEventListener("click", function(e){
       if (!body.classList.contains("search-active")) return;
       if (e.target.closest(".island-navbar") || e.target.closest("#search-results")) return;
       closeSearch();
     });
 
-    // Keyboard shortcuts + nav
     document.addEventListener("keydown", function(e){
       if (e.key === "/" && !body.classList.contains("search-active")) {
         e.preventDefault(); openSearch();
@@ -261,7 +255,6 @@
       }
     });
 
-    // Debounced type → filter
     var timer = null;
     input && input.addEventListener("input", function(){
       clearTimeout(timer);
@@ -271,7 +264,6 @@
       if (!q && results && results.classList.contains("is-open")) results.classList.remove("is-open");
     });
 
-    // Prevent form navigation
     form && form.addEventListener("submit", function(e){
       e.preventDefault();
       var first = results && results.querySelector('.search-item[role="option"] a[href]');

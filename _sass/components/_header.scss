@@ -16,7 +16,7 @@
   justify-content: space-between;
   gap: $sp-6;
 
-  padding: $sp-3 $sp-6; // compact
+  padding: $sp-3 $sp-6;
   border-radius: $radius-6;
   border: 1px solid;
   -webkit-backdrop-filter: blur(12px);
@@ -58,7 +58,6 @@
     border-radius: $radius-6;
   }
 
-  // spacing below the fixed island
   body.has-fixed-nav {
     padding-top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
   }
@@ -73,14 +72,11 @@
   margin-right: auto;
   max-width: $island-width;
 
-  // sit just below header island
-  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
+  // a bit more space below header island
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-4});
 
   border: 1px solid;
-  border-top-left-radius: $radius-6;
-  border-top-right-radius: $radius-6;
-  border-bottom-left-radius: $radius-6;
-  border-bottom-right-radius: $radius-6;
+  border-radius: $radius-6;
 
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
@@ -129,7 +125,7 @@
   }
 }
 
-/* bento grid: 2 cols → 3 on wider phones */
+/* bento grid */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -161,12 +157,8 @@
 
   &:hover {
     transform: translateY(-2px);
-    @include theme-block {
-      background: tone(background-100, light);
-    }
-    @include theme-block-dark {
-      background: tone(background-100, dark);
-    }
+    @include theme-block { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark); }
   }
 
   .bento-icon {
@@ -177,37 +169,23 @@
     border-radius: $radius-3;
     border: 1px solid;
 
-    @include theme-block {
-      border-color: tone(border, light);
-    }
-    @include theme-block-dark {
-      border-color: tone(border, dark);
-    }
+    @include theme-block { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark); }
 
-    i {
-      font-size: $fs-4;
-    }
+    i { font-size: $fs-4; }
   }
 
   .bento-title {
     font-weight: $fw-semibold;
     font-size: $fs-3;
-    @include theme-block {
-      color: tone(contrast, light);
-    }
-    @include theme-block-dark {
-      color: tone(contrast, dark);
-    }
+    @include theme-block { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
   }
 
   .bento-sub {
     font-size: $fs-2;
-    @include theme-block {
-      color: tone(secondary, light);
-    }
-    @include theme-block-dark {
-      color: tone(secondary, dark);
-    }
+    @include theme-block { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
   }
 }
 
@@ -224,40 +202,24 @@
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid;
-
-    @include theme-block {
-      border-color: tone(border, light);
-    }
-    @include theme-block-dark {
-      border-color: tone(border, dark);
-    }
+    @include theme-block { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark); }
   }
 
-  .brand-text {
-    display: grid;
-    line-height: 1.1;
-  }
+  .brand-text { display: grid; line-height: 1.1; }
 
   .logo {
     font-size: $fs-4;
     font-weight: $fw-semibold;
     letter-spacing: -0.01em;
-    @include theme-block {
-      color: tone(contrast, light);
-    }
-    @include theme-block-dark {
-      color: tone(contrast, dark);
-    }
+    @include theme-block { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark); }
   }
 
   .logo-sub {
     font-size: $fs-1;
-    @include theme-block {
-      color: tone(secondary, light);
-    }
-    @include theme-block-dark {
-      color: tone(secondary, dark);
-    }
+    @include theme-block { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark); }
   }
 }
 
@@ -275,41 +237,26 @@
   a {
     display: inline-flex;
     align-items: center;
-    gap: 0.5em;
+    gap: .5em;
     padding: $sp-3 $sp-5;
     font-size: $fs-3;
     font-weight: $fw-medium;
     border-radius: $radius-pill;
     transition: background-color $dur-1, color $dur-1;
 
-    i {
-      font-size: $fs-4;
-      line-height: 1;
-    }
+    i { font-size: $fs-4; line-height: 1; }
 
     @include theme-block {
       color: tone(secondary, light);
-
-      &:hover,
-      &.active {
-        color: tone(contrast, light);
-        background: tone(background-100, light);
-      }
+      &:hover, &.active { color: tone(contrast, light); background: tone(background-100, light); }
     }
     @include theme-block-dark {
       color: tone(secondary, dark);
-
-      &:hover,
-      &.active {
-        color: tone(contrast, dark);
-        background: tone(background-100, dark);
-      }
+      &:hover, &.active { color: tone(contrast, dark); background: tone(background-100, dark); }
     }
   }
 
-  @media (max-width: $bp-lg) {
-    display: none;
-  }
+  @media (max-width: $bp-lg) { display: none; }
 }
 
 // ---------- Right-side actions ----------
@@ -318,7 +265,6 @@
   align-items: center;
   gap: $sp-3;
 
-  // circular icon button (search, menu, etc.)
   .nav-icon {
     display: inline-grid;
     place-items: center;
@@ -337,24 +283,15 @@
     @include theme-block {
       color: tone(secondary, light);
       border-color: tone(border, light);
-
-      &:hover {
-        color: tone(contrast, light);
-        background: tone(background-200, light);
-      }
+      &:hover { color: tone(contrast, light); background: tone(background-200, light); }
     }
     @include theme-block-dark {
       color: tone(secondary, dark);
       border-color: tone(border, dark);
-
-      &:hover {
-        color: tone(contrast, dark);
-        background: tone(background-200, dark);
-      }
+      &:hover { color: tone(contrast, dark); background: tone(background-200, dark); }
     }
   }
 
-  // Theme toggle (animated swap)
   .theme-toggle-button {
     @extend .nav-icon;
     position: relative;
@@ -366,29 +303,18 @@
       display: grid;
       place-items: center;
       opacity: 0;
-      transform: rotate(-90deg) scale(0.8);
+      transform: rotate(-90deg) scale(.8);
       transition: opacity $dur-2 ease, transform $dur-2 $ease-in-out;
     }
 
-    @include theme-block {
-      .icon-sun {
-        opacity: 1;
-        transform: rotate(0) scale(1);
-      }
-    }
-    @include theme-block-dark {
-      .icon-moon {
-        opacity: 1;
-        transform: rotate(0) scale(1);
-      }
-    }
+    @include theme-block   { .icon-sun  { opacity: 1; transform: rotate(0) scale(1); } }
+    @include theme-block-dark { .icon-moon { opacity: 1; transform: rotate(0) scale(1); } }
   }
 
-  // GitHub CTA
   .nav-cta {
     display: inline-flex;
     align-items: center;
-    gap: 0.5em;
+    gap: .5em;
     min-height: $btn-height-sm;
     padding: 0.35rem $btn-pad-x-sm;
     border-radius: $radius-pill;
@@ -397,48 +323,25 @@
     font-weight: $fw-semibold;
     cursor: pointer;
     user-select: none;
-    transition:
-      transform $dur-1 $ease-in-out,
-      box-shadow $dur-1 $ease-in-out,
-      background-color $dur-1,
-      color $dur-1;
+    transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, background-color $dur-1, color $dur-1;
 
-    @include theme-block {
-      background: tone(contrast, light);
-      color: tone(white, light);
-    }
-    @include theme-block-dark {
-      background: tone(white, dark);
-      color: tone(black, dark);
-    }
+    @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
+    @include theme-block-dark { background: tone(white, dark);    color: tone(black, dark);  }
 
-    &:hover {
-      transform: translateY(-2px);
-    }
+    &:hover { transform: translateY(-2px); }
 
-    span {
-      display: none;
-    }
-
-    @include mq-up($bp-md) {
-      span {
-        display: inline;
-      }
-    }
+    span { display: none; }
+    @include mq-up($bp-md) { span { display: inline; } }
   }
 
-  .mobile-menu-toggle {
-    display: none;
-  }
+  .mobile-menu-toggle { display: none; }
 
   @media (max-width: $bp-lg) {
-    .mobile-menu-toggle {
-      display: inline-grid;
-    }
+    .mobile-menu-toggle { display: inline-grid; }
   }
 }
 
-// ---------- Mobile panel height rules ----------
+// panel height safety
 .island-panel.is-open {
   max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
 }
@@ -448,31 +351,18 @@
 }
 
 /* ===================================================================== */
-/* INLINE NAVBAR SEARCH — animation + dark mode + result behavior        */
+/* INLINE NAVBAR SEARCH                                                  */
 /* ===================================================================== */
 
 @keyframes ims-search-reveal {
-  0% {
-    opacity: 0;
-    transform: scaleX(0.88) translateX(8px);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1) translateX(0);
-  }
+  0%   { opacity: 0; transform: scaleX(.88) translateX(8px); }
+  100% { opacity: 1; transform: scaleX(1) translateX(0); }
 }
 @keyframes ims-results-drop {
-  0% {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0%   { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Global backdrop blur when search is active */
 body.search-active::before {
   content: "";
   position: fixed;
@@ -480,14 +370,11 @@ body.search-active::before {
   z-index: $z-overlay - 2;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  background: rgba(0, 0, 0, 0.18);
-  @include theme-block-dark {
-    background: rgba(0, 0, 0, 0.28);
-  }
+  background: rgba(0,0,0,.18);
+  @include theme-block-dark { background: rgba(0,0,0,.28); }
   pointer-events: auto;
 }
 
-/* Search form occupies navbar center when active */
 .navbar-search {
   border: 0;
   box-shadow: none;
@@ -502,13 +389,9 @@ body.search-active::before {
   transform-origin: right center;
 
   i {
-    opacity: 0.9;
-    @include theme-block {
-      color: tone(secondary, light);
-    }
-    @include theme-block-dark {
-      color: tone(secondary, dark);
-    }
+    opacity: .9;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
   }
 
   .search-input {
@@ -519,21 +402,13 @@ body.search-active::before {
     outline: none;
     font-size: $fs-3;
 
-    @include theme-block {
-      color: tone(contrast, light);
-    }
-    @include theme-block-dark {
-      color: tone(contrast, dark);
-    }
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
 
     &::placeholder {
-      opacity: 0.9;
-      @include theme-block {
-        color: mix(tone(secondary, light), transparent, 90%);
-      }
-      @include theme-block-dark {
-        color: mix(tone(secondary, dark), transparent, 90%);
-      }
+      opacity: .9;
+      @include theme-block      { color: mix(tone(secondary, light), transparent, 90%); }
+      @include theme-block-dark { color: mix(tone(secondary, dark),  transparent, 90%); }
     }
   }
 
@@ -546,35 +421,20 @@ body.search-active::before {
   }
 }
 
-/* When active, hide brand/menu/cta; make room for search + animate */
 body.search-active {
-  .navbar-search {
-    display: flex;
-    animation: ims-search-reveal $dur-2 $ease-in-out both;
-  }
-  .navbar-brand,
-  .navbar-menu,
-  .navbar-actions .cta-github {
-    display: none;
-  }
-  .island-navbar {
-    gap: $sp-3;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    z-index: $z-overlay + 1;
-  }
+  .navbar-search { display: flex; animation: ims-search-reveal $dur-2 $ease-in-out both; }
+  .navbar-brand, .navbar-menu, .navbar-actions .cta-github { display: none; }
+  .island-navbar { gap: $sp-3; display: grid; grid-template-columns: 1fr auto; z-index: $z-overlay + 1; }
 }
 
 @media (max-width: $bp-lg) {
-  body.search-active .island-navbar {
-    grid-template-columns: 1fr auto;
-  }
+  body.search-active .island-navbar { grid-template-columns: 1fr auto; }
 }
 
-/* Results container */
+/* Results container (match island width, with same top gap as panel) */
 .search-results {
   position: sticky;
-  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-4});
   z-index: $z-overlay;
   max-width: $island-width;
   margin-left: auto;
@@ -592,7 +452,7 @@ body.search-active {
     position: fixed;
     left: $container-gutter;
     right: $container-gutter;
-    top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-3});
+    top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-4});
   }
 }
 
@@ -600,14 +460,8 @@ body.search-active {
   display: block;
   animation: ims-results-drop $dur-2 $ease-in-out both;
 
-  @include theme-block {
-    background: tone(background, light);
-    box-shadow: $shadow-light;
-  }
-  @include theme-block-dark {
-    background: tone(background-100, dark);
-    box-shadow: $shadow-dark;
-  }
+  @include theme-block      { background: tone(background, light);   box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); box-shadow: $shadow-dark; }
 }
 
 .search-list {
@@ -620,29 +474,17 @@ body.search-active {
 
 .search-item {
   display: grid;
-  grid-template-columns: 2.5rem 1fr auto; // thumb | text | cta
+  grid-template-columns: 2.5rem 1fr auto;
   align-items: center;
   gap: $sp-4;
   padding: $sp-5;
   border-radius: $radius-5;
   cursor: pointer;
 
-  @include theme-block {
-    &:hover,
-    &[aria-selected="true"] {
-      background: tone(background-100, light);
-    }
-  }
-  @include theme-block-dark {
-    &:hover,
-    &[aria-selected="true"] {
-      background: tone(background-100, dark);
-    }
-  }
+  @include theme-block      { &:hover, &[aria-selected="true"] { background: tone(background-100, light); } }
+  @include theme-block-dark { &:hover, &[aria-selected="true"] { background: tone(background-100, dark);  } }
 
-  &:hover .search-title {
-    text-decoration: underline;
-  }
+  &:hover .search-title { text-decoration: underline; }
 }
 
 .search-thumb {
@@ -654,57 +496,25 @@ body.search-active {
   place-items: center;
   border: 1px solid;
 
-  @include theme-block {
-    border-color: tone(border, light);
-    background: tone(background-100, light);
-  }
-  @include theme-block-dark {
-    border-color: tone(border, dark);
-    background: tone(background-100, dark);
-  }
+  @include theme-block      { border-color: tone(border, light); background: tone(background-100, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: tone(background-100, dark);  }
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  i {
-    font-size: $fs-4;
-    @include theme-block {
-      color: tone(secondary, light);
-    }
-    @include theme-block-dark {
-      color: tone(secondary, dark);
-    }
-  }
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  i   { font-size: $fs-4; @include theme-block { color: tone(secondary, light);} @include theme-block-dark { color: tone(secondary, dark);} }
 }
 
-.search-main {
-  min-width: 0;
-}
+.search-main { min-width: 0; }
 .search-title {
   font-weight: $fw-semibold;
   line-height: 1.15;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  @include theme-block {
-    color: tone(contrast, light);
-  }
-  @include theme-block-dark {
-    color: tone(contrast, dark);
-  }
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
 }
 .search-excerpt {
-  margin-top: 0.2rem;
-  @include theme-block {
-    color: tone(secondary, light);
-  }
-  @include theme-block-dark {
-    color: tone(secondary, dark);
-  }
+  margin-top: .2rem;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -715,63 +525,33 @@ body.search-active {
 .search-cta {
   font-size: $fs-2;
   text-decoration: none;
-  @include theme-block {
-    color: tone(secondary, light);
-  }
-  @include theme-block-dark {
-    color: tone(secondary, dark);
-  }
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
 
-  &:hover {
-    text-decoration: underline;
-  }
+  &:hover { text-decoration: underline; }
 }
 
 /* ===================================================================== */
-/* MOBILE MENU: hamburger → close inside navbar on mobile                */
+/* MOBILE MENU: simple icon swap (hamburger → ×)                         */
 /* ===================================================================== */
 
 @media (max-width: $bp-lg) {
-  /* When panel is open, ensure navbar is the anchor for the close btn */
-  body.panel-open .island-navbar {
-    position: fixed;
-  }
+  .navbar-actions .mobile-menu-toggle[aria-expanded="true"] {
+    position: relative;
 
-  body.panel-open .island-navbar .mobile-menu-toggle {
-    position: absolute;
-    top: $sp-3;
-    right: $sp-3;
-    z-index: $z-overlay + 2;
-    // nav-icon styles already apply via the class in HTML
-    background: transparent;
-
-    &[aria-expanded="true"] {
-      i {
-        opacity: 0;
-      } // hide hamburger
-      &::after {
-        content: "×";
-        display: grid;
-        place-items: center;
-        position: absolute;
-        inset: 0;
-        font-size: $fs-4;
-        @include theme-block {
-          color: tone(contrast, light);
-        }
-        @include theme-block-dark {
-          color: tone(contrast, dark);
-        }
-      }
+    i {
+      opacity: 0;
     }
-  }
 
-  .island-panel.is-open .island-panel__inner {
-    padding-top: $sp-8; // some space, but not crazy
-  }
-
-  .bento-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: $sp-5;
+    &::after {
+      content: "×";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: $fs-4;
+      @include theme-block      { color: tone(contrast, light); }
+      @include theme-block-dark { color: tone(contrast, dark);  }
+    }
   }
 }
