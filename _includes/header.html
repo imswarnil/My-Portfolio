@@ -77,7 +77,12 @@
               {% if header_show_nav_icons %}
                 <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
               {% endif %}
-              {{ item.title }}
+              <span class="nav-label">{{ item.title }}</span>
+              {% if children %}
+                <span class="nav-chevron" aria-hidden="true">
+                  <i class="ph-bold ph-caret-down"></i>
+                </span>
+              {% endif %}
             </a>
 
             {% if children %}
@@ -98,10 +103,10 @@
           </li>
         {% endfor %}
       {% else %}
-        <li><a href="{{ '/#about' | relative_url }}"><i class="ph-bold ph-user"></i>About</a></li>
-        <li><a href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i>Projects</a></li>
-        <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i>Blog</a></li>
-        <li><a href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i>Contact</a></li>
+        <li><a href="{{ '/#about' | relative_url }}"><i class="ph-bold ph-user"></i><span class="nav-label">About</span></a></li>
+        <li><a href="{{ '/#projects' | relative_url }}"><i class="ph-bold ph-folder"></i><span class="nav-label">Projects</span></a></li>
+        <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i><span class="nav-label">Blog</span></a></li>
+        <li><a href="{{ '/#contact' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i><span class="nav-label">Contact</span></a></li>
       {% endif %}
     </ul>
   </nav>
@@ -149,58 +154,71 @@
   <div class="island-panel__inner">
     <!-- Close button INSIDE the panel -->
     <button type="button" class="island-panel__close" id="mobile-panel-close" aria-label="Close menu">
-      <i class="ph-duotone ph-x"></i>
+      <span class="island-panel__close-icon" aria-hidden="true">&times;</span>
     </button>
 
-    <!-- Nav tiles -->
-    <div class="bento-grid" role="menu" aria-label="Quick actions">
+    <!-- Nav list (mobile) -->
+    <nav class="mobile-nav" aria-label="Mobile Navigation">
       {% assign mobile_items = site.navigation_header %}
       {% if mobile_items and mobile_items.size > 0 %}
-        {% for item in mobile_items %}
-          {% assign href = item.url %}
-          {% assign is_external = false %}
-          {% if href contains '://' %}{% assign is_external = true %}{% endif %}
-          {% assign children = item.children %}
+        <ul class="mobile-nav-list">
+          {% for item in mobile_items %}
+            {% assign href = item.url %}
+            {% assign is_external = false %}
+            {% if href contains '://' %}{% assign is_external = true %}{% endif %}
+            {% assign children = item.children %}
+            {% assign has_children = children and children.size > 0 %}
 
-          <div class="bento-card" role="group" aria-label="{{ item.title }}">
-            <a class="bento-card__main"
-               href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
-               {% if is_external %}target="_blank" rel="noopener"{% endif %}
-               role="menuitem">
-              <span class="bento-icon">
-                {% if header_show_nav_icons %}
-                  <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
+            <li class="mobile-nav-item{% if has_children %} has-children{% endif %}">
+              <div class="mobile-nav-row" data-mobile-parent>
+                <a class="mobile-nav-link"
+                   href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
+                   {% if is_external %}target="_blank" rel="noopener"{% endif %}>
+                  <span class="mobile-nav-icon">
+                    {% if header_show_nav_icons %}
+                      <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
+                    {% endif %}
+                  </span>
+                  <span class="mobile-nav-label">{{ item.title }}</span>
+                </a>
+
+                {% if has_children %}
+                  <button type="button"
+                          class="mobile-nav-toggle"
+                          aria-label="Toggle {{ item.title }} submenu"
+                          aria-expanded="false">
+                    <i class="ph-bold ph-caret-down"></i>
+                  </button>
                 {% endif %}
-              </span>
-              <span>
-                <div class="bento-title">{{ item.title }}</div>
-                <div class="bento-sub">{{ item.sub | default: 'Open' }}</div>
-              </span>
-            </a>
-
-            {% if children %}
-              <div class="bento-submenu" aria-label="{{ item.title }} submenu">
-                {% for child in children %}
-                  {% assign ch_href = child.url %}
-                  {% assign ch_is_external = false %}
-                  {% if ch_href contains '://' %}{% assign ch_is_external = true %}{% endif %}
-                  <a href="{% if ch_is_external %}{{ ch_href }}{% else %}{{ ch_href | relative_url }}{% endif %}"
-                     {% if ch_is_external %}target="_blank" rel="noopener noreferrer"{% endif %}
-                     class="bento-submenu__link">
-                    {{ child.title }}
-                  </a>
-                {% endfor %}
               </div>
-            {% endif %}
-          </div>
-        {% endfor %}
+
+              {% if has_children %}
+                <ul class="mobile-submenu" hidden>
+                  {% for child in children %}
+                    {% assign ch_href = child.url %}
+                    {% assign ch_is_external = false %}
+                    {% if ch_href contains '://' %}{% assign ch_is_external = true %}{% endif %}
+                    <li>
+                      <a href="{% if ch_is_external %}{{ ch_href }}{% else %}{{ ch_href | relative_url }}{% endif %}"
+                         {% if ch_is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                        {{ child.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
       {% else %}
-        <a class="bento-card" href="{{ '/#about' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-user"></i></span><span><div class="bento-title">About</div><div class="bento-sub">Who I am</div></span></a>
-        <a class="bento-card" href="{{ '/#projects' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-folder"></i></span><span><div class="bento-title">Projects</div><div class="bento-sub">Featured builds</div></span></a>
-        <a class="bento-card" href="{{ '/blog/' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-article"></i></span><span><div class="bento-title">Blog</div><div class="bento-sub">Notes & essays</div></span></a>
-        <a class="bento-card" href="{{ '/#contact' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-paper-plane-tilt"></i></span><span><div class="bento-title">Contact</div><div class="bento-sub">Say hello</div></span></a>
+        <div class="bento-grid" role="menu" aria-label="Quick actions">
+          <a class="bento-card" href="{{ '/#about' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-user"></i></span><span><div class="bento-title">About</div><div class="bento-sub">Who I am</div></span></a>
+          <a class="bento-card" href="{{ '/#projects' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-folder"></i></span><span><div class="bento-title">Projects</div><div class="bento-sub">Featured builds</div></span></a>
+          <a class="bento-card" href="{{ '/blog/' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-article"></i></span><span><div class="bento-title">Blog</div><div class="bento-sub">Notes & essays</div></span></a>
+          <a class="bento-card" href="{{ '/#contact' | relative_url }}"><span class="bento-icon"><i class="ph-bold ph-paper-plane-tilt"></i></span><span><div class="bento-title">Contact</div><div class="bento-sub">Say hello</div></span></a>
+        </div>
       {% endif %}
-    </div>
+    </nav>
 
     {% if site.social_links and header_show_social %}
       <div class="panel-social">
@@ -415,6 +433,35 @@
     });
     var mq = window.matchMedia("(min-width: 992px)");
     mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
+
+    // --- Mobile submenu accordion ---
+    var mobileToggles = panel ? panel.querySelectorAll(".mobile-nav-toggle") : [];
+    mobileToggles.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var item = btn.closest(".mobile-nav-item");
+        if (!item) return;
+        var submenu = item.querySelector(".mobile-submenu");
+        if (!submenu) return;
+
+        var isOpen = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        item.classList.toggle("is-open", !isOpen);
+
+        if (!isOpen) {
+          submenu.hidden = false;
+          submenu.style.maxHeight = "0px";
+          requestAnimationFrame(function(){
+            submenu.style.maxHeight = submenu.scrollHeight + "px";
+          });
+        } else {
+          submenu.style.maxHeight = submenu.scrollHeight + "px";
+          requestAnimationFrame(function(){
+            submenu.style.maxHeight = "0px";
+          });
+          window.setTimeout(function(){ submenu.hidden = true; }, 250);
+        }
+      });
+    });
 
     // ===========================
     // Inline Navbar Search

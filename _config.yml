@@ -50,10 +50,9 @@ adsense:
 # Site basics
 # -------------------------------------------------
 title: "Swarnil Singhai"
-job_title: "Salesforce Developer • Filmmaker"
+job_title: "Salesforce Developer"
 url: "https://imswarnil.com"
 baseurl: "" # set if you deploy under subpath
-
 # -------------------------------------------------
 # Social links (used in header, panel, JSON-LD)
 # -------------------------------------------------

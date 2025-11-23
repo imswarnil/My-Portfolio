@@ -1,6 +1,6 @@
 // ======================================================================
 // _header.scss — island header with desktop icons, fixed mobile bar,
-// floating bento panel, animated theme switcher, inline navbar search
+// floating mobile panel, dropdowns, inline search
 // ======================================================================
 
 // ---------- Navbar ----------
@@ -45,7 +45,6 @@
   }
 }
 
-// header modifiers from config
 .island-navbar--fullwidth {
   max-width: none;
   width: 100%;
@@ -98,8 +97,8 @@
   margin-right: auto;
   max-width: $island-width;
 
-  // more breathing room under navbar
-  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-6});
+  // a bit more gap from navbar
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
 
   border: 1px solid;
   border-radius: $radius-6;
@@ -108,11 +107,11 @@
   backdrop-filter: blur(14px);
 
   z-index: $z-overlay;
-  transform: translateY(-6px);
+  transform: translateY(-8px);
   transition:
-    max-height 500ms $ease-in-out,
-    opacity 300ms ease,
-    transform 350ms $ease-in-out,
+    max-height 450ms $ease-in-out,
+    opacity 260ms ease,
+    transform 320ms $ease-in-out,
     box-shadow $dur-2 $ease-in-out;
 
   max-height: 0;
@@ -121,7 +120,7 @@
   pointer-events: none;
 
   @include theme-block {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.94);
     border-color: tone(border, light);
     box-shadow: $shadow-light;
   }
@@ -152,7 +151,7 @@
   }
 }
 
-/* Close button inside panel (X) */
+/* Close button inside panel (big X) */
 .island-panel__close {
   position: absolute;
   top: $sp-6;
@@ -170,7 +169,7 @@
   @include theme-block {
     border-color: tone(border, light);
     color: tone(contrast, light);
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.9);
 
     &:hover {
       background: tone(background-100, light);
@@ -179,26 +178,172 @@
   @include theme-block-dark {
     border-color: tone(border, dark);
     color: tone(contrast, dark);
-    background: rgba(12,12,14,0.9);
+    background: rgba(12,12,14,0.95);
 
     &:hover {
       background: tone(background-100, dark);
     }
   }
 
-  i {
+  .island-panel__close-icon {
     font-size: $fs-4;
+    line-height: 1;
   }
 }
 
-/* Extra top padding on mobile to account for close button */
+/* more top padding so content sits below close */
 @media (max-width: $bp-lg) {
   .island-panel.is-open .island-panel__inner {
-    padding-top: calc($sp-8 + $btn-height-sm + $sp-4);
+    padding-top: calc($sp-8 + $btn-height-sm + $sp-5);
   }
 }
 
-/* bento grid: 2 cols → 3 on wider phones */
+/* panel height safety */
+.island-panel.is-open {
+  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-4} + #{$sp-4}));
+}
+.island-panel .island-panel__inner {
+  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-4} + #{$sp-4}));
+  overflow: auto;
+}
+
+/* ---------- Mobile nav list inside panel ---------- */
+.mobile-nav {
+  width: 100%;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $sp-2;
+}
+
+.mobile-nav-item {
+  border-radius: $radius-4;
+  border: 1px solid;
+
+  @include theme-block {
+    background: mix(tone(background-100, light), tone(white, light), 75%);
+    border-color: tone(border, light);
+  }
+  @include theme-block-dark {
+    background: mix(tone(background-100, dark), tone(black, dark), 75%);
+    border-color: tone(border, dark);
+  }
+
+  &.is-open {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
+  }
+}
+
+.mobile-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-3;
+  padding: $sp-3 $sp-4;
+}
+
+.mobile-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-3;
+  text-decoration: none;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+
+.mobile-nav-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: $radius-pill;
+  border: 1px solid;
+  display: grid;
+  place-items: center;
+
+  @include theme-block      { border-color: tone(border, light); background: rgba(255,255,255,0.88); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: rgba(12,12,14,0.92);     }
+
+  i { font-size: $fs-4; }
+}
+
+.mobile-nav-label {
+  font-size: $fs-3;
+  font-weight: $fw-medium;
+}
+
+.mobile-nav-toggle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 1px solid;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color $dur-1, color $dur-1, border-color $dur-1, transform $dur-1 $ease-in-out;
+
+  @include theme-block {
+    border-color: tone(border, light);
+    color: tone(secondary, light);
+    background: rgba(255,255,255,0.85);
+  }
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    color: tone(secondary, dark);
+    background: rgba(12,12,14,0.9);
+  }
+
+  i {
+    font-size: $fs-3;
+    transition: transform $dur-1 $ease-in-out;
+  }
+}
+
+.mobile-nav-item.is-open .mobile-nav-toggle i {
+  transform: rotate(180deg);
+}
+
+/* accordion submenu */
+.mobile-submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0 $sp-4 $sp-3;
+  border-top: 1px dashed;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 260ms $ease-in-out;
+
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+
+  li + li {
+    margin-top: $sp-2;
+  }
+
+  a {
+    display: block;
+    padding: $sp-2 $sp-3;
+    border-radius: $radius-pill;
+    font-size: $fs-2;
+    text-decoration: none;
+
+    @include theme-block {
+      color: tone(secondary, light);
+      &:hover { color: tone(contrast, light); background: tone(background-100, light); }
+    }
+    @include theme-block-dark {
+      color: tone(secondary, dark);
+      &:hover { color: tone(contrast, dark); background: tone(background-100, dark); }
+    }
+  }
+}
+
+/* ---------- Bento grid fallback (unchanged) ---------- */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -265,41 +410,7 @@
   }
 }
 
-/* Submenu pills inside bento cards */
-.bento-submenu {
-  margin-top: $sp-3;
-  display: flex;
-  flex-wrap: wrap;
-  gap: $sp-2;
-
-  .bento-submenu__link {
-    display: inline-flex;
-    align-items: center;
-    padding: $sp-2 $sp-3;
-    border-radius: $radius-pill;
-    border: 1px dashed;
-    font-size: $fs-2;
-    text-decoration: none;
-
-    @include theme-block {
-      border-color: tone(border, light);
-      color: tone(secondary, light);
-      background: rgba(255,255,255,0.6);
-    }
-    @include theme-block-dark {
-      border-color: tone(border, dark);
-      color: tone(secondary, dark);
-      background: rgba(12,12,14,0.9);
-    }
-
-    &:hover {
-      @include theme-block      { color: tone(contrast, light); background: tone(background-100, light); }
-      @include theme-block-dark { color: tone(contrast, dark);  background: tone(background-100, dark);  }
-    }
-  }
-}
-
-/* Social section inside panel (white / black / silver) */
+/* Social section inside panel — white / black / silver */
 .panel-social {
   margin-top: $sp-2;
   padding-top: $sp-5;
@@ -362,12 +473,12 @@
 
     @include theme-block {
       border-color: tone(border, light);
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.9);
       color: #111;
     }
     @include theme-block-dark {
       border-color: tone(border, dark);
-      background: rgba(16,16,18,0.9);
+      background: rgba(16,16,18,0.96);
       color: #f5f5f5;
     }
 
@@ -425,7 +536,7 @@
   a {
     display: inline-flex;
     align-items: center;
-    gap: .5em;
+    gap: .4em;
     padding: $sp-3 $sp-5;
     font-size: $fs-3;
     font-weight: $fw-medium;
@@ -439,7 +550,7 @@
       &:hover,
       &.active {
         color: tone(contrast, light);
-        background: tone(background-100, light);
+        background: mix(tone(background-100, light), tone(white, light), 70%);
       }
     }
     @include theme-block-dark {
@@ -447,17 +558,36 @@
       &:hover,
       &.active {
         color: tone(contrast, dark);
-        background: tone(background-100, dark);
+        background: mix(tone(background-100, dark), tone(black, dark), 70%);
       }
+    }
+  }
+
+  .nav-label {
+    white-space: nowrap;
+  }
+
+  .nav-chevron {
+    display: inline-flex;
+    align-items: center;
+    i {
+      font-size: $fs-2;
+      opacity: .8;
     }
   }
 
   @media (max-width: $bp-lg) { display: none; }
 }
 
-/* desktop submenu */
+/* desktop submenu — cleaner pill card */
+/* desktop submenu — cleaner pill card */
 .navbar-menu li.nav-item-has-children {
   position: relative;
+
+  > a {
+    position: relative;
+    z-index: $z-header + 1;
+  }
 
   .nav-submenu {
     position: absolute;
@@ -465,25 +595,36 @@
     left: 0;
     min-width: 11rem;
     padding: $sp-3;
-    border-radius: $radius-4;
+    border-radius: $radius-5;
     border: 1px solid;
     list-style: none;
     margin: 0;
+
+    /* override parent flex so items stack in separate lines */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
     opacity: 0;
     transform: translateY(-4px);
     pointer-events: none;
     transition: opacity $dur-1, transform $dur-1;
 
-    @include theme-block      { background: tone(background, light);   border-color: tone(border, light);   box-shadow: $shadow-light; }
-    @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);   box-shadow: $shadow-dark; }
+    @include theme-block      { background: mix(tone(background, light), tone(white, light), 85%);  border-color: tone(border, light); box-shadow: $shadow-light; }
+    @include theme-block-dark { background: mix(tone(background-100, dark), tone(black, dark), 85%); border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
 
+    li {
+      width: 100%;
+    }
     li + li { margin-top: $sp-1; }
 
     a {
       display: block;
+      width: 100%;
       padding: $sp-2 $sp-3;
       font-size: $fs-2;
       border-radius: $radius-pill;
+      text-decoration: none;
 
       @include theme-block {
         color: tone(secondary, light);
@@ -503,6 +644,7 @@
     pointer-events: auto;
   }
 }
+
 
 // ---------- Right-side actions ----------
 .navbar-actions {
@@ -583,15 +725,6 @@
   @media (max-width: $bp-lg) {
     .mobile-menu-toggle { display: inline-grid; }
   }
-}
-
-// panel height safety
-.island-panel.is-open {
-  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
-}
-.island-panel .island-panel__inner {
-  max-height: calc(100vh - (var(--nav-h, #{$navbar-height}) + #{$sp-3} + #{$sp-3}));
-  overflow: auto;
 }
 
 /* ===================================================================== */
@@ -675,10 +808,10 @@ body.search-active {
   body.search-active .island-navbar { grid-template-columns: 1fr auto; }
 }
 
-/* Results container: match panel offset */
+/* Results container: little gap below navbar, aligned with panel */
 .search-results {
   position: sticky;
-  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-6});
+  top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
   z-index: $z-overlay;
   max-width: $island-width;
   margin-left: auto;
@@ -696,7 +829,7 @@ body.search-active {
     position: fixed;
     left: $container-gutter;
     right: $container-gutter;
-    top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-6});
+    top: calc(var(--nav-h, #{$navbar-height}) + #{$sp-8});
   }
 }
 
