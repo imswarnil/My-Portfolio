@@ -1,121 +1,40 @@
+# ====================================
 # Site configuration
-# 1. Files excluded from Jekyll builds
-# 2. Installed Gems
-# 3. Gem settings
-# 4. Jekyll settings
-# 5. Collections
-# 6. Jekyll collections settings
-# 7. Site settings
-# 8. Site favicons & manifest icons
-# 9. Site navigation
+# 1. Site identity & content
+# 2. Content structure & collections
+# 3. Plugins & gem settings
+# 4. Assets & favicons
+# 5. Build & tooling
+# ====================================
 
-# 1. Files excluded from Jekyll builds
-exclude:
-- README.md
-- CODE_OF_CONDUCT.md
-- CONTRIBUTING.md
-- screenshot.png
-- LICENSE
-- CNAME
-- Gemfile
-- Gemfile.lock
-- alembic-jekyll-theme.gemspec
-- .jekyll-cache
+# 1. Site identity & content
+encoding: utf-8                 # Make sure the encoding is right
+lang: en-GB                     # Site language
+timezone: Asia/Kolkata          # Local time zone
 
-# 2. Installed Gems
-plugins:
-- jekyll-sitemap
-- jekyll-mentions
-- jekyll-paginate
-- jekyll-seo-tag
-- jekyll-redirect-from
-- jekyll-feed
-- jekyll-commonmark
-- jekyll-include-cache
-- jemoji
+title: "Swarnil Singhai"        # Site name / title (also jekyll-seo-tag)
+job_title: "Salesforce Developer"     # Used under brand name
 
-# 3. Gem settings
-paginate: 10 # jekyll-paginate > items per page
-paginate_path: archive/page:num # jekyll-paginate > blog page
-jekyll-mentions: https://twitter.com # jekyll-mentions > service used when @replying
-twitter:
-  username: DavidDarnes # jekyll-seo-tag > Owners twitter username
-author: DavidDarnes # jekyll-seo-tag > default author
-social: # jekyll-seo-tag > social overrides
-  name: David Darnes # jekyll-seo-tag > real name
-  links:  # jekyll-seo-tag > social aliases (sameAs)
-    - https://twitter.com/DavidDarnes
-    - https://www.facebook.com/daviddarnes
-    - https://www.linkedin.com/in/daviddarnes
-    - https://github.com/daviddarnes
-# markdown: CommonMark # Markdown parse settings, CommonMark performs slightly better an others in build time
-# commonmark:
-  # options: ["SMART", "FOOTNOTES"]
-  # extensions: ["strikethrough", "autolink", "table"]
+description: >
+  Alembic is a starting point for Jekyll projects. Rather than starting from
+  scratch, this boilerplate is designed to get the ball rolling immediately
 
-# 4. Jekyll settings
-  
-permalink: pretty  # Permalink style (/YYYY/MM/DD/page-name/)
-excerpt_separator: <!-- more --> # Marks end of excerpt in posts
+url: "http://127.0.0.1:4000"    # Site url, also used in jekyll-seo-tag
+baseurl: ""                     # Base URL (for GitHub Pages etc.)
 
-# 5. Collections
-collections:
-  posts:
-    title: Posts # Needed for Siteleaf
-    output: true
-    description: "My thoughts and ideas" # The post list page content
-    feature_text: |
-      Welcome to the blog
-    feature_image: "https://picsum.photos/2560/600?image=866"
-
-# 6. Jekyll collections settings
-defaults:
-  -
-    scope:
-      path: ""
-    values:
-      image: "/assets/default-social-image.png" # Default image for sharing
-  -
-    scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: post # Set the default layout for posts
-  -
-    scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: page # Set the default layout for pages
-
-# 7. Site settings
-encoding: utf-8 # Make sure the encoding is right
-lang: en-GB # Set the site language
-title: "Swarnil Singhai" # Site name or title, also used in jekyll-seo-tag
-job_title: "Salesforce Developer"     # used under brand name
+logo: "/assets/logos/logo.svg"  # Site logo (also jekyll-seo-tag)
 avatarurl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGKma77hTKmFWTnWOOnWehJbWac3IsLmX9dg&s"
-logo: "/assets/logos/logo.svg" # Site logo, also used in jekyll-seo-tag
-description: "Alembic is a starting point for Jekyll projects. Rather than starting from scratch, this boilerplate is designed to get the ball rolling immediately" # Site description and default description, also used in jekyll-seo-tag
-url: "http://127.0.0.1:4000" # Site url, also used in jekyll-seo-tag
-baseurl: ""
-repo: "https://github.com/daviddarnes/alembic"
+
 email: "me@daviddarnes.com"
 location: "Bengaluru, India"
-timezone: Asia/Kolkata
+repo: "https://github.com/daviddarnes/alembic"
+
 work:
   company: "Imswarnil Studio"
   role: "Software Engineer & Filmmaker"
   url: "https://yourcompany.com"
-# disqus: "alembic-1" # Blog post comments, uncomment the option and set the site ID from your Disqus account
-# date_format: "%-d %B %Y" # Blog post date formatting using placeholder formatting
-# google_analytics: ""
-# google_analytics_anonymize_ip: ""
-# service_worker: false # Will turn off the service worker if set to false
-# short_name: "Al" # The web application short name, defaults to the site title
-css_inline: false # Will insert all styles into a single <style> block in the <head> element and remove the style <link> reference
-sass:
- quiet_deps: true
 
+# AdSense / monetization
 adsense:
   enabled: true
   client: "ca-pub-1291242080282540"
@@ -126,26 +45,9 @@ adsense:
     vertical: "3487917390"
     fluid: "9130894804"
     in_article: "6501428979"
-
   # optional: you can still pass slot="" explicitly in the include to override
 
-
-
-# 8. Site favicons & manifest icons
-favicons: # Favicons are also used in the manifest file. Syntax is 'size: path'
-  16: '/assets/logos/logo@16px.png'
-  32: '/assets/logos/logo@32px.png'
-  96: '/assets/logos/logo@96px.png'
-  120: '/assets/logos/logo@120px.png'
-  144: '/assets/logos/logo@144px.png'
-  180: '/assets/logos/logo@180px.png'
-  512: '/assets/logos/logo@512px.png'
-  1024: '/assets/logos/logo@1024px.png'
-
-# 9. Site navigation
-# New (or confirm exists)
-
-# Optional: icon per nav item
+# Navigation (header & footer)
 navigation_header:
   - title: Home
     url: /
@@ -164,39 +66,35 @@ navigation_header:
     icon: magnifying-glass
 
 navigation_footer:
-- title: Created by David Darnes
-  url: https://darn.es
+  - title: Created by David Darnes
+    url: https://darn.es
 
-social_links: # Appears in sidebar. Set the urls then uncomment and comment out as desired
+# Social & sharing
+social_links:              # Appears in sidebar
   Twitter: https://twitter.com/DavidDarnes
   LinkedIn: https://www.linkedin.com/in/daviddarnes
   GitHub: https://github.com/daviddarnes
   link: https://darn.es
   RSS: /feed.xml
 
-sharing_links: # Appear at the bottom of single blog posts, add as desired. The value can be 'true' or the desired button colour
+sharing_links:             # Buttons at bottom of posts
   Twitter: "#0d94e7"
   facebook: "#3B5998"
   Email: true
 
-# Load custom fonts from fonts.google.com etc
-#
-# TIP: Try to keep the number of urls as low to reduce the performance cost
-#      If multiple fonts can be requested in a single url opt for this
+# Fonts (Google Fonts, etc.)
 fonts:
   preconnect_urls:
     - https://fonts.gstatic.com
   font_urls:
     - https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap
 
-
-# ================================
 # Resume content (global)
-# ================================
 resume:
   name: Raja Swarnil Singhai
   tagline: Software Engineer • Filmmaker • Creator
   avatar: /assets/avatar.jpg
+
   contact:
     location: Bangalore, India
     email: hello@imswarnil.com
@@ -222,7 +120,8 @@ resume:
       where: Bangalore
       body: >
         Building analytics for Salesforce CRM Analytics & CPQ flows.
-        Delivered AE Quote Dashboards, Conga CPQ automations, and a CPQEmbeddedAI prototype to reduce quote time ~28%.
+        Delivered AE Quote Dashboards, Conga CPQ automations, and a CPQEmbeddedAI prototype
+        to reduce quote time ~28%.
       points:
         - Designed reusable dashboards with SAQL + advanced filtering
         - Optimized Quote-to-Agreement flow for speed & UX
@@ -248,22 +147,31 @@ resume:
       icon: ph-graduation-cap
       when: 2016 — 2020
       where: Bhopal
-      body: Led film society; built student analytics tools; festival wins.
+      body: >
+        Led film society; built student analytics tools; festival wins.
       tags: [Salesforce, DSA, Cinematics]
 
   steps:
     - title: Discover & Align
       text: Clarify problem, KPIs, and definition of done.
-      bullets: [Stakeholder interviews, Scope & risks mapped]
+      bullets:
+        - Stakeholder interviews
+        - Scope & risks mapped
     - title: Design & Prototype
       text: Low-noise UI and analytics mocks.
-      bullets: [Wireframes • SAQL sketch, Accessibility checks]
+      bullets:
+        - Wireframes • SAQL sketch
+        - Accessibility checks
     - title: Build & Validate
       text: Iterative shipping with measurement.
-      bullets: [Dashboards + CPQ automations, Telemetry & success metrics]
+      bullets:
+        - Dashboards + CPQ automations
+        - Telemetry & success metrics
     - title: Rollout & Scale
       text: Documentation & enablement.
-      bullets: [Playbooks • Training clips, Post-launch review]
+      bullets:
+        - Playbooks • Training clips
+        - Post-launch review
 
   skills:
     - name: Salesforce CRM Analytics
@@ -327,6 +235,7 @@ resume:
       demo: https://crm-analytics-academy.com
       repo: https://github.com/imswarnil/crma-academy
       time: May 2025
+
     - title: Docs Theme (Island UI)
       cover: /assets/projects/docs.jpg
       meta: Jekyll • Islands
@@ -334,6 +243,7 @@ resume:
       tags: [Web, Jekyll]
       repo: https://github.com/imswarnil/imswarnil.github.io
       time: Aug 2025
+
     - title: Quote-to-Agreement UX
       cover: /assets/projects/qta.jpg
       meta: Flow • UX
@@ -345,3 +255,105 @@ resume:
     - Shipped analytics that reduced quote time by ~28%.
     - Built thumbnail/poster system with consistent gridline fades.
     - Mentors newcomers via Namaste Salesforce Academy.
+
+# 2. Content structure & collections
+permalink: pretty                   # Permalink style (/YYYY/MM/DD/page-name/)
+excerpt_separator: <!-- more -->    # Marks end of excerpt in posts
+
+collections:
+  posts:
+    title: Posts                    # Needed for Siteleaf
+    output: true
+    description: "My thoughts and ideas" # The post list page content
+    feature_text: |
+      Welcome to the blog
+    feature_image: "https://picsum.photos/2560/600?image=866"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: "/assets/default-social-image.png" # Default image for sharing
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: post                             # Default layout for posts
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: page                             # Default layout for pages
+
+# 3. Plugins & gem settings
+plugins:
+  - jekyll-sitemap
+  - jekyll-mentions
+  - jekyll-paginate
+  - jekyll-seo-tag
+  - jekyll-redirect-from
+  - jekyll-feed
+  - jekyll-commonmark
+  - jekyll-include-cache
+  - jemoji
+
+paginate: 10                      # jekyll-paginate > items per page
+paginate_path: archive/page:num   # jekyll-paginate > blog page
+
+jekyll-mentions: https://twitter.com # jekyll-mentions > @reply service
+
+twitter:                            # jekyll-seo-tag > Twitter config
+  username: DavidDarnes
+author: DavidDarnes                 # jekyll-seo-tag > default author
+
+social:                             # jekyll-seo-tag > social overrides
+  name: David Darnes                # Real name
+  links:                            # sameAs list
+    - https://twitter.com/DavidDarnes
+    - https://www.facebook.com/daviddarnes
+    - https://www.linkedin.com/in/daviddarnes
+    - https://github.com/daviddarnes
+
+# Markdown parser (optional)
+# markdown: CommonMark
+# commonmark:
+#   options: ["SMART", "FOOTNOTES"]
+#   extensions: ["strikethrough", "autolink", "table"]
+
+# Comments / analytics / PWA (optional)
+# disqus: "alembic-1"           # Blog post comments, set your Disqus shortname
+# date_format: "%-d %B %Y"      # Blog post date formatting
+# google_analytics: ""          # GA tracking ID
+# google_analytics_anonymize_ip: ""
+# service_worker: false         # Turn off the service worker if set to false
+# short_name: "Al"              # Web app short name, defaults to site title
+
+# 4. Assets & favicons
+favicons:            # size: path
+  16:   "/assets/logos/logo@16px.png"
+  32:   "/assets/logos/logo@32px.png"
+  96:   "/assets/logos/logo@96px.png"
+  120:  "/assets/logos/logo@120px.png"
+  144:  "/assets/logos/logo@144px.png"
+  180:  "/assets/logos/logo@180px.png"
+  512:  "/assets/logos/logo@512px.png"
+  1024: "/assets/logos/logo@1024px.png"
+
+# 5. Build & tooling
+css_inline: false               # Inline all CSS into <head> if true
+
+sass:
+  quiet_deps: true
+
+# Files excluded from Jekyll builds
+exclude:
+  - README.md
+  - CODE_OF_CONDUCT.md
+  - CONTRIBUTING.md
+  - screenshot.png
+  - LICENSE
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - alembic-jekyll-theme.gemspec
+  - .jekyll-cache
