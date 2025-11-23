@@ -2,7 +2,7 @@
 <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
   <a href="{{ '/' | relative_url }}" class="navbar-brand">
     <img
-      src="{{ site.favicon | default: site.logo | default: 'https://i.pravatar.cc/64?u=j' }}"
+      src="{{ site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/64?u=j' }}"
       alt="{{ site.title | default: 'Site' | escape }}"
       class="navbar-avatar"
       width="32" height="32" loading="lazy"
@@ -110,230 +110,228 @@
 <!-- Results panel, docked under the island -->
 <section id="search-results" class="search-results" aria-live="polite" aria-label="Search results"></section>
 
-<!-- Phosphor Icons (if not included in your <head>) -->
 <script>
   /* assets/scripts/header.js */
 
-/* FOUC guard — you likely already run something similar in <head> */
-(function () {
-  var KEY = "color-scheme";
-  try {
-    var saved = localStorage.getItem(KEY);
-    var system = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    var theme = saved || system || "light";
-    document.documentElement.setAttribute("data-color-scheme", theme);
-  } catch(e){}
-})();
+  /* FOUC guard */
+  (function () {
+    var KEY = "color-scheme";
+    try {
+      var saved = localStorage.getItem(KEY);
+      var system = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      var theme = saved || system || "light";
+      document.documentElement.setAttribute("data-color-scheme", theme);
+    } catch(e){}
+  })();
 
-document.addEventListener("DOMContentLoaded", function () {
-  var root    = document.documentElement;
-  var header  = document.getElementById('site-navbar');
-  var panel   = document.getElementById('mobile-panel');
-  var toggle  = document.getElementById('mobile-menu-toggle');
-  var themeBtn = document.getElementById('theme-toggle');
+  document.addEventListener("DOMContentLoaded", function () {
+    var root    = document.documentElement;
+    var header  = document.getElementById('site-navbar');
+    var panel   = document.getElementById('mobile-panel');
+    var toggle  = document.getElementById('mobile-menu-toggle');
+    var themeBtn = document.getElementById('theme-toggle');
 
-  // --- Theme toggle (persist) ---
-  var KEY = "color-scheme";
-  function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
-  function setTheme(theme){
-    root.setAttribute("data-color-scheme", theme);
-    try { localStorage.setItem(KEY, theme); } catch(e){}
-    if (themeBtn) themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
-  }
-  try {
-    var saved = localStorage.getItem(KEY);
-    if (saved && saved !== getTheme()) setTheme(saved);
-  } catch(e){}
-  themeBtn && themeBtn.addEventListener("click", function () {
-    setTheme(getTheme() === "light" ? "dark" : "light");
-  });
-
-  // --- Compute nav height for mobile spacing ---
-  function setNavHeightVar() {
-    var h = header ? header.getBoundingClientRect().height : 58;
-    root.style.setProperty("--nav-h", h + "px");
-  }
-  function applyMobileMode() {
-    var isMobile = window.matchMedia("(max-width: 991px)").matches;
-    document.body.classList.toggle("has-fixed-nav", isMobile);
-    setNavHeightVar();
-  }
-  applyMobileMode();
-  window.addEventListener("resize", setNavHeightVar);
-  window.addEventListener("orientationchange", setNavHeightVar);
-  window.setTimeout(setNavHeightVar, 120);
-
-  // --- Mobile panel open/close ---
-  function setPanelHeight(open){
-    if (!panel) return;
-    if (open) {
-      panel.style.maxHeight = "0px";
-      requestAnimationFrame(function(){ panel.style.maxHeight = panel.scrollHeight + "px"; });
-    } else {
-      panel.style.maxHeight = panel.scrollHeight + "px";
-      requestAnimationFrame(function(){ panel.style.maxHeight = "0px"; });
+    // --- Theme toggle (persist) ---
+    var KEY = "color-scheme";
+    function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
+    function setTheme(theme){
+      root.setAttribute("data-color-scheme", theme);
+      try { localStorage.setItem(KEY, theme); } catch(e){}
+      if (themeBtn) themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
     }
-  }
-  function openPanel(){
-    header && header.classList.add("is-open");
-    panel && panel.classList.add("is-open");
-    panel && panel.setAttribute("aria-hidden","false");
-    toggle && toggle.setAttribute("aria-expanded","true");
-    document.body.classList.add("panel-open");
-    setPanelHeight(true);
-  }
-  function closePanel(){
-    header && header.classList.remove("is-open");
-    panel && panel.classList.remove("is-open");
-    panel && panel.setAttribute("aria-hidden","true");
-    toggle && toggle.setAttribute("aria-expanded","false");
-    document.body.classList.remove("panel-open");
-    setPanelHeight(false);
-  }
-  function togglePanel(){ panel && (panel.classList.contains("is-open") ? closePanel() : openPanel()); }
-  toggle && toggle.addEventListener("click", togglePanel);
-  panel && panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
-  document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
-  var mq = window.matchMedia("(min-width: 992px)");
-  mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
-
-  // ===========================
-  // Inline Navbar Search (NEW)
-  // ===========================
-  var body    = document.body;
-  var openBtn = document.getElementById("search-open");
-  var form    = document.getElementById("navbar-search");
-  var input   = document.getElementById("navbar-search-input");
-  var cancel  = document.getElementById("navbar-search-cancel");
-  var results = document.getElementById("search-results");
-  var endpoint = "{{ '/assets/search.json' | relative_url }}"; // Jekyll will resolve
-  var PAGES = [];
-
-  // Load index once
-  if (endpoint) {
-    fetch(endpoint)
-      .then(function(r){ return r.json(); })
-      .then(function(data){ PAGES = data || []; })
-      .catch(function(){ PAGES = []; });
-  }
-
-  function openSearch() {
-    body.classList.add("search-active");
-    if (results) results.classList.add("is-open");
-    setTimeout(function(){ input && input.focus(); }, 10);
-  }
-  function clearResults(){ if (results) results.innerHTML = ""; }
-  function closeSearch() {
-    body.classList.remove("search-active");
-    if (results) results.classList.remove("is-open");
-    clearResults();
-    if (input) input.value = "";
-  }
-
-  // Cancel btn
-  cancel && cancel.addEventListener("click", closeSearch);
-
-  // Open trigger: prevent navigating to /search/
-  openBtn && openBtn.addEventListener("click", function(e){
-    e.preventDefault();
-    openSearch();
-  });
-
-  // Click-away to close
-  document.addEventListener("click", function(e){
-    if (!body.classList.contains("search-active")) return;
-    if (e.target.closest(".island-navbar") || e.target.closest("#search-results")) return;
-    closeSearch();
-  });
-
-  // Keyboard shortcuts + nav
-  document.addEventListener("keydown", function(e){
-    if (e.key === "/" && !body.classList.contains("search-active")) {
-      e.preventDefault(); openSearch();
-    } else if (e.key === "Escape" && body.classList.contains("search-active")) {
-      e.preventDefault(); closeSearch();
-    } else if (body.classList.contains("search-active") && ["ArrowDown","ArrowUp","Enter"].includes(e.key)) {
-      var opts = Array.from(results.querySelectorAll('.search-item[role="option"]'));
-      if (!opts.length) return;
-      var cur = opts.findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; });
-      if (e.key === "ArrowDown") { cur = (cur+1) % opts.length; highlight(cur); e.preventDefault(); }
-      if (e.key === "ArrowUp")   { cur = (cur-1+opts.length) % opts.length; highlight(cur); e.preventDefault(); }
-      if (e.key === "Enter" && cur >= 0) { opts[cur].click(); }
-    }
-  });
-
-  // Debounced type → filter
-  var timer = null;
-  input && input.addEventListener("input", function(){
-    clearTimeout(timer);
-    var q = (this.value || "").trim();
-    timer = setTimeout(function(){ renderSearch(q); }, 120);
-    if (q && results && !results.classList.contains("is-open")) results.classList.add("is-open");
-    if (!q && results && results.classList.contains("is-open")) results.classList.remove("is-open");
-  });
-
-  // Prevent form navigation
-  form && form.addEventListener("submit", function(e){
-    e.preventDefault();
-    var first = results && results.querySelector('.search-item[role="option"] a[href]');
-    if (first) { window.location.href = first.getAttribute("href"); closeSearch(); }
-  });
-
-  function findResults(term, pages) {
-    if (!term) return [];
-    var regex = new RegExp(term, "gi");
-    return (pages || []).filter(function(item){
-      return (item.title && item.title.match(regex)) || (item.content && item.content.match(regex));
+    try {
+      var saved = localStorage.getItem(KEY);
+      if (saved && saved !== getTheme()) setTheme(saved);
+    } catch(e){}
+    themeBtn && themeBtn.addEventListener("click", function () {
+      setTheme(getTheme() === "light" ? "dark" : "light");
     });
-  }
 
-  function renderSearch(q) {
-    var arr = findResults(q, PAGES).slice(0, 12);
-    if (!results) return;
-    if (!q || !arr.length) {
-      results.innerHTML = '<div class="search-list"><div class="search-item" aria-disabled="true" style="opacity:.75">No results</div></div>';
-      return;
+    // --- Compute nav height for mobile spacing ---
+    function setNavHeightVar() {
+      var h = header ? header.getBoundingClientRect().height : 58;
+      root.style.setProperty("--nav-h", h + "px");
+    }
+    function applyMobileMode() {
+      var isMobile = window.matchMedia("(max-width: 991px)").matches;
+      document.body.classList.toggle("has-fixed-nav", isMobile);
+      setNavHeightVar();
+    }
+    applyMobileMode();
+    window.addEventListener("resize", setNavHeightVar);
+    window.addEventListener("orientationchange", setNavHeightVar);
+    window.setTimeout(setNavHeightVar, 120);
+
+    // --- Mobile panel open/close ---
+    function setPanelHeight(open){
+      if (!panel) return;
+      if (open) {
+        panel.style.maxHeight = "0px";
+        requestAnimationFrame(function(){ panel.style.maxHeight = panel.scrollHeight + "px"; });
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        requestAnimationFrame(function(){ panel.style.maxHeight = "0px"; });
+      }
+    }
+    function openPanel(){
+      header && header.classList.add("is-open");
+      panel && panel.classList.add("is-open");
+      panel && panel.setAttribute("aria-hidden","false");
+      toggle && toggle.setAttribute("aria-expanded","true");
+      document.body.classList.add("panel-open");
+      setPanelHeight(true);
+    }
+    function closePanel(){
+      header && header.classList.remove("is-open");
+      panel && panel.classList.remove("is-open");
+      panel && panel.setAttribute("aria-hidden","true");
+      toggle && toggle.setAttribute("aria-expanded","false");
+      document.body.classList.remove("panel-open");
+      setPanelHeight(false);
+    }
+    function togglePanel(){ panel && (panel.classList.contains("is-open") ? closePanel() : openPanel()); }
+    toggle && toggle.addEventListener("click", togglePanel);
+    panel && panel.addEventListener("click", function(e){ if(e.target.closest("a")) closePanel(); });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel(); });
+    var mq = window.matchMedia("(min-width: 992px)");
+    mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
+
+    // ===========================
+    // Inline Navbar Search
+    // ===========================
+    var body    = document.body;
+    var openBtn = document.getElementById("search-open");
+    var form    = document.getElementById("navbar-search");
+    var input   = document.getElementById("navbar-search-input");
+    var cancel  = document.getElementById("navbar-search-cancel");
+    var results = document.getElementById("search-results");
+    var endpoint = "{{ '/assets/search.json' | relative_url }}";
+    var PAGES = [];
+
+    // Load index once
+    if (endpoint) {
+      fetch(endpoint)
+        .then(function(r){ return r.json(); })
+        .then(function(data){ PAGES = data || []; })
+        .catch(function(){ PAGES = []; });
     }
 
-    var html = ['<ul class="search-list" role="listbox">']
-      .concat(arr.map(function(item, i){
-        var thumb = item.image
-          ? '<div class="search-thumb"><img src="'+item.image+'" alt=""></div>'
-          : '<div class="search-thumb"><i class="ph-bold ph-file-text"></i></div>';
-        var url = item.url || "#";
-        var safeTitle = item.title || "Untitled";
-        var excerpt = item.excerpt || "";
-        return (
-          '<li class="search-item" role="option" data-index="'+i+'" tabindex="-1">'+
-            thumb+
-            '<div class="search-main">'+
-              '<div class="search-title">'+safeTitle+'</div>'+
-              '<div class="search-excerpt">'+excerpt+'</div>'+
-            '</div>'+
-            '<a class="search-cta" href="'+url+'">Open</a>'+
-          '</li>'
-        );
-      }))
-      .concat(['</ul>']).join('');
-    results.innerHTML = html;
-    highlight(0);
+    function openSearch() {
+      body.classList.add("search-active");
+      if (results) results.classList.add("is-open");
+      setTimeout(function(){ input && input.focus(); }, 10);
+    }
+    function clearResults(){ if (results) results.innerHTML = ""; }
+    function closeSearch() {
+      body.classList.remove("search-active");
+      if (results) results.classList.remove("is-open");
+      clearResults();
+      if (input) input.value = "";
+    }
 
-    results.querySelectorAll('.search-item').forEach(function(li){
-      li.addEventListener("click", function(e){
-        if (e.target.tagName.toLowerCase() !== "a") {
-          var a = li.querySelector("a[href]");
-          if (a) { window.location.href = a.getAttribute("href"); }
-        }
-        closeSearch();
+    // Cancel btn
+    cancel && cancel.addEventListener("click", closeSearch);
+
+    // Open trigger: prevent navigating to /search/
+    openBtn && openBtn.addEventListener("click", function(e){
+      e.preventDefault();
+      openSearch();
+    });
+
+    // Click-away to close
+    document.addEventListener("click", function(e){
+      if (!body.classList.contains("search-active")) return;
+      if (e.target.closest(".island-navbar") || e.target.closest("#search-results")) return;
+      closeSearch();
+    });
+
+    // Keyboard shortcuts + nav
+    document.addEventListener("keydown", function(e){
+      if (e.key === "/" && !body.classList.contains("search-active")) {
+        e.preventDefault(); openSearch();
+      } else if (e.key === "Escape" && body.classList.contains("search-active")) {
+        e.preventDefault(); closeSearch();
+      } else if (body.classList.contains("search-active") && ["ArrowDown","ArrowUp","Enter"].includes(e.key)) {
+        var opts = Array.from(results.querySelectorAll('.search-item[role="option"]'));
+        if (!opts.length) return;
+        var cur = opts.findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; });
+        if (e.key === "ArrowDown") { cur = (cur+1) % opts.length; highlight(cur); e.preventDefault(); }
+        if (e.key === "ArrowUp")   { cur = (cur-1+opts.length) % opts.length; highlight(cur); e.preventDefault(); }
+        if (e.key === "Enter" && cur >= 0) { opts[cur].click(); }
+      }
+    });
+
+    // Debounced type → filter
+    var timer = null;
+    input && input.addEventListener("input", function(){
+      clearTimeout(timer);
+      var q = (this.value || "").trim();
+      timer = setTimeout(function(){ renderSearch(q); }, 120);
+      if (q && results && !results.classList.contains("is-open")) results.classList.add("is-open");
+      if (!q && results && results.classList.contains("is-open")) results.classList.remove("is-open");
+    });
+
+    // Prevent form navigation
+    form && form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var first = results && results.querySelector('.search-item[role="option"] a[href]');
+      if (first) { window.location.href = first.getAttribute("href"); closeSearch(); }
+    });
+
+    function findResults(term, pages) {
+      if (!term) return [];
+      var regex = new RegExp(term, "gi");
+      return (pages || []).filter(function(item){
+        return (item.title && item.title.match(regex)) || (item.content && item.content.match(regex));
       });
-    });
-  }
+    }
 
-  function highlight(idx){
-    var opts = results.querySelectorAll('.search-item[role="option"]');
-    opts.forEach(function(el){ el.setAttribute("aria-selected","false"); });
-    if (opts[idx]) { opts[idx].setAttribute("aria-selected","true"); opts[idx].scrollIntoView({block: "nearest"}); }
-  }
-});
+    function renderSearch(q) {
+      var arr = findResults(q, PAGES).slice(0, 12);
+      if (!results) return;
+      if (!q || !arr.length) {
+        results.innerHTML = '<div class="search-list"><div class="search-item" aria-disabled="true" style="opacity:.75">No results</div></div>';
+        return;
+      }
 
+      var html = ['<ul class="search-list" role="listbox">']
+        .concat(arr.map(function(item, i){
+          var thumb = item.image
+            ? '<div class="search-thumb"><img src="'+item.image+'" alt=""></div>'
+            : '<div class="search-thumb"><i class="ph-bold ph-file-text"></i></div>';
+          var url = item.url || "#";
+          var safeTitle = item.title || "Untitled";
+          var excerpt = item.excerpt || "";
+          return (
+            '<li class="search-item" role="option" data-index="'+i+'" tabindex="-1">'+
+              thumb+
+              '<div class="search-main">'+
+                '<div class="search-title">'+safeTitle+'</div>'+
+                '<div class="search-excerpt">'+excerpt+'</div>'+
+              '</div>'+
+              '<a class="search-cta" href="'+url+'">Open</a>'+
+            '</li>'
+          );
+        }))
+        .concat(['</ul>']).join('');
+      results.innerHTML = html;
+      highlight(0);
+
+      results.querySelectorAll('.search-item').forEach(function(li){
+        li.addEventListener("click", function(e){
+          if (e.target.tagName.toLowerCase() !== "a") {
+            var a = li.querySelector("a[href]");
+            if (a) { window.location.href = a.getAttribute("href"); }
+          }
+          closeSearch();
+        });
+      });
+    }
+
+    function highlight(idx){
+      var opts = results.querySelectorAll('.search-item[role="option"]');
+      opts.forEach(function(el){ el.setAttribute("aria-selected","false"); });
+      if (opts[idx]) { opts[idx].setAttribute("aria-selected","true"); opts[idx].scrollIntoView({block: "nearest"}); }
+    }
+  });
 </script>
