@@ -2,7 +2,7 @@
 <header class="island-navbar" role="navigation" aria-label="Primary" id="site-navbar">
   <a href="{{ '/' | relative_url }}" class="navbar-brand">
     <img
-      src="{{ site.avatarurl | default: site.logo | default: 'https://i.pravatar.cc/64?u=j' }}"
+      src="{{ site.favicon | default: site.logo | default: 'https://i.pravatar.cc/64?u=j' }}"
       alt="{{ site.title | default: 'Site' | escape }}"
       class="navbar-avatar"
       width="32" height="32" loading="lazy"

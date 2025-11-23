@@ -23,8 +23,7 @@ url: "http://127.0.0.1:4000"    # Site url, also used in jekyll-seo-tag
 baseurl: ""                     # Base URL (for GitHub Pages etc.)
 
 logo: "/assets/logos/logo.svg"  # Site logo (also jekyll-seo-tag)
-avatarurl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGKma77hTKmFWTnWOOnWehJbWac3IsLmX9dg&s"
-
+avatarurl: "/assets/logos/logo@512px.png"
 email: "me@daviddarnes.com"
 location: "Bengaluru, India"
 repo: "https://github.com/daviddarnes/alembic"
@@ -340,7 +339,7 @@ favicons:            # size: path
   1024: "/assets/logos/logo@1024px.png"
 
 # 5. Build & tooling
-css_inline: false               # Inline all CSS into <head> if true
+css_inline: true               # Inline all CSS into <head> if true
 
 sass:
   quiet_deps: true
