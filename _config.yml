@@ -104,6 +104,16 @@ navigation_header:
         url: /elements/#components
       - title: Layouts
         url: /elements/#layouts
+  - title: Learn
+    url: /learn/
+    icon: graduation-cap
+    children:
+      - title: CRM Analytics
+        url: /crm-analytics/
+        icon: chart-bar
+      - title: YouTube Tips
+        url: /youtube-tips/
+        icon: youtube-logo
   - title: Archive
     url: /archive/
     icon: article

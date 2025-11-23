@@ -85,21 +85,31 @@
               {% endif %}
             </a>
 
-            {% if children %}
-              <ul class="nav-submenu" aria-label="{{ item.title }} submenu">
-                {% for child in children %}
-                  {% assign ch_href = child.url %}
-                  {% assign ch_is_external = false %}
-                  {% if ch_href contains '://' %}{% assign ch_is_external = true %}{% endif %}
-                  <li>
-                    <a href="{% if ch_is_external %}{{ ch_href }}{% else %}{{ ch_href | relative_url }}{% endif %}"
-                       {% if ch_is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
-                      {{ child.title }}
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
+          {% if children %}
+  <ul class="nav-submenu" aria-label="{{ item.title }} submenu">
+    {% for child in children %}
+      {% assign ch_href = child.url %}
+      {% assign ch_is_external = false %}
+      {% if ch_href contains '://' %}{% assign ch_is_external = true %}{% endif %}
+
+      {% assign ch_icon = child.icon %}
+      <li>
+        <a href="{% if ch_is_external %}{{ ch_href }}{% else %}{{ ch_href | relative_url }}{% endif %}"
+           {% if ch_is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+          {% if header_show_nav_icons and ch_icon %}
+            <span class="nav-submenu-icon">
+              <i class="ph-bold ph-{{ ch_icon }}"></i>
+            </span>
+          {% endif %}
+          <span class="nav-submenu-label">
+            {{ child.title }}
+          </span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
           </li>
         {% endfor %}
       {% else %}
