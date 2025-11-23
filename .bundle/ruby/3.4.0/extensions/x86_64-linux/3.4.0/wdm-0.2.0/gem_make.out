@@ -1,0 +1,14 @@
+current directory: /workspaces/My-Portfolio/.bundle/ruby/3.4.0/gems/wdm-0.2.0/ext/wdm
+/usr/local/rvm/rubies/ruby-3.4.1/bin/ruby extconf.rb
+
+current directory: /workspaces/My-Portfolio/.bundle/ruby/3.4.0/gems/wdm-0.2.0/ext/wdm
+make DESTDIR\= sitearchdir\=./.gem.20251123-13943-rm20ad sitelibdir\=./.gem.20251123-13943-rm20ad clean
+
+current directory: /workspaces/My-Portfolio/.bundle/ruby/3.4.0/gems/wdm-0.2.0/ext/wdm
+make DESTDIR\= sitearchdir\=./.gem.20251123-13943-rm20ad sitelibdir\=./.gem.20251123-13943-rm20ad
+
+current directory: /workspaces/My-Portfolio/.bundle/ruby/3.4.0/gems/wdm-0.2.0/ext/wdm
+make DESTDIR\= sitearchdir\=./.gem.20251123-13943-rm20ad sitelibdir\=./.gem.20251123-13943-rm20ad install
+
+current directory: /workspaces/My-Portfolio/.bundle/ruby/3.4.0/gems/wdm-0.2.0/ext/wdm
+make DESTDIR\= sitearchdir\=./.gem.20251123-13943-rm20ad sitelibdir\=./.gem.20251123-13943-rm20ad clean

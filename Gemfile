@@ -1,27 +1,31 @@
 # Gemfile
 source "https://rubygems.org"
 
+# Core Jekyll
 gem "jekyll"
 
 group :jekyll_plugins do
-  gem "jekyll-sitemap",       "~> 1.4"
-  gem "jekyll-mentions",      "~> 1.6"
-  gem "jekyll-paginate",      "~> 1.1"
-  gem "jekyll-seo-tag",       "~> 2.8"
-  gem "jekyll-redirect-from", "~> 0.16"
-  gem "jekyll-feed",          "~> 0.17"
-  gem "jekyll-commonmark",    "~> 1.3"
-  gem "jekyll-include-cache", "~> 0.2"
-  gem "jemoji",               "~> 0.12"
+  gem "jekyll-sitemap"
+  gem "jekyll-mentions"
+  gem "jekyll-paginate"
+  gem "jekyll-seo-tag"
+  gem "jekyll-redirect-from"
+  gem "jekyll-feed"
+  gem "jekyll-commonmark"
+  gem "jekyll-include-cache"
+  gem "jemoji"
 end
 
+# Sass converter for Jekyll
 gem "jekyll-sass-converter"
 
 # Local dev helpers
 gem "webrick"
-gem "tzinfo-data"
+
+# Timezone data only needed on Windows
+gem "tzinfo-data", platforms: [:windows]
 
 # Windows file watcher – only on Windows
-platforms :mingw, :x64_mingw, :mswin do
-  gem "wdm", ">= 0.1.0"
+platforms :windows do
+  gem "wdm"
 end
