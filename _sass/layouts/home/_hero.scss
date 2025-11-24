@@ -2,8 +2,60 @@
    HERO
 ========================================= */
 .home-hero {
+  position: relative;
   padding-block: clamp($sp-10, 4.5vw, $sp-14);
   overflow-x: clip;
+
+  /* Fading grid background */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: .55;
+    background-size: 32px 32px;
+    mix-blend-mode: soft-light;
+    mask-image: radial-gradient(circle at center, #000 0, #000 45%, transparent 100%);
+    -webkit-mask-image: radial-gradient(circle at center, #000 0, #000 45%, transparent 100%);
+  }
+
+  @include theme-block {
+    &::before {
+      background-image:
+        linear-gradient(
+          to right,
+          rgba(tone(border, light), .32) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(tone(border, light), .32) 1px,
+          transparent 1px
+        );
+    }
+  }
+
+  @include theme-block-dark {
+    &::before {
+      background-image:
+        linear-gradient(
+          to right,
+          rgba(tone(border, dark), .42) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(tone(border, dark), .42) 1px,
+          transparent 1px
+        );
+    }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1; // keep content above the grid
+  }
 }
 
 .home-hero__grid {
@@ -13,7 +65,7 @@
   align-items: center;
 
   @include mq-up($bp-lg) {
-    grid-template-columns: 1.05fr .95fr;
+    grid-template-columns: 1.05fr .95fr; // keep original balance
   }
 }
 
@@ -44,10 +96,10 @@
 
 @keyframes wave {
   0%, 100% { transform: rotate(0); }
-  20%      { transform: rotate(16deg); }
-  40%      { transform: rotate(-10deg); }
-  60%      { transform: rotate(12deg); }
-  80%      { transform: rotate(-6deg); }
+  20%      { rotate: 16deg; }
+  40%      { rotate: -10deg; }
+  60%      { rotate: 12deg; }
+  80%      { rotate: -6deg; }
 }
 
 .home-hero__name {
@@ -55,6 +107,62 @@
   font-weight: $fw-bold;
   line-height: $lh-tight;
   font-size: clamp($fs-7, 6vw, $fs-10);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $sp-4;
+}
+
+/* Horn button next to name */
+.home-hero__horn {
+  border: 0;
+  padding: .15rem .55rem;
+  border-radius: $radius-pill;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+  font-size: $fs-2;
+  line-height: 1;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform 160ms $ease-in-out,
+    box-shadow 160ms $ease-in-out,
+    background-color 160ms $ease-in-out,
+    color 160ms $ease-in-out;
+
+  @include theme-block {
+    background: rgba(255,255,255,.8);
+    color: tone(secondary, light);
+    box-shadow: 0 4px 10px rgba(0,0,0,.06);
+  }
+  @include theme-block-dark {
+    background: rgba(20,20,22,.9);
+    color: tone(secondary, dark);
+    box-shadow: 0 4px 12px rgba(0,0,0,.5);
+  }
+
+  i {
+    font-size: $fs-3;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+
+  &.is-ping {
+    animation: horn-ping 0.26s ease-out;
+  }
+}
+
+@keyframes horn-ping {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12) translateY(-1px); }
+  100% { transform: scale(1); }
 }
 
 .home-hero__sub {
@@ -146,7 +254,7 @@
   }
 }
 
-/* --- Art: square card that morphs to 16/9 TV --- */
+/* Art wrapper */
 .home-hero__art-wrap {
   position: relative;
 }
@@ -158,14 +266,13 @@
   position: relative;
 }
 
-/* This is the actual frame */
+/* Frame container: 3D tilt towards content */
 .home-hero__video-shell {
   position: relative;
   width: 100%;
   border-radius: $radius-6;
   overflow: hidden;
   isolation: isolate;
-  transform-origin: center;
   transition:
     transform 350ms $ease-in-out,
     box-shadow 300ms $ease-in-out;
@@ -182,24 +289,26 @@
   }
 }
 
-/* Ratio spacer: 1:1 → 16:9 (animated) */
+/* Default no tilt on small screens for stability */
+@media (min-width: $bp-lg) {
+  .home-hero__video-shell {
+    transform: perspective(1200px) rotateY(-5deg) rotateX(1deg);
+    transform-origin: center left;
+  }
+  .home-hero__video-shell:hover {
+    transform: perspective(1200px) rotateY(-2deg) rotateX(0deg) translateY(-2px);
+  }
+}
+
+/* Ratio spacer: square → 16/9 when playing */
 .home-hero__ratio {
   width: 100%;
-  padding-top: 100%; /* 1:1 by default */
+  padding-top: 100%; /* 1:1 */
   transition: padding-top 350ms $ease-in-out;
 }
 
-/* When playing: morph to 16/9 */
 .home-hero__video-shell[data-hero-state="playing"] .home-hero__ratio {
-  padding-top: 56.25%;
-}
-
-/* Subtle “card lifts” */
-.home-hero__video-shell[data-hero-state="poster"] {
-  transform: scale(.96) translateY(4px);
-}
-.home-hero__video-shell[data-hero-state="playing"] {
-  transform: scale(1) translateY(0);
+  padding-top: 56.25%; /* 16/9 */
 }
 
 /* Poster image with vintage overlay */
@@ -235,11 +344,7 @@
 
 .home-hero__video-poster::before {
   background-image:
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,.24) 0,
-      rgba(0,0,0,0) 2px
-    );
+    linear-gradient(to bottom, rgba(0,0,0,.24) 0, rgba(0,0,0,0) 2px);
   background-size: 100% 3px;
   opacity: .55;
   mix-blend-mode: soft-light;
@@ -278,7 +383,7 @@
   }
 }
 
-/* External play / pause pill */
+/* External play / pause pill button */
 .home-hero__video-toggle {
   position: absolute;
   left: $sp-6;
@@ -286,8 +391,8 @@
   z-index: 3;
   display: inline-flex;
   align-items: center;
-  gap: .4rem;
-  padding: .35rem .7rem;
+  gap: .45rem;
+  padding: .42rem .9rem;
   border-radius: $radius-pill;
   border: 1px solid;
   font-size: $fs-2;
@@ -295,29 +400,23 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   text-decoration: none;
+  white-space: nowrap;
 
   @include theme-block {
-    background: rgba(0,0,0,.74);
+    background: rgba(0,0,0,.78);
     color: tone(white, light);
     border-color: rgba(255,255,255,.16);
   }
   @include theme-block-dark {
-    background: rgba(0,0,0,.78);
+    background: rgba(0,0,0,.82);
     color: tone(white, dark);
     border-color: rgba(255,255,255,.18);
   }
 
-  i {
-    font-size: $fs-3;
-    line-height: 1;
-  }
-
-  span {
-    display: inline-block;
-  }
+  i { font-size: $fs-3; line-height: 1; }
 }
 
-/* Social rail: inside border, not cut */
+/* Social rail half in/out */
 .home-hero__social {
   position: absolute;
   margin: 0;
@@ -326,12 +425,10 @@
   display: flex;
   gap: $sp-5;
 
-  /* mobile: bottom inside, centered */
+  /* mobile: bottom center, half outside */
   left: 50%;
-  bottom: $sp-4;
+  bottom: -0.9rem;
   transform: translateX(-50%);
-  z-index: 4;
-
   li { margin: 0; }
 
   a {
@@ -365,18 +462,14 @@
   }
 }
 
+/* Desktop: right-side vertical rail half outside */
 @media (min-width: $bp-lg) {
   .home-hero__social {
     top: 50%;
     bottom: auto;
     left: auto;
-    right: $sp-4;
+    right: -1.1rem;
     transform: translateY(-50%);
     flex-direction: column;
   }
-}
-
-/* Safety */
-.home-hero {
-  overflow-x: clip;
 }

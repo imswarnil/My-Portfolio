@@ -2,7 +2,6 @@
 layout: default
 ---
 
-
 <!-- =========================
      HERO
 ========================= -->
@@ -15,22 +14,33 @@ layout: default
           <i class="ph-bold ph-hand-waving" aria-hidden="true"></i><span>Hi,</span>
         </p>
 
-        <h1 class="home-hero__name" itemprop="name">I’m Swarnil Singhai</h1>
+        <h1 class="home-hero__name" itemprop="name">
+          I’m Swarnil Singhai
+          <button
+            class="home-hero__horn"
+            type="button"
+            aria-label="Play my name pronunciation"
+          >
+            <i class="ph-bold ph-megaphone-simple" aria-hidden="true"></i>
+          </button>
+        </h1>
 
         <p class="home-hero__sub">
           {{ site.resume.tagline | default: "Software Engineer • Filmmaker • Creator" }}
         </p>
-
         <p class="home-hero__bio">
-          I build Salesforce analytics by day and cinematic life stories by night — helping people with careers, dashboards, and decisions in between.
+          I build Salesforce analytics by day and cinematic life stories by night —
+          helping people with careers, dashboards, and decisions in between.
         </p>
 
         <nav class="home-hero__cta" aria-label="Primary actions">
           <a class="button" href="{{ site.resume.contact.youtube | default: 'https://youtube.com/@ImSwarnil' }}">
-            <i class="ph-bold ph-youtube-logo" aria-hidden="true"></i><span>Watch my latest</span>
+            <i class="ph-bold ph-youtube-logo" aria-hidden="true"></i>
+            <span>Watch my latest</span>
           </a>
-          <a class="button-transparent" href="{{ '/resume/' | relative_url }}">
-            <i class="ph-bold ph-identification-badge" aria-hidden="true"></i><span>View resume</span>
+          <a class="button-transparent" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four" aria-hidden="true"></i>
+            <span>View projects</span>
           </a>
         </nav>
 
@@ -65,11 +75,11 @@ layout: default
         </ul>
       </div>
 
-      <!-- Art (Square → 16/9 TV) + Social rail -->
+      <!-- Art (Square poster → same place video) + Social rail -->
       <div class="home-hero__art-wrap">
         <figure class="home-hero__art" itemprop="image" aria-label="Portrait">
           <div class="home-hero__video-shell" data-hero-state="poster">
-            <!-- Ratio spacer (1:1 → 16:9 via CSS) -->
+            <!-- Ratio spacer (1:1 → 16/9 via CSS) -->
             <div class="home-hero__ratio"></div>
 
             <!-- Poster image with vintage feel -->
@@ -77,23 +87,24 @@ layout: default
               <img
                 src="{{ page.hero_image | default: '/assets/Swarnil-Singhai.png' }}"
                 alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
-                width="1000" height="1000" loading="eager" fetchpriority="high">
+                width="1000" height="1000"
+                loading="eager" fetchpriority="high">
             </div>
 
             <!-- YouTube embed container (iframe injected by JS) -->
             <div
               class="home-hero__video-embed"
-              data-youtube-id="{{ page.hero_youtube_id | default: site.hero_youtube_id | default: '73WZX9m8lWA' }}">
+              data-youtube-id="{{ page.hero_youtube_id | default: site.hero_youtube_id | default: 'uV3eTXpEBOg' }}">
             </div>
 
             <!-- External Play / Pause button -->
-            <button class="home-hero__video-toggle" type="button" aria-label="Play reel" data-state="poster">
+            <button class="home-hero__video-toggle" type="button" aria-label="Watch my story" data-state="poster">
               <i class="ph-bold ph-play" aria-hidden="true"></i>
-              <span>Play</span>
+              <span>Watch my story</span>
             </button>
           </div>
 
-          <!-- Socials rail -->
+          <!-- Socials rail (edge, half outside) -->
           <ul class="home-hero__social" role="list" aria-label="Social links">
             <li>
               <a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email">
@@ -126,71 +137,142 @@ layout: default
     </div>
   </div>
 
-  <!-- Hero video toggle (poster ↔ YouTube iframe) -->
+  <!-- Hero JS: video toggle + horn Web Speech -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // ---- Video toggle (poster ↔ YouTube iframe) ----
       var shell = document.querySelector('.home-hero__video-shell');
-      if (!shell) return;
+      if (shell) {
+        var hero   = document.querySelector('.home-hero');
+        var embed  = shell.querySelector('.home-hero__video-embed');
+        var toggle = shell.querySelector('.home-hero__video-toggle');
+        var ratio  = shell.querySelector('.home-hero__ratio');
+        var videoId = embed && embed.dataset.youtubeId;
 
-      var embed  = shell.querySelector('.home-hero__video-embed');
-      var toggle = shell.querySelector('.home-hero__video-toggle');
-      if (!embed || !toggle) return;
-
-      var videoId = embed.dataset.youtubeId;
-      if (!videoId) return;
-
-      function setPosterState() {
-        shell.setAttribute('data-hero-state', 'poster');
-        toggle.dataset.state = 'poster';
-        toggle.setAttribute('aria-label', 'Play reel');
-        var icon = toggle.querySelector('i');
-        var labelSpan = toggle.querySelector('span');
-        if (icon) icon.className = 'ph-bold ph-play';
-        if (labelSpan) labelSpan.textContent = 'Play';
-        embed.innerHTML = ''; // remove iframe = stop playback
-      }
-
-      function setPlayingState() {
-        shell.setAttribute('data-hero-state', 'playing');
-        toggle.dataset.state = 'playing';
-        toggle.setAttribute('aria-label', 'Pause reel');
-        var icon = toggle.querySelector('i');
-        var labelSpan = toggle.querySelector('span');
-        if (icon) icon.className = 'ph-bold ph-pause';
-        if (labelSpan) labelSpan.textContent = 'Pause';
-
-        var iframe = document.createElement('iframe');
-        iframe.setAttribute('allowfullscreen', '');
-        iframe.setAttribute('loading', 'lazy');
-        iframe.setAttribute('title', 'Imswarnil hero reel');
-        iframe.setAttribute('frameborder', '0');
-        iframe.setAttribute(
-          'allow',
-          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-        );
-        iframe.src =
-          'https://www.youtube.com/embed/' +
-          encodeURIComponent(videoId) +
-          '?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&controls=0';
-
-        embed.innerHTML = '';
-        embed.appendChild(iframe);
-      }
-
-      // Respect reduced motion: default to poster
-      try {
-        var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-        if (mq.matches) shell.setAttribute('data-hero-state', 'poster');
-      } catch (e) {}
-
-      toggle.addEventListener('click', function () {
-        var state = toggle.dataset.state || 'poster';
-        if (state === 'poster') {
-          setPlayingState();
-        } else {
-          setPosterState();
+        function setPosterState() {
+          shell.setAttribute('data-hero-state', 'poster');
+          if (toggle) {
+            toggle.dataset.state = 'poster';
+            toggle.setAttribute('aria-label', 'Watch my story');
+            var icon = toggle.querySelector('i');
+            var labelSpan = toggle.querySelector('span');
+            if (icon) icon.className = 'ph-bold ph-play';
+            if (labelSpan) labelSpan.textContent = 'Watch my story';
+          }
+          if (hero) {
+            hero.classList.remove('is-playing');
+            hero.classList.add('is-poster');
+          }
+          if (embed) embed.innerHTML = '';
         }
-      });
+
+        function setPlayingState() {
+          if (!videoId || !embed || !toggle) return;
+
+          shell.setAttribute('data-hero-state', 'playing');
+          toggle.dataset.state = 'playing';
+          toggle.setAttribute('aria-label', 'Pause story');
+          var icon = toggle.querySelector('i');
+          var labelSpan = toggle.querySelector('span');
+          if (icon) icon.className = 'ph-bold ph-pause';
+          if (labelSpan) labelSpan.textContent = 'Pause';
+
+          if (hero) {
+            hero.classList.add('is-playing');
+            hero.classList.remove('is-poster');
+          }
+
+          var iframe = document.createElement('iframe');
+          iframe.width  = '1038';
+          iframe.height = '584';
+          iframe.src =
+            'https://www.youtube.com/embed/' +
+            encodeURIComponent(videoId) +
+            '?rel=0&modestbranding=1&playsinline=1&controls=0&autoplay=1&mute=1&loop=1&playlist=' +
+            encodeURIComponent(videoId);
+          iframe.title = 'From Small Town to Bangalore : My Life Story 📜  [ Software Engineer Bangalore 🪪 ]';
+          iframe.frameBorder = '0';
+          iframe.setAttribute(
+            'allow',
+            'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+          );
+          iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+          iframe.setAttribute('allowfullscreen', '');
+
+          embed.innerHTML = '';
+          embed.appendChild(iframe);
+        }
+
+        setPosterState();
+
+        if (toggle) {
+          toggle.addEventListener('click', function () {
+            var state = toggle.dataset.state || 'poster';
+            if (state === 'poster') {
+              setPlayingState();
+            } else {
+              setPosterState();
+            }
+          });
+        }
+      }
+
+      // ---- Horn button (Web Speech API: shout / whisper / normal) ----
+      var horn = document.querySelector('.home-hero__horn');
+
+      function pingHorn(el) {
+        if (!el) return;
+        el.classList.add('is-ping');
+        setTimeout(function () { el.classList.remove('is-ping'); }, 260);
+      }
+
+      if (horn) {
+        if ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
+          // Warm up voices (some browsers lazy-load)
+          window.speechSynthesis.getVoices();
+
+          horn.addEventListener('click', function () {
+            pingHorn(horn);
+
+            var modes = ['normal', 'shout', 'whisper'];
+            var mode = modes[Math.floor(Math.random() * modes.length)];
+
+            var text;
+            var u = new SpeechSynthesisUtterance();
+
+            if (mode === 'shout') {
+              text = 'SWARNIL SINGHAI!';
+              u.rate = 1.1;
+              u.pitch = 0.9;
+              u.volume = 1.0;
+            } else if (mode === 'whisper') {
+              text = 'Swarnil Singhai.';
+              u.rate = 0.85;
+              u.pitch = 1.3;
+              u.volume = 0.35;
+            } else {
+              text = 'Read my name: Swarnil Singhai.';
+              u.rate = 1.0;
+              u.pitch = 1.0;
+              u.volume = 0.9;
+            }
+
+            u.text = text;
+            // Try to pick an English voice if available
+            var allVoices = window.speechSynthesis.getVoices() || [];
+            var en = allVoices.find(function (v) { return /en/i.test(v.lang); });
+            if (en) u.voice = en;
+
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(u);
+          });
+        } else {
+          // Fallback: just animate the horn
+          horn.addEventListener('click', function () {
+            pingHorn(horn);
+          });
+        }
+      }
     });
   </script>
 </section>
