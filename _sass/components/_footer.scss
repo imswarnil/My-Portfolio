@@ -1,39 +1,61 @@
 // ======================================================================
-// SIMPLE, VIDEO-FREE, DARK-MODE FOOTER (CONTAINER PARENT)
-// - Mobile layout (grid areas):
-//   about = full; links = 1/2; contact = 1/2; newsletter = full
-// - Desktop: 4 columns
-// - Uses theme tokens/mixins only (no new vars)
-// - Floating strip like navbar island
+// FOOTER ISLAND – GRID LINES, AVATAR BRAND, RESPONSIVE 4-COL LAYOUT
 // ======================================================================
 
 .footer-wrap {
   @include container;
   margin-top: $sp-12;
+  margin-bottom: $sp-10;
 }
 
 .footer-island {
   position: relative;
-  border: 1px solid; border-bottom: 0;
+  border: 1px solid;
+  border-bottom: 0;
   border-radius: $radius-6;
   overflow: hidden;
 
   @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); box-shadow: $shadow-light; }
   @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+
+  // Subtle grid lines, fading to centre
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mix-blend-mode: soft-light;
+    opacity: .55;
+
+    mask-image:
+      radial-gradient(circle at 0 0, transparent 0, black 32%, black 55%, transparent 85%),
+      radial-gradient(circle at 100% 0, transparent 0, black 32%, black 55%, transparent 85%),
+      radial-gradient(circle at 0 100%, transparent 0, black 32%, black 55%, transparent 85%),
+      radial-gradient(circle at 100% 100%, transparent 0, black 32%, black 55%, transparent 85%);
+    mask-size: 60% 60%;
+    mask-position: 0 0, 100% 0, 0 100%, 100% 100%;
+    mask-repeat: no-repeat;
+  }
 }
 
 .footer-inner {
+  position: relative;
   padding: clamp(#{$sp-8}, 5vw, #{$sp-12});
-  display: grid; gap: $sp-8;
+  display: grid;
+  gap: $sp-8;
 
-  // MOBILE GRID AREAS
+  // MOBILE
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
     "about about"
     "links contact"
     "news news";
 
-  @media (max-width: 380px) {
+  @media (max-width: 480px) {
     grid-template-columns: 1fr;
     grid-template-areas:
       "about"
@@ -42,7 +64,7 @@
       "news";
   }
 
-  // TABLET (3 cols)
+  // TABLET
   @include mq-up($bp-md) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-areas:
@@ -50,7 +72,7 @@
       "links contact news";
   }
 
-  // DESKTOP (4 cols)
+  // DESKTOP
   @include mq-up($bp-lg) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-areas: "about links contact news";
@@ -58,17 +80,65 @@
 }
 
 /* Area placements */
-.footer-about     { grid-area: about; }
-.footer-links     { grid-area: links; }
-.footer-contact   { grid-area: contact; }
-.footer-newsletter{ grid-area: news; }
+.footer-about      { grid-area: about; }
+.footer-links      { grid-area: links; }
+.footer-contact    { grid-area: contact; }
+.footer-newsletter { grid-area: news; }
 
-.footer-col { display: flex; flex-direction: column; gap: $sp-4; }
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: $sp-4;
+}
+
+/* Brand block */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: $sp-4;
+}
+
+.footer-avatar {
+  margin: 0;
+  inline-size: 3.2rem;
+  block-size: 3.2rem;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid;
+
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+
+  img { width: 100%; height: 100%; object-fit: cover; display:block; }
+}
+
+.footer-brand-text { display: flex; flex-direction: column; gap: .1rem; }
+
+.footer-brand-name {
+  margin: 0;
+  font-size: $fs-4;
+  font-weight: $fw-semibold;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+
+.footer-brand-role {
+  margin: 0;
+  font-size: $fs-2;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
 
 /* Headings */
 .footer-title {
-  display: inline-flex; align-items: center; gap: .55rem;
-  font-size: $fs-4; font-weight: $fw-semibold; letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  font-size: $fs-4;
+  font-weight: $fw-semibold;
+  letter-spacing: -0.01em;
 
   @include theme-block      { color: tone(contrast, light); }
   @include theme-block-dark { color: tone(contrast, dark);  }
@@ -76,53 +146,92 @@
   i { font-size: $fs-4; opacity: .9; }
 
   &::after {
-    content:""; display:block; width:28px; height:2px; margin-top:$sp-2; border-radius:2px;
+    content: "";
+    display: block;
+    width: 28px;
+    height: 2px;
+    margin-top: $sp-2;
+    border-radius: 2px;
+
     @include theme-block      { background: tone(contrast, light); opacity: .15; }
     @include theme-block-dark { background: tone(contrast, dark);  opacity: .2;  }
   }
 }
 
 /* Text */
-.footer-text, .footer-hint, .footer-credit, .footer-address {
+.footer-text,
+.footer-hint,
+.footer-credit,
+.footer-address {
   @include theme-block      { color: tone(contrast, light); }
   @include theme-block-dark { color: tone(contrast, dark);  }
   opacity: .9;
 }
-.footer-address p { margin: 0 0 .35rem; display:flex; align-items:center; gap:.5rem; }
-.footer-address a {
-  text-decoration:none;
-  @include theme-block      { color: tone(contrast, light); }
-  @include theme-block-dark { color: tone(contrast, dark);  }
-  &:hover { text-decoration: underline; }
+
+.footer-address {
+  font-style: normal;
+
+  p {
+    margin: 0 0 .35rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  a {
+    text-decoration: none;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+    &:hover { text-decoration: underline; }
+  }
 }
 
 /* Lists */
 .footer-list {
-  list-style: none; margin: 0; padding: 0; display: grid; gap: $sp-2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $sp-2;
 
   a {
-    display: inline-flex; align-items: center; gap: .55rem;
-    text-decoration: none; font-size: $fs-3;
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    text-decoration: none;
+    font-size: $fs-3;
 
     @include theme-block      { color: tone(contrast, light); }
     @include theme-block-dark { color: tone(contrast, dark);  }
 
     i { font-size: $fs-4; }
+
     transition: transform $dur-1 $ease-in-out, text-decoration-color $dur-1;
     &:hover { text-decoration: underline; transform: translateX(2px); }
   }
 }
+
 .footer-legal { margin-top: $sp-3; }
 
 /* Social icons */
 .footer-social {
-  display: flex; align-items: center; gap: $sp-3;
+  display: flex;
+  align-items: center;
+  gap: $sp-3;
+  margin-top: $sp-3;
 
   a {
-    display:inline-grid; place-items:center;
-    width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid;
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 1px solid;
     font-size: $fs-4;
-    transition: transform $dur-1 $ease-in-out, background-color $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+    transition:
+      transform $dur-1 $ease-in-out,
+      background-color $dur-1 $ease-in-out,
+      box-shadow $dur-1 $ease-in-out;
 
     @include theme-block      { color: tone(contrast, light); border-color: tone(border, light); }
     @include theme-block-dark { color: tone(contrast, dark);  border-color: tone(border, dark);  }
@@ -135,43 +244,166 @@
   }
 }
 
-/* Newsletter */
-.footer-form { display: flex; flex-direction: column; gap: $sp-3; }
-
-.footer-field {
-  display: flex; align-items: center; gap: $sp-3;
-  border: 1px solid; border-radius: $radius-pill; padding: .55rem .85rem; background: transparent;
-
-  @include theme-block      { border-color: tone(border, light); }
-  @include theme-block-dark { border-color: tone(border, dark);  }
-
-  i { font-size: $fs-4; opacity: .9; }
-
-  input {
-    flex: 1; border: 0; outline: 0; background: transparent; font-size: $fs-3;
-
-    @include theme-block      { color: tone(contrast, light); &::placeholder { color: tone(secondary, light); } }
-    @include theme-block-dark { color: tone(contrast, dark);  &::placeholder { color: tone(secondary, dark);  } }
+/* Newsletter / support */
+.footer-newsletter {
+  .footer-form {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-2;
+    margin-top: $sp-2;
   }
 
-  &:focus-within {
-    @include theme-block      { border-color: tone(contrast, light); }
-    @include theme-block-dark { border-color: tone(contrast, dark);  }
+  .footer-form-row {
+    display: flex;
+    align-items: stretch;
+    gap: $sp-2;
+    flex-wrap: wrap;
+  }
+
+  .footer-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: $sp-2;
+    border: 1px solid;
+    border-radius: $radius-pill;
+    padding: 0.25rem 0.75rem;
+    min-height: 2.25rem;
+    background: transparent;
+
+    @include theme-block      { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark);  }
+
+    i {
+      font-size: $fs-3;
+      opacity: .9;
+    }
+
+    input {
+      flex: 1;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font-size: $fs-2;
+      line-height: 1.1;
+      padding: 0;
+
+      @include theme-block      { color: tone(contrast, light); &::placeholder { color: tone(secondary, light); } }
+      @include theme-block-dark { color: tone(contrast, dark);  &::placeholder { color: tone(secondary, dark);  } }
+    }
+
+    &:focus-within {
+      @include theme-block      { border-color: tone(contrast, light); }
+      @include theme-block-dark { border-color: tone(contrast, dark);  }
+    }
+  }
+
+  .footer-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    min-height: 2.25rem;
+    padding: 0 0.9rem;
+    border-radius: $radius-pill;
+    border: 1px solid transparent;
+    cursor: pointer;
+    user-select: none;
+    font-size: $fs-3;
+    font-weight: $fw-semibold;
+    white-space: nowrap;
+
+    @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
+    @include theme-block-dark { background: tone(contrast, dark);  color: tone(white, dark);  }
+
+    transition:
+      transform $dur-1 $ease-in-out,
+      box-shadow $dur-1 $ease-in-out,
+      opacity $dur-1;
+
+    i { font-size: $fs-3; }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px -10px rgba(0,0,0,.35);
+    }
+
+    &:active {
+      transform: translateY(0);
+      opacity: .92;
+    }
+  }
+
+  .footer-hint {
+    font-size: $fs-1;
+    opacity: .8;
+  }
+
+  .footer-news-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $sp-2;
+    margin-top: $sp-3;
+  }
+
+  .footer-cta-secondary,
+  .footer-cta-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: $radius-pill;
+    font-size: $fs-2;
+    font-weight: $fw-medium;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid;
+
+    i { font-size: $fs-3; }
+
+    transition:
+      transform $dur-1 $ease-in-out,
+      box-shadow $dur-1 $ease-in-out,
+      background-color $dur-1 $ease-in-out,
+      color $dur-1 $ease-in-out;
+  }
+
+  .footer-cta-secondary {
+    @include theme-block      { background: transparent;       color: tone(contrast, light); border-color: tone(border, light); }
+    @include theme-block-dark { background: transparent;       color: tone(contrast, dark);  border-color: tone(border, dark);  }
+
+    &:hover {
+      transform: translateY(-2px);
+      @include theme-block      { background: tone(background-100, light); box-shadow: $shadow-light; }
+      @include theme-block-dark { background: tone(background-100, dark);  box-shadow: $shadow-dark;  }
+    }
+  }
+
+  .footer-cta-primary {
+    @include theme-block      { background: tone(contrast, light); color: tone(white, light); border-color: transparent; }
+    @include theme-block-dark { background: tone(contrast, dark);  color: tone(white, dark);  border-color: transparent; }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px -10px rgba(0,0,0,.35);
+    }
   }
 }
 
-.footer-submit {
-  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
-  min-height: 40px; padding: .5rem 1rem;
-  border-radius: $radius-pill; border: 1px solid transparent; cursor: pointer; user-select: none;
-  font-size: $fs-3; font-weight: $fw-semibold;
+/* Bottom strip */
+.footer-bottom {
+  border-top: 1px solid;
+  padding: $sp-4 $sp-6;
+  display: flex;
+  justify-content: center;
 
-  @include theme-block      { background: tone(contrast, light); color: tone(white, light); }
-  @include theme-block-dark { background: tone(contrast, dark);  color: tone(white, dark);  }
-
-  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, opacity $dur-1;
-  i { font-size: $fs-4; }
-  &:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -10px rgba(0,0,0,.35); }
-  &:active { transform: translateY(0); opacity: .92; }
+  @include theme-block      { border-color: tone(border, light); background: rgba(255,255,255,.03); }
+  @include theme-block-dark { border-color: tone(border, dark);  background: rgba(0,0,0,.18);       }
 }
 
+.footer-credit {
+  margin: 0;
+  font-size: $fs-2;
+  text-align: center;
+}

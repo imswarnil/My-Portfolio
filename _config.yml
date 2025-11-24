@@ -18,18 +18,18 @@ url: "https://dev.imswarnil.com"    # Site url, also used in jekyll-seo-tag
 baseurl: ""                     # Base URL (for GitHub Pages etc.)
 logo: "/assets/logos/logo.svg"  # Site logo (also jekyll-seo-tag)
 avatarurl: "/assets/logos/logo@512px.png"
-email: "me@daviddarnes.com"
+email: "contact@imswarnil.com"
 location: "Bengaluru, India"
-repo: "https://github.com/daviddarnes/alembic"
+repo: "https://github.com/imswarnil/alembic"
 work:
   company: "Imswarnil Studio"
   role: "Software Engineer & Filmmaker"
   url: "https://yourcompany.com"
 
 social_links:              # Appears in sidebar
-  Twitter: https://twitter.com/DavidDarnes
-  LinkedIn: https://www.linkedin.com/in/daviddarnes
-  GitHub: https://github.com/daviddarnes
+  Twitter: https://twitter.com/imswarnil
+  LinkedIn: https://www.linkedin.com/in/imswarnil
+  GitHub: https://github.com/imswarnil
   link: https://darn.es
   RSS: /feed.xml
 
@@ -57,9 +57,9 @@ baseurl: "" # set if you deploy under subpath
 # Social links (used in header, panel, JSON-LD)
 # -------------------------------------------------
 social_links:
-  Twitter: https://twitter.com/DavidDarnes
-  LinkedIn: https://www.linkedin.com/in/daviddarnes
-  GitHub: https://github.com/daviddarnes
+  Twitter: https://twitter.com/imswarnil
+  LinkedIn: https://www.linkedin.com/in/imswarnil
+  GitHub: https://github.com/imswarnil
   link: https://darn.es
   RSS: /feed.xml
 
@@ -150,9 +150,9 @@ navigation_footer:
 
 # Social & sharing
 social_links:              # Appears in sidebar
-  Twitter: https://twitter.com/DavidDarnes
-  LinkedIn: https://www.linkedin.com/in/daviddarnes
-  GitHub: https://github.com/daviddarnes
+  Twitter: https://twitter.com/imswarnil
+  LinkedIn: https://www.linkedin.com/in/imswarnil
+  GitHub: https://github.com/imswarnil
   link: https://darn.es
   RSS: /feed.xml
 
@@ -382,16 +382,16 @@ paginate_path: archive/page:num   # jekyll-paginate > blog page
 jekyll-mentions: https://twitter.com # jekyll-mentions > @reply service
 
 twitter:                            # jekyll-seo-tag > Twitter config
-  username: DavidDarnes
-author: DavidDarnes                 # jekyll-seo-tag > default author
+  username: imswarnil
+author: Swarnil Singhai                 # jekyll-seo-tag > default author
 
 social:                             # jekyll-seo-tag > social overrides
-  name: David Darnes                # Real name
+  name: Swarnil Singhai             # Real name
   links:                            # sameAs list
-    - https://twitter.com/DavidDarnes
-    - https://www.facebook.com/daviddarnes
-    - https://www.linkedin.com/in/daviddarnes
-    - https://github.com/daviddarnes
+    - https://twitter.com/imswarnil
+    - https://www.facebook.com/imswarnil
+    - https://www.linkedin.com/in/Swarnil-Singhai
+    - https://github.com/imswarnil
 
 # Markdown parser (optional)
 # markdown: CommonMark

@@ -1,48 +1,72 @@
 <!-- ====================================================================== -->
-<!--  SIMPLE, VIDEO-FREE, DARK-MODE ENABLED FOOTER (CONTAINER PARENT)       -->
-<!--  Mobile:                                                               -->
-<!--   - About (full width)                                                 -->
-<!--   - Quick Links (1/2) + Contact & Legal (1/2)                          -->
-<!--   - Newsletter (full width)                                            -->
-<!--  Desktop: 4 columns                                                    -->
-<!--  Uses _config.yml for links/social/email/etc                           -->
+<!--  FOOTER ISLAND – GRID LINES, AVATAR BRAND, RESPONSIVE 4-COL LAYOUT    -->
 <!-- ====================================================================== -->
 
 <div class="container footer-wrap">
   <footer class="footer-island" role="contentinfo" aria-label="Site footer">
     <div class="footer-inner">
 
-      <!-- 1) ABOUT (full width on mobile) -->
+      <!-- 1) ABOUT / BRAND -->
       <section class="footer-col footer-about">
-        <h4 class="footer-title"><i class="ph-bold ph-user"></i> About</h4>
+        <div class="footer-brand">
+          <figure class="footer-avatar">
+            <img
+              src="/assets/Swarnil-Singhai.png"
+              alt="{{ site.resume.name | default: site.title }}"
+              loading="lazy"
+              width="80"
+              height="80">
+          </figure>
+          <div class="footer-brand-text">
+            <p class="footer-brand-name">
+              {{ site.resume.name | default: site.title | default: "Your Name" }}
+            </p>
+            <p class="footer-brand-role">
+              {{ site.resume.tagline | default: site.work.role | default: site.job_title }}
+            </p>
+          </div>
+        </div>
+
         <p class="footer-text">
-          {{ site.description | default: "A thoughtful, cinematic space for code and creativity." }}
+          {{ site.description | default: "A thoughtful, cinematic space for code, career and storytelling." }}
         </p>
 
         {% if site.social_links %}
         <nav class="footer-social" aria-label="Social links">
           {% if site.social_links.Twitter %}
-            <a href="{{ site.social_links.Twitter }}" aria-label="Twitter" target="_blank" rel="noopener"><i class="ph-bold ph-twitter-logo"></i></a>
+            <a href="{{ site.social_links.Twitter }}" aria-label="Twitter" target="_blank" rel="noopener">
+              <i class="ph-bold ph-twitter-logo"></i>
+            </a>
           {% endif %}
           {% if site.social_links.LinkedIn %}
-            <a href="{{ site.social_links.LinkedIn }}" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i></a>
+            <a href="{{ site.social_links.LinkedIn }}" aria-label="LinkedIn" target="_blank" rel="noopener">
+              <i class="ph-bold ph-linkedin-logo"></i>
+            </a>
           {% endif %}
           {% if site.social_links.GitHub %}
-            <a href="{{ site.social_links.GitHub }}" aria-label="GitHub" target="_blank" rel="noopener"><i class="ph-bold ph-github-logo"></i></a>
+            <a href="{{ site.social_links.GitHub }}" aria-label="GitHub" target="_blank" rel="noopener">
+              <i class="ph-bold ph-github-logo"></i>
+            </a>
           {% endif %}
           {% if site.social_links.RSS %}
-            <a href="{{ site.baseurl }}{{ site.social_links.RSS }}" aria-label="RSS"><i class="ph-bold ph-rss"></i></a>
+            <a href="{{ site.baseurl }}{{ site.social_links.RSS }}" aria-label="RSS">
+              <i class="ph-bold ph-rss"></i>
+            </a>
           {% endif %}
           {% if site.social_links.link %}
-            <a href="{{ site.social_links.link }}" aria-label="Website" target="_blank" rel="noopener"><i class="ph-bold ph-link-simple"></i></a>
+            <a href="{{ site.social_links.link }}" aria-label="Website" target="_blank" rel="noopener">
+              <i class="ph-bold ph-link-simple"></i>
+            </a>
           {% endif %}
         </nav>
         {% endif %}
       </section>
 
-      <!-- 2) QUICK LINKS (1/2 width on mobile) -->
+      <!-- 2) QUICK LINKS (nav from config) -->
       <section class="footer-col footer-links">
-        <h4 class="footer-title"><i class="ph-bold ph-compass"></i> Quick Links</h4>
+        <h4 class="footer-title">
+          <i class="ph-bold ph-compass"></i> Quick Links
+        </h4>
         <ul class="footer-list">
           {% assign nav_items = site.navigation_header %}
           {% if nav_items and nav_items.size > 0 %}
@@ -67,63 +91,105 @@
         </ul>
       </section>
 
-      <!-- 3) CONTACT & LEGAL (1/2 width on mobile) -->
+      <!-- 3) CONTACT & LEGAL -->
       <section class="footer-col footer-contact">
-        <h4 class="footer-title"><i class="ph-bold ph-map-pin"></i> Contact & Legal</h4>
+        <h4 class="footer-title">
+          <i class="ph-bold ph-map-pin"></i> Contact &amp; Legal
+        </h4>
         <address class="footer-address">
-          <p><i class="ph-bold ph-buildings"></i> {{ site.title | default: "Your Site" }}</p>
-          <p><i class="ph-bold ph-map-trifold"></i> {{ site.timezone | default: "Worldwide" }}</p>
+          <p>
+            <i class="ph-bold ph-buildings"></i>
+            {{ site.title | default: "Your Site" }}
+          </p>
+          <p>
+            <i class="ph-bold ph-map-trifold"></i>
+            {{ site.location | default: site.timezone | default: "Worldwide" }}
+          </p>
           {% if site.email %}
-            <p><i class="ph-bold ph-envelope"></i> <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+            <p>
+              <i class="ph-bold ph-envelope"></i>
+              <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+            </p>
           {% endif %}
           {% if site.url %}
-            <p><i class="ph-bold ph-link-simple"></i> <a href="{{ site.url | default: '/' }}" target="_blank" rel="noopener">{{ site.url | default: "/" }}</a></p>
+            <p>
+              <i class="ph-bold ph-link-simple"></i>
+              <a href="{{ site.url | default: '/' }}" target="_blank" rel="noopener">
+                {{ site.url | default: "/" }}
+              </a>
+            </p>
           {% endif %}
         </address>
 
         <ul class="footer-list footer-legal">
-          {% comment %}
-            Use navigation_footer if provided; else show Privacy/Terms defaults.
-          {% endcomment %}
-          {% assign foot_nav = site.navigation_footer %}
-          {% if foot_nav and foot_nav.size > 0 %}
-            {% for item in foot_nav %}
-              {% assign href = item.url %}
-              {% assign is_external = false %}
-              {% if href contains '://' %}{% assign is_external = true %}{% endif %}
-              <li>
-                <a href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
-                   {% if is_external %}target="_blank" rel="noopener"{% endif %}>
-                  <i class="ph-bold ph-link-simple"></i>
-                  {{ item.title }}
-                </a>
-              </li>
-            {% endfor %}
-          {% else %}
-            <li><a href="{{ '/privacy/' | relative_url }}"><i class="ph-bold ph-lock-key"></i> Privacy</a></li>
-            <li><a href="{{ '/terms/' | relative_url }}"><i class="ph-bold ph-scale"></i> Terms</a></li>
-          {% endif %}
+          <li>
+            <a href="{{ '/privacy/' | relative_url }}">
+              <i class="ph-bold ph-lock-key"></i> Privacy
+            </a>
+          </li>
+          <li>
+            <a href="{{ '/terms/' | relative_url }}">
+              <i class="ph-bold ph-scale"></i> Terms
+            </a>
+          </li>
+          <li>
+            <a href="{{ site.repo | default: 'https://github.com' }}" target="_blank" rel="noopener">
+              <i class="ph-bold ph-github-logo"></i> Proudly open source
+            </a>
+          </li>
+          <li>
+            <a href="{{ '/sponsor/' | relative_url }}">
+              <i class="ph-bold ph-hand-heart"></i> Sponsor this site
+            </a>
+          </li>
         </ul>
       </section>
 
-      <!-- 4) NEWSLETTER (full width on mobile) -->
+      <!-- 4) NEWSLETTER / SUPPORT -->
       <section class="footer-col footer-newsletter">
-        <h4 class="footer-title"><i class="ph-bold ph-megaphone-simple"></i> Newsletter</h4>
-        <p class="footer-text">Get stories, updates & behind-the-scenes once a month. No spam.</p>
+        <h4 class="footer-title">
+          <i class="ph-bold ph-megaphone-simple"></i> Stay Connected
+        </h4>
+        <p class="footer-text">
+          One tight email a month with stories, projects &amp; behind-the-scenes.
+        </p>
 
         <form class="footer-form" action="#" method="post" novalidate>
-          <label class="footer-field" aria-label="Email">
-            <i class="ph-bold ph-at"></i>
-            <input type="email" name="email" placeholder="Your email" required />
-          </label>
-          <button type="submit" class="footer-submit" aria-label="Subscribe">
-            <i class="ph-bold ph-paper-plane-tilt"></i>
-            <span>Subscribe</span>
-          </button>
-          <p class="footer-hint">You can unsubscribe at any time.</p>
+          <div class="footer-form-row">
+            <label class="footer-field" aria-label="Email">
+              <i class="ph-bold ph-at"></i>
+              <input type="email" name="email" placeholder="Your email" required />
+            </label>
+
+            <button type="submit" class="footer-submit" aria-label="Subscribe">
+              <i class="ph-bold ph-paper-plane-tilt"></i>
+              <span>Subscribe</span>
+            </button>
+          </div>
+          <p class="footer-hint">No spam. Unsubscribe any time.</p>
         </form>
+
+        <div class="footer-news-actions">
+          <button type="button" class="footer-cta-secondary" aria-label="Enable push notifications">
+            <i class="ph-bold ph-bell-ringing"></i>
+            <span>Enable push</span>
+          </button>
+          <a href="{{ '/sponsor/' | relative_url }}" class="footer-cta-primary">
+            <i class="ph-bold ph-hand-heart"></i>
+            <span>Become a sponsor</span>
+          </a>
+        </div>
       </section>
 
+    </div>
+
+    <!-- Bottom strip -->
+    <div class="footer-bottom">
+      <p class="footer-credit">
+        © {{ "now" | date: "%Y" }}
+        {{ site.resume.name | default: site.title | default: "Your Name" }} ·
+        Built in Bengaluru · Powered by Jekyll.
+      </p>
     </div>
   </footer>
 </div>
