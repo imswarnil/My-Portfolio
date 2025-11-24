@@ -127,10 +127,6 @@ navigation_header:
     url: /categories/
     icon: tag
     sub: Topics
-  - title: Search
-    url: /search/
-    icon: magnifying-glass
-    sub: Find anything
 
 # Example footer nav if you want later
 navigation_footer:

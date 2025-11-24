@@ -10,13 +10,14 @@
   top: $container-gutter;
   z-index: $z-header;
 
-  margin: 0 auto $sp-6;
+  margin: 0 auto $sp-4;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $sp-6;
+  gap: $sp-4;
 
-  padding: $sp-3 $sp-6;
+  // slightly tighter padding
+  padding: $sp-2 $sp-4;
   border-radius: $radius-6;
   border: 1px solid;
   -webkit-backdrop-filter: blur(12px);
@@ -63,7 +64,6 @@
 @media (max-width: $bp-lg) {
   .island-navbar {
     @include container;
-    position: fixed;
     top: $container-gutter;
     left: $container-gutter;
     right: $container-gutter;
@@ -328,8 +328,8 @@
   a {
     display: block;
     padding: $sp-2 $sp-3;
-    border-radius: $radius-pill;
     font-size: $fs-2;
+    border-radius: $radius-pill;
     text-decoration: none;
 
     @include theme-block {
@@ -494,7 +494,7 @@
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: $sp-5;
+  gap: $sp-4;
   text-decoration: none;
 
   .navbar-avatar {
@@ -527,7 +527,8 @@
   ul {
     display: flex;
     align-items: center;
-    gap: $sp-2;
+    // tighter spacing between top-level links
+    gap: $sp-1;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -537,7 +538,8 @@
     display: inline-flex;
     align-items: center;
     gap: .4em;
-    padding: $sp-3 $sp-5;
+    // slimmer pill
+    padding: $sp-2 $sp-4;
     font-size: $fs-3;
     font-weight: $fw-medium;
     border-radius: $radius-pill;
@@ -579,10 +581,13 @@
   @media (max-width: $bp-lg) { display: none; }
 }
 
-/* desktop submenu — cleaner pill card */
-/* desktop submenu — cleaner pill card */
+/* desktop submenu — cleaner, tighter */
+/* desktop submenu — cleaner, tighter + no hover gap */
 .navbar-menu li.nav-item-has-children {
   position: relative;
+
+  /* hover bridge: small padding below so mouse can travel into submenu */
+  padding-bottom: $sp-2;
 
   > a {
     position: relative;
@@ -591,49 +596,100 @@
 
   .nav-submenu {
     position: absolute;
-    top: calc(100% + 0.35rem);
+    /* attach directly to bottom of parent li – no gap */
+    top: 100%;
     left: 0;
+
     min-width: 11rem;
-    padding: $sp-3;
+    padding: $sp-2;
     border-radius: $radius-5;
     border: 1px solid;
     list-style: none;
     margin: 0;
 
-    /* override parent flex so items stack in separate lines */
+    // vertical list
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    gap: $sp-1;
 
     opacity: 0;
     transform: translateY(-4px);
     pointer-events: none;
     transition: opacity $dur-1, transform $dur-1;
 
-    @include theme-block      { background: mix(tone(background, light), tone(white, light), 85%);  border-color: tone(border, light); box-shadow: $shadow-light; }
-    @include theme-block-dark { background: mix(tone(background-100, dark), tone(black, dark), 85%); border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+    @include theme-block {
+      background: mix(tone(background, light), tone(white, light), 88%);
+      border-color: tone(border, light);
+      box-shadow: $shadow-light;
+    }
+    @include theme-block-dark {
+      background: mix(tone(background-100, dark), tone(black, dark), 88%);
+      border-color: tone(border, dark);
+      box-shadow: $shadow-dark;
+    }
 
     li {
       width: 100%;
     }
-    li + li { margin-top: $sp-1; }
 
     a {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: $sp-2;
       width: 100%;
       padding: $sp-2 $sp-3;
       font-size: $fs-2;
-      border-radius: $radius-pill;
+      border-radius: $radius-4;
       text-decoration: none;
 
       @include theme-block {
         color: tone(secondary, light);
-        &:hover { color: tone(contrast, light); background: tone(background-100, light); }
+        &:hover {
+          color: tone(contrast, light);
+          background: tone(background-100, light);
+        }
       }
       @include theme-block-dark {
         color: tone(secondary, dark);
-        &:hover { color: tone(contrast, dark); background: tone(background-100, dark); }
+        &:hover {
+          color: tone(contrast, dark);
+          background: tone(background-100, dark);
+        }
       }
+    }
+
+    .nav-submenu-icon {
+      width: 1.7rem;
+      height: 1.7rem;
+      border-radius: $radius-pill;
+      border: 1px solid;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+
+      @include theme-block {
+        border-color: tone(border, light);
+        background: rgba(255,255,255,0.9);
+        color: tone(secondary, light);
+      }
+      @include theme-block-dark {
+        border-color: tone(border, dark);
+        background: rgba(12,12,14,0.96);
+        color: tone(secondary, dark);
+      }
+
+      i {
+        font-size: $fs-3;
+      }
+    }
+
+    .nav-submenu-label {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 
@@ -644,7 +700,6 @@
     pointer-events: auto;
   }
 }
-
 
 // ---------- Right-side actions ----------
 .navbar-actions {
@@ -905,4 +960,16 @@ body.search-active {
   @include theme-block      { color: tone(secondary, light); }
   @include theme-block-dark { color: tone(secondary, dark);  }
   &:hover { text-decoration: underline; }
+}
+
+/* Ensure all nav links show pointer cursor */
+.navbar-menu a,
+.nav-submenu a,
+.mobile-nav-link,
+.mobile-submenu a,
+.panel-social__item,
+.bento-card,
+.nav-cta,
+.nav-icon {
+  cursor: pointer;
 }

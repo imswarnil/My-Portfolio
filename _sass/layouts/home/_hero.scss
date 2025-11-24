@@ -1,0 +1,265 @@
+/* =========================================
+   HERO
+========================================= */
+
+.home-hero {
+  padding-block: clamp($sp-10, 4.5vw, $sp-14);
+  overflow-x: clip;
+}
+
+.home-hero__grid {
+  display: grid;
+  gap: clamp($sp-8, 3vw, $sp-12);
+  grid-template-columns: 1fr;
+  align-items: center;
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: 1.05fr .95fr;
+  }
+}
+
+/* Make art first on mobile and perfectly centered */
+@media (max-width: $bp-lg) {
+  .home-hero__art-wrap {
+    order: -1;
+  }
+}
+
+.home-hero__copy {
+  display: grid;
+  gap: $sp-6;
+  min-width: 0;
+}
+
+.home-hero__hello {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: $sp-5;
+  font-size: $fs-4;
+  font-weight: $fw-medium;
+
+  i {
+    transform-origin: 60% 60%;
+    animation: wave 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0); }
+  20% { rotate: 16deg; }
+  40% { rotate: -10deg; }
+  60% { rotate: 12deg; }
+  80% { rotate: -6deg; }
+}
+
+.home-hero__name {
+  margin: 0;
+  font-weight: $fw-bold;
+  line-height: $lh-tight;
+  font-size: clamp($fs-7, 6vw, $fs-10);
+}
+
+.home-hero__sub {
+  margin: 0;
+  font-size: clamp($fs-4, 2.4vw, $fs-6);
+  opacity: .94;
+}
+
+.home-hero__bio {
+  margin: 0;
+  max-width: 60ch;
+  font-size: $fs-3;
+
+  @include theme-block      { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark);  }
+}
+
+.home-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-6;
+  align-items: center;
+
+  .button {
+    @include theme-block      { color: tone(white, light); }
+    @include theme-block-dark { color: tone(black, dark);  }
+
+    &:hover {
+      @include theme-block      { color: tone(white, light); }
+      @include theme-block-dark { color: tone(black, dark);  }
+    }
+  }
+}
+
+.home-hero__meta {
+  display: grid;
+  gap: $sp-3;
+  margin-top: $sp-2;
+}
+
+.home-hero__meta-row {
+  display: flex;
+  align-items: center;
+  gap: $sp-5;
+  font-size: $fs-2;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+/* Pill stats */
+.home-hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-6;
+  margin-top: $sp-7;
+  padding: 0;
+  list-style: none;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-5;
+  padding: .38rem .7rem;
+  border-radius: $radius-pill;
+  border: 1px solid;
+
+  @include theme-block {
+    background: tone(surface, light);
+    border-color: tone(border, light);
+    box-shadow: $shadow-light;
+  }
+  @include theme-block-dark {
+    background: tone(surface, dark);
+    border-color: tone(border, dark);
+    box-shadow: $shadow-dark;
+  }
+
+  .pill__val {
+    font-weight: $fw-semibold;
+    font-size: $fs-3;
+    line-height: $lh-tight;
+  }
+
+  .pill__label {
+    font-size: $fs-1;
+    opacity: .9;
+  }
+}
+
+/* Art: SQUARE, centered */
+.home-hero__art-wrap {
+  position: relative;
+}
+
+/* 👇 changed here: overflow: visible; img gets radius */
+.home-hero__art {
+  margin: 0;
+  width: min(96%, 520px);
+  aspect-ratio: 1 / 1;
+  border-radius: $radius-6;
+  overflow: visible; // allow social rail to hang outside
+  border: 1px solid;
+  justify-self: center;
+
+  @include theme-block {
+    background: tone(background-100, light);
+    border-color: tone(border, light);
+    box-shadow: $shadow-light;
+  }
+  @include theme-block-dark {
+    background: tone(background-200, dark);
+    border-color: tone(border, dark);
+    box-shadow: $shadow-dark;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: inherit; // keeps square card corners clean
+  }
+}
+
+@media (min-width: $bp-lg) {
+  .home-hero__art {
+    transform: perspective(1200px) rotateY(-3.25deg);
+    transform-origin: center left;
+  }
+
+  .home-hero__art:hover {
+    transform: perspective(1200px) rotateY(-2.5deg) translateY(-2px);
+  }
+}
+
+@media (max-width: $bp-lg) {
+  .home-hero__art {
+    transform: none;
+  }
+}
+
+/* Social rail half in/out */
+.home-hero__social {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: $sp-5;
+
+  /* mobile: bottom center, half outside */
+  left: 50%;
+  bottom: -0.75rem;
+  transform: translateX(-50%);
+
+  li { margin: 0; }
+
+  a {
+    inline-size: 2.2rem;
+    block-size: 2.2rem;
+    display: grid;
+    place-items: center;
+    border-radius: $radius-4;
+    text-decoration: none;
+    border: 1px solid;
+
+    @include theme-block {
+      background: tone(surface, light);
+      border-color: tone(border, light);
+      color: tone(contrast, light);
+      box-shadow: $shadow-light;
+    }
+    @include theme-block-dark {
+      background: tone(surface, dark);
+      border-color: tone(border, dark);
+      color: tone(contrast, dark);
+      box-shadow: $shadow-dark;
+    }
+
+    transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,.12);
+    }
+  }
+}
+
+/* Desktop: vertical rail on right, half outside but not clipped */
+@media (min-width: $bp-lg) {
+  .home-hero__social {
+    top: 50%;
+    bottom: auto;
+    left: auto;
+    right: -1.1rem; // ~half of 2.2rem → nicely half in/out
+    transform: translateY(-50%);
+    flex-direction: column;
+  }
+}
+
+/* Safety: never overflow horizontally */
+.home-hero { overflow-x: clip; }

@@ -349,6 +349,7 @@
 <script>
   /* assets/scripts/header.js */
 
+  // FOUC guard — theme from localStorage / system
   (function () {
     var KEY = "color-scheme";
     try {
@@ -356,127 +357,159 @@
       var system = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       var theme = saved || system || "light";
       document.documentElement.setAttribute("data-color-scheme", theme);
-    } catch(e){}
+    } catch (e) {}
   })();
 
   document.addEventListener("DOMContentLoaded", function () {
-    var root    = document.documentElement;
-    var header  = document.getElementById('site-navbar');
-    var panel   = document.getElementById('mobile-panel');
-    var toggle  = document.getElementById('mobile-menu-toggle');
-    var panelClose = document.getElementById('mobile-panel-close');
-    var themeBtn = document.getElementById('theme-toggle');
+    var root     = document.documentElement;
+    var body     = document.body;
+    var header   = document.getElementById("site-navbar");
+    var panel    = document.getElementById("mobile-panel");
+    var toggle   = document.getElementById("mobile-menu-toggle");
+    var themeBtn = document.getElementById("theme-toggle");
 
-    // --- Theme toggle (persist) ---
+    // ===========================
+    // THEME TOGGLE (PERSISTENT)
+    // ===========================
     var KEY = "color-scheme";
-    function getTheme(){ return root.getAttribute("data-color-scheme") || "light"; }
-    function setTheme(theme){
+    function getTheme() {
+      return root.getAttribute("data-color-scheme") || "light";
+    }
+    function setTheme(theme) {
       root.setAttribute("data-color-scheme", theme);
-      try { localStorage.setItem(KEY, theme); } catch(e){}
+      try {
+        localStorage.setItem(KEY, theme);
+      } catch (e) {}
       if (themeBtn) themeBtn.setAttribute("aria-pressed", String(theme === "dark"));
     }
+
     try {
       var saved = localStorage.getItem(KEY);
       if (saved && saved !== getTheme()) setTheme(saved);
-    } catch(e){}
+    } catch (e) {}
+
     themeBtn && themeBtn.addEventListener("click", function () {
       setTheme(getTheme() === "light" ? "dark" : "light");
     });
 
-    // --- Compute nav height + sticky behaviour ---
+    // ===========================
+    // LAYOUT + NAV HEIGHT
+    // ===========================
     function setNavHeightVar() {
       var h = header ? header.getBoundingClientRect().height : 58;
       root.style.setProperty("--nav-h", h + "px");
     }
-    function applyMobileMode() {
-      var isMobile = window.matchMedia("(max-width: 991px)").matches;
-      var isSticky = true;
-      if (header && header.getAttribute("data-sticky") === "false") {
-        isSticky = false;
-      }
-      document.body.classList.toggle("has-fixed-nav", isMobile && isSticky);
-      setNavHeightVar();
-    }
-    applyMobileMode();
-    window.addEventListener("resize", applyMobileMode);
-    window.addEventListener("orientationchange", applyMobileMode);
-    window.setTimeout(setNavHeightVar, 120);
 
-    // --- Mobile panel open/close ---
-    function setPanelHeight(open){
+    function isMobile() {
+      // match CSS breakpoint (max-width: $bp-lg ≈ 991px)
+      return window.matchMedia("(max-width: 991px)").matches;
+    }
+
+    function applyLayout() {
+      var mobile = isMobile();
+      var isStaticHeader = header && header.classList.contains("island-navbar--static");
+
+      // Only add padding for fixed mobile navbar (not static/overridden)
+      body.classList.toggle("has-fixed-nav", mobile && !isStaticHeader);
+
+      setNavHeightVar();
+
+      // When switching to desktop, force panel closed so states don't get stuck
+      if (!mobile) {
+        closePanel();
+      }
+    }
+
+    // Initial layout
+    applyLayout();
+    // After initial render (fonts / async stuff)
+    window.setTimeout(applyLayout, 120);
+
+    // On resize: recompute layout + height with rAF for smoother animation
+    window.addEventListener("resize", function () {
+      window.requestAnimationFrame(applyLayout);
+    });
+    window.addEventListener("orientationchange", applyLayout);
+
+    // ===========================
+    // MOBILE PANEL OPEN/CLOSE
+    // ===========================
+    function setPanelHeight(open) {
       if (!panel) return;
       if (open) {
         panel.style.maxHeight = "0px";
-        requestAnimationFrame(function(){ panel.style.maxHeight = panel.scrollHeight + "px"; });
+        requestAnimationFrame(function () {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        });
       } else {
         panel.style.maxHeight = panel.scrollHeight + "px";
-        requestAnimationFrame(function(){ panel.style.maxHeight = "0px"; });
+        requestAnimationFrame(function () {
+          panel.style.maxHeight = "0px";
+        });
       }
     }
-    function openPanel(){
-      header && header.classList.add("is-open");
-      panel && panel.classList.add("is-open");
-      panel && panel.setAttribute("aria-hidden","false");
-      toggle && toggle.setAttribute("aria-expanded","true");
-      document.body.classList.add("panel-open");
+
+    function openPanel() {
+      if (header) header.classList.add("is-open");
+      if (panel) {
+        panel.classList.add("is-open");
+        panel.setAttribute("aria-hidden", "false");
+      }
+      if (toggle) toggle.setAttribute("aria-expanded", "true");
+      body.classList.add("panel-open");
       setPanelHeight(true);
     }
-    function closePanel(){
-      header && header.classList.remove("is-open");
-      panel && panel.classList.remove("is-open");
-      panel && panel.setAttribute("aria-hidden","true");
-      toggle && toggle.setAttribute("aria-expanded","false");
-      document.body.classList.remove("panel-open");
+
+    function closePanel() {
+      if (header) header.classList.remove("is-open");
+      if (panel) {
+        panel.classList.remove("is-open");
+        panel.setAttribute("aria-hidden", "true");
+      }
+      if (toggle) toggle.setAttribute("aria-expanded", "false");
+      body.classList.remove("panel-open");
       setPanelHeight(false);
     }
-    function togglePanel(){ panel && (panel.classList.contains("is-open") ? closePanel() : openPanel()); }
+
+    function togglePanel() {
+      if (!panel) return;
+      if (panel.classList.contains("is-open")) {
+        closePanel();
+      } else {
+        openPanel();
+      }
+    }
 
     toggle && toggle.addEventListener("click", togglePanel);
-    panelClose && panelClose.addEventListener("click", closePanel);
 
-    panel && panel.addEventListener("click", function(e){
-      if(e.target.closest("a")) closePanel();
+    // Clicking a link inside the panel closes it
+    panel && panel.addEventListener("click", function (e) {
+      if (e.target.closest("a")) closePanel();
     });
 
-    document.addEventListener("keydown", function(e){
-      if (e.key === "Escape" && panel && panel.classList.contains("is-open")) closePanel();
+    // Escape closes panel
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && panel && panel.classList.contains("is-open")) {
+        closePanel();
+      }
     });
+
+    // Also react to breakpoint changes via matchMedia
     var mq = window.matchMedia("(min-width: 992px)");
-    mq.addEventListener("change", function(){ if (mq.matches) closePanel(); });
-
-    // --- Mobile submenu accordion ---
-    var mobileToggles = panel ? panel.querySelectorAll(".mobile-nav-toggle") : [];
-    mobileToggles.forEach(function(btn){
-      btn.addEventListener("click", function(){
-        var item = btn.closest(".mobile-nav-item");
-        if (!item) return;
-        var submenu = item.querySelector(".mobile-submenu");
-        if (!submenu) return;
-
-        var isOpen = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", String(!isOpen));
-        item.classList.toggle("is-open", !isOpen);
-
-        if (!isOpen) {
-          submenu.hidden = false;
-          submenu.style.maxHeight = "0px";
-          requestAnimationFrame(function(){
-            submenu.style.maxHeight = submenu.scrollHeight + "px";
-          });
-        } else {
-          submenu.style.maxHeight = submenu.scrollHeight + "px";
-          requestAnimationFrame(function(){
-            submenu.style.maxHeight = "0px";
-          });
-          window.setTimeout(function(){ submenu.hidden = true; }, 250);
-        }
-      });
+    mq.addEventListener("change", function (e) {
+      if (e.matches) {
+        // now in desktop
+        closePanel();
+        applyLayout();
+      } else {
+        // now in mobile
+        applyLayout();
+      }
     });
 
     // ===========================
-    // Inline Navbar Search
+    // INLINE NAVBAR SEARCH
     // ===========================
-    var body    = document.body;
     var openBtn = document.getElementById("search-open");
     var form    = document.getElementById("navbar-search");
     var input   = document.getElementById("navbar-search-input");
@@ -485,130 +518,183 @@
     var endpoint = "{{ '/assets/search.json' | relative_url }}";
     var PAGES = [];
 
-    if (endpoint && results) {
+    // Load search index once
+    if (endpoint) {
       fetch(endpoint)
-        .then(function(r){ return r.json(); })
-        .then(function(data){ PAGES = data || []; })
-        .catch(function(){ PAGES = []; });
+        .then(function (r) { return r.json(); })
+        .then(function (data) { PAGES = data || []; })
+        .catch(function () { PAGES = []; });
     }
 
     function openSearch() {
-      if (!form || !results) return;
       body.classList.add("search-active");
-      results.classList.add("is-open");
-      setTimeout(function(){ input && input.focus(); }, 10);
+      if (results) results.classList.add("is-open");
+      setTimeout(function () { input && input.focus(); }, 10);
     }
-    function clearResults(){ if (results) results.innerHTML = ""; }
+
+    function clearResults() {
+      if (results) results.innerHTML = "";
+    }
+
     function closeSearch() {
-      if (!form || !results) return;
       body.classList.remove("search-active");
-      results.classList.remove("is-open");
+      if (results) results.classList.remove("is-open");
       clearResults();
       if (input) input.value = "";
     }
 
     cancel && cancel.addEventListener("click", closeSearch);
 
-    openBtn && openBtn.addEventListener("click", function(e){
+    openBtn && openBtn.addEventListener("click", function (e) {
       e.preventDefault();
       openSearch();
     });
 
-    document.addEventListener("click", function(e){
+    // Click-away closes search (but not when clicking inside navbar/results)
+    document.addEventListener("click", function (e) {
       if (!body.classList.contains("search-active")) return;
       if (e.target.closest(".island-navbar") || e.target.closest("#search-results")) return;
       closeSearch();
     });
 
-    document.addEventListener("keydown", function(e){
-      if (!form || !results) return;
-
+    // Keyboard shortcuts: "/" to open, ESC to close, arrows for options
+    document.addEventListener("keydown", function (e) {
       if (e.key === "/" && !body.classList.contains("search-active")) {
-        e.preventDefault(); openSearch();
+        e.preventDefault();
+        openSearch();
       } else if (e.key === "Escape" && body.classList.contains("search-active")) {
-        e.preventDefault(); closeSearch();
-      } else if (body.classList.contains("search-active") && ["ArrowDown","ArrowUp","Enter"].includes(e.key)) {
+        e.preventDefault();
+        closeSearch();
+      } else if (
+        body.classList.contains("search-active") &&
+        ["ArrowDown", "ArrowUp", "Enter"].includes(e.key)
+      ) {
+        if (!results) return;
         var opts = Array.from(results.querySelectorAll('.search-item[role="option"]'));
         if (!opts.length) return;
-        var cur = opts.findIndex(function(el){ return el.getAttribute("aria-selected")==="true"; });
-        if (e.key === "ArrowDown") { cur = (cur+1) % opts.length; highlight(cur); e.preventDefault(); }
-        if (e.key === "ArrowUp")   { cur = (cur-1+opts.length) % opts.length; highlight(cur); e.preventDefault(); }
-        if (e.key === "Enter" && cur >= 0) { opts[cur].click(); }
+        var cur = opts.findIndex(function (el) {
+          return el.getAttribute("aria-selected") === "true";
+        });
+
+        if (e.key === "ArrowDown") {
+          cur = (cur + 1) % opts.length;
+          highlight(cur);
+          e.preventDefault();
+        }
+        if (e.key === "ArrowUp") {
+          cur = (cur - 1 + opts.length) % opts.length;
+          highlight(cur);
+          e.preventDefault();
+        }
+        if (e.key === "Enter" && cur >= 0) {
+          opts[cur].click();
+        }
       }
     });
 
     var timer = null;
-    input && input.addEventListener("input", function(){
-      if (!results) return;
+    input && input.addEventListener("input", function () {
       clearTimeout(timer);
       var q = (this.value || "").trim();
-      timer = setTimeout(function(){ renderSearch(q); }, 120);
+      timer = setTimeout(function () {
+        renderSearch(q);
+      }, 120);
+
+      if (!results) return;
       if (q && !results.classList.contains("is-open")) results.classList.add("is-open");
       if (!q && results.classList.contains("is-open")) results.classList.remove("is-open");
     });
 
-    form && form.addEventListener("submit", function(e){
-      if (!results) return;
+    // Prevent full-page submit; just go to first result
+    form && form.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (!results) return;
       var first = results.querySelector('.search-item[role="option"] a[href]');
-      if (first) { window.location.href = first.getAttribute("href"); closeSearch(); }
+      if (first) {
+        window.location.href = first.getAttribute("href");
+        closeSearch();
+      }
     });
 
     function findResults(term, pages) {
       if (!term) return [];
       var regex = new RegExp(term, "gi");
-      return (pages || []).filter(function(item){
-        return (item.title && item.title.match(regex)) || (item.content && item.content.match(regex));
+      return (pages || []).filter(function (item) {
+        return (
+          (item.title && item.title.match(regex)) ||
+          (item.content && item.content.match(regex))
+        );
       });
     }
 
     function renderSearch(q) {
       if (!results) return;
       var arr = findResults(q, PAGES).slice(0, 12);
+
       if (!q || !arr.length) {
-        results.innerHTML = '<div class="search-list"><div class="search-item" aria-disabled="true" style="opacity:.75">No results</div></div>';
+        results.innerHTML =
+          '<div class="search-list"><div class="search-item" aria-disabled="true" style="opacity:.75">No results</div></div>';
         return;
       }
 
       var html = ['<ul class="search-list" role="listbox">']
-        .concat(arr.map(function(item, i){
-          var thumb = item.image
-            ? '<div class="search-thumb"><img src="'+item.image+'" alt=""></div>'
-            : '<div class="search-thumb"><i class="ph-bold ph-file-text"></i></div>';
-          var url = item.url || "#";
-          var safeTitle = item.title || "Untitled";
-          var excerpt = item.excerpt || "";
-          return (
-            '<li class="search-item" role="option" data-index="'+i+'" tabindex="-1">'+
-              thumb+
-              '<div class="search-main">'+
-                '<div class="search-title">'+safeTitle+'</div>'+
-                '<div class="search-excerpt">'+excerpt+'</div>'+
-              '</div>'+
-              '<a class="search-cta" href="'+url+'">Open</a>'+
-            '</li>'
-          );
-        }))
-        .concat(['</ul>']).join('');
+        .concat(
+          arr.map(function (item, i) {
+            var thumb = item.image
+              ? '<div class="search-thumb"><img src="' + item.image + '" alt=""></div>'
+              : '<div class="search-thumb"><i class="ph-bold ph-file-text"></i></div>';
+            var url = item.url || "#";
+            var safeTitle = item.title || "Untitled";
+            var excerpt = item.excerpt || "";
+            return (
+              '<li class="search-item" role="option" data-index="' +
+              i +
+              '" tabindex="-1">' +
+              thumb +
+              '<div class="search-main">' +
+              '<div class="search-title">' +
+              safeTitle +
+              "</div>" +
+              '<div class="search-excerpt">' +
+              excerpt +
+              "</div>" +
+              "</div>" +
+              '<a class="search-cta" href="' +
+              url +
+              '">Open</a>' +
+              "</li>"
+            );
+          })
+        )
+        .concat(["</ul>"])
+        .join("");
+
       results.innerHTML = html;
       highlight(0);
 
-      results.querySelectorAll('.search-item').forEach(function(li){
-        li.addEventListener("click", function(e){
+      results.querySelectorAll(".search-item").forEach(function (li) {
+        li.addEventListener("click", function (e) {
           if (e.target.tagName.toLowerCase() !== "a") {
             var a = li.querySelector("a[href]");
-            if (a) { window.location.href = a.getAttribute("href"); }
+            if (a) {
+              window.location.href = a.getAttribute("href");
+            }
           }
           closeSearch();
         });
       });
     }
 
-    function highlight(idx){
+    function highlight(idx) {
       if (!results) return;
       var opts = results.querySelectorAll('.search-item[role="option"]');
-      opts.forEach(function(el){ el.setAttribute("aria-selected","false"); });
-      if (opts[idx]) { opts[idx].setAttribute("aria-selected","true"); opts[idx].scrollIntoView({block: "nearest"}); }
+      opts.forEach(function (el) {
+        el.setAttribute("aria-selected", "false");
+      });
+      if (opts[idx]) {
+        opts[idx].setAttribute("aria-selected", "true");
+        opts[idx].scrollIntoView({ block: "nearest" });
+      }
     }
   });
 </script>
