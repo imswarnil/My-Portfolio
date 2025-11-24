@@ -6,228 +6,281 @@ layout: default
 {% include home/hero.html %}
 
 <!-- =========================
-     HOME HUB – Square start here
+     HOME HUB – Quick actions / mosaic
 ========================= -->
 <section class="home-hub" aria-label="Start here">
   <div class="container">
-    <div class="home-hub__shell">
-      <div class="home-hub__bg-grid" aria-hidden="true"></div>
+    <!-- Optional heading -->
+    <header class="home-hub__head">
+      <h2 class="home-hub__title">Start anywhere, it all connects.</h2>
+      <p class="home-hub__subtitle">
+        Guides, videos, projects, reviews, courses &amp; more — this is the hub.
+      </p>
+    </header>
 
-      <header class="home-hub__head">
-        <h2 class="home-hub__title">Start here</h2>
-        <p class="home-hub__subtitle">
-          Everything I do — work, videos, stories, code, and trips — in one quick grid.
+    {%- comment -%}
+      Loose stats for all the “collections” you care about
+    {%- endcomment -%}
+    {% assign total_posts     = site.posts | size %}
+    {% assign blog_posts      = site.categories.blog | size %}
+    {% assign guides_posts    = site.categories.guide | size %}
+    {% assign video_posts     = site.categories.video | size %}
+    {% assign series_posts    = site.categories.series | size %}
+    {% assign project_posts   = site.categories.project | size %}
+    {% assign travel_posts    = site.categories.travel | size %}
+    {% assign review_posts    = site.categories.review | size %}
+    {% assign course_posts    = site.categories.course | size %}
+    {% assign code_posts      = site.categories.code | size %}
+    {% assign podcast_posts   = site.categories.podcast | size %}
+    {% assign job_posts       = site.categories["Job & Career"] | size %}
+
+    <div class="home-hub__grid">
+      <!-- Resume + Process -->
+      <a class="home-hub__tile home-hub__tile--resume" href="{{ '/resume/' | relative_url }}">
+        <div class="home-hub__topline">
+          <span class="home-hub__kicker">For recruiters</span>
+          <span class="home-hub__pill">Process inside</span>
+        </div>
+        <h3 class="home-hub__label">
+          Resume &amp;<br>how I work
+        </h3>
+        <p class="home-hub__text">
+          Salesforce, CRM Analytics &amp; filmmaking, plus my end-to-end delivery process.
         </p>
-      </header>
+        <div class="home-hub__footer">
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-briefcase"></i>
+            <span>{{ site.resume.experience | size | default: 0 }} roles</span>
+          </span>
+          <span class="home-hub__cta">
+            <span>View resume</span>
+            <i class="ph-bold ph-arrow-up-right"></i>
+          </span>
+        </div>
+      </a>
 
-      {%- assign hub_total_posts   = site.posts | size -%}
-      {%- assign hub_blog_posts   = site.posts | where: "category", "blog"    | size -%}
-      {%- assign hub_video_posts  = site.posts | where: "category", "video"   | size -%}
-      {%- assign hub_project_posts= site.posts | where: "category", "project" | size -%}
-      {%- assign hub_travel_posts = site.posts | where: "category", "travel"  | size -%}
-      {%- assign hub_review_posts = site.posts | where: "category", "review"  | size -%}
-      {%- assign hub_course_posts = site.posts | where: "category", "course"  | size -%}
-      {%- assign hub_code_posts   = site.posts | where: "category", "code"    | size -%}
-      {%- assign hub_podcast_posts= site.posts | where: "category", "podcast" | size -%}
+      <!-- Guides / Blog / Job & Career -->
+      <a class="home-hub__tile home-hub__tile--blog" href="{{ '/blog/' | relative_url }}">
+        <div class="home-hub__topline">
+          <span class="home-hub__kicker">For readers</span>
+        </div>
+        <h3 class="home-hub__label">
+          Guides, essays &amp;<br>career stories
+        </h3>
+        <p class="home-hub__text">
+          Bangalore moves, jobless confusion &amp; long-form guides on what to do next.
+        </p>
+        <div class="home-hub__footer">
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-notebook"></i>
+            <span>{{ blog_posts }} blog posts</span>
+          </span>
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-graduation-cap"></i>
+            <span>{{ guides_posts }} guides · {{ job_posts }} job posts</span>
+          </span>
+        </div>
+      </a>
 
-      <div class="home-hub__grid">
-        <!-- Resume / Hire me -->
-        <a class="home-hub__tile home-hub__tile--resume" href="{{ '/resume/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-identification-card"></i>
-            </span>
-            <span class="home-hub__tag">Work</span>
+      <!-- Videos + Webseries -->
+      <a class="home-hub__tile home-hub__tile--video" href="{{ '/videos/' | relative_url }}">
+        <div class="home-hub__topline">
+          <span class="home-hub__kicker">For watchers</span>
+        </div>
+        <h3 class="home-hub__label">
+          Videos &amp;<br>webseries
+        </h3>
+        <div class="home-hub__video-shell" aria-hidden="true">
+          <div class="home-hub__video-frame">
+            <div class="home-hub__video-track">
+              <span class="home-hub__video-dot"></span>
+              <span class="home-hub__video-dot"></span>
+              <span class="home-hub__video-dot"></span>
+            </div>
+            <div class="home-hub__video-thumb">
+              <span class="home-hub__video-tag">Channel &amp; series</span>
+            </div>
+            <div class="home-hub__video-meta">
+              <span>{{ video_posts }} videos</span>
+              <span class="home-hub__video-duration">{{ series_posts }} webseries eps</span>
+            </div>
           </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Resume</h3>
-            <p class="home-hub__tile-meta">
-              Salesforce, analytics & filmmaking in one clean page.
+        </div>
+        <div class="home-hub__footer">
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-youtube-logo"></i>
+            <span>{{ page.stats_youtube | default: '17K+' }} subs (legacy)</span>
+          </span>
+          <span class="home-hub__cta">
+            <span>Watch channel</span>
+            <i class="ph-bold ph-play-circle"></i>
+          </span>
+        </div>
+      </a>
+
+      <!-- Projects -->
+      <a class="home-hub__tile home-hub__tile--projects" href="{{ '/projects/' | relative_url }}">
+        <div class="home-hub__topline">
+          <span class="home-hub__kicker">For builders</span>
+          <span class="home-hub__pill">Open source</span>
+        </div>
+        <h3 class="home-hub__label">
+          Projects &amp;<br>experiments
+        </h3>
+
+        <div class="home-hub__repo-list" aria-hidden="true">
+          <div class="home-hub__repo-row">
+            <span class="home-hub__repo-name">imswarnil / crm-analytics-academy</span>
+            <span class="home-hub__repo-meta">
+              <span class="home-hub__dot"></span> TS • Nuxt
+              <span class="home-hub__spacer"></span>
+              <i class="ph-bold ph-star"></i> 1.2k
+            </span>
+          </div>
+          <div class="home-hub__repo-row">
+            <span class="home-hub__repo-name">imswarnil / island-docs-theme</span>
+            <span class="home-hub__repo-meta">
+              <span class="home-hub__dot"></span> Jekyll • SCSS
+              <span class="home-hub__spacer"></span>
+              <i class="ph-bold ph-git-fork"></i> 320
+            </span>
+          </div>
+        </div>
+
+        <div class="home-hub__footer">
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-folder"></i>
+            <span>{{ project_posts }} projects</span>
+          </span>
+          <span class="home-hub__cta">
+            <span>Browse projects</span>
+            <i class="ph-bold ph-arrow-up-right"></i>
+          </span>
+        </div>
+      </a>
+
+      <!-- Courses + Snippets – product card code example -->
+      <a class="home-hub__tile home-hub__tile--learn" href="{{ '/crm-analytics/' | relative_url }}">
+        <div class="home-hub__topline">
+          <span class="home-hub__kicker">For learners</span>
+        </div>
+        <h3 class="home-hub__label">
+          Courses &amp;<br>code snippets
+        </h3>
+
+        <div class="home-hub__code-shell" aria-hidden="true">
+          <div class="home-hub__code-header">
+            <span class="home-hub__code-lang">JSX</span>
+            <span class="home-hub__code-pill">Product card UI</span>
+          </div>
+          <pre class="home-hub__code-body">
+&lt;ProductCard
+  title="CRM Analytics Course"
+  price="₹2,999"
+  badge="Bestseller"
+  cta="Start learning"
+/&gt;
+          </pre>
+        </div>
+
+        <div class="home-hub__footer">
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-graduation-cap"></i>
+            <span>{{ course_posts }} lessons</span>
+          </span>
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-code"></i>
+            <span>{{ code_posts }} code posts</span>
+          </span>
+        </div>
+      </a>
+
+      <!-- Honest reviews – stars + mini comment UI -->
+      <a class="home-hub__tile home-hub__tile--reviews" href="{{ '/tag/review/' | relative_url }}">
+        <div class="home-hub__topline">
+          <span class="home-hub__kicker">For curiosity</span>
+        </div>
+        <h3 class="home-hub__label">
+          Honest reviews &amp;<br>gear notes
+        </h3>
+
+        <div class="home-hub__review-shell" aria-hidden="true">
+          <div class="home-hub__review-stars">
+            <i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star"></i>
+            <i class="ph-fill ph-star-half"></i>
+            <span class="home-hub__review-score">4.7/5</span>
+          </div>
+          <div class="home-hub__review-comment">
+            <div class="home-hub__review-meta">
+              <span class="home-hub__review-label">Recent note</span>
+              <span class="home-hub__review-tag">Tripod</span>
+            </div>
+            <p class="home-hub__review-text">
+              “Survived Mahroni dust, Bangalore metro and a Leh Ladakh trip.”
             </p>
           </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__stat-label">Ready for collabs</span>
-            <span class="home-hub__cta">View resume →</span>
-          </div>
-        </a>
+        </div>
 
-        <!-- Courses / CRM Analytics -->
-        <a class="home-hub__tile home-hub__tile--courses" href="{{ '/courses/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-graduation-cap"></i>
-            </span>
-            <span class="home-hub__tag">Courses</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">CRM Analytics</h3>
-            <p class="home-hub__tile-meta">
-              {{ hub_course_posts | default: 0 }} lessons on dashboards, SAQL & real projects.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__stat-dot"></span>
-            <span class="home-hub__cta">Start learning →</span>
-          </div>
-        </a>
+        <div class="home-hub__footer">
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-star-half"></i>
+            <span>{{ review_posts }} reviews</span>
+          </span>
+          <span class="home-hub__cta">
+            <span>Read reviews</span>
+            <i class="ph-bold ph-arrow-up-right"></i>
+          </span>
+        </div>
+      </a>
 
-        <!-- Videos / Channel -->
-        <a class="home-hub__tile home-hub__tile--video" href="{{ '/videos/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-youtube-logo"></i>
-            </span>
-            <span class="home-hub__tag">Videos</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Watch videos</h3>
-            <p class="home-hub__tile-meta">
-              {{ hub_video_posts | default: 0 }}+ films, web series & storytelling experiments.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__stat-chip">
-              <i class="ph-bold ph-play-circle"></i><span>Start with Episode 1</span>
-            </span>
-          </div>
-        </a>
+      <!-- Uses / Products I use -->
+      <a class="home-hub__tile home-hub__tile--uses" href="{{ '/uses/' | relative_url }}">
+        <div class="home-hub__topline">
+          <span class="home-hub__kicker">For creators</span>
+          <span class="home-hub__pill">Gear &amp; stack</span>
+        </div>
+        <h3 class="home-hub__label">
+          Products &amp;<br>tools I use
+        </h3>
+        <p class="home-hub__text">
+          Camera, edit setup, dev stack &amp; services that power my work.
+        </p>
+        <div class="home-hub__footer">
+          <span class="home-hub__stat">
+            <i class="ph-bold ph-toolbox"></i>
+            <span>Setup &amp; toolkit</span>
+          </span>
+          <span class="home-hub__cta">
+            <span>Open /uses</span>
+            <i class="ph-bold ph-arrow-up-right"></i>
+          </span>
+        </div>
+      </a>
 
-        <!-- Blog / Writing -->
-        <a class="home-hub__tile home-hub__tile--blog" href="{{ '/blog/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-notebook"></i>
-            </span>
-            <span class="home-hub__tag">Writing</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Read the blog</h3>
-            <p class="home-hub__tile-meta">
-              {{ hub_blog_posts | default: 0 }}+ posts on jobs, Bangalore & creator life.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__cta">Browse posts →</span>
-          </div>
-        </a>
-
-        <!-- Projects / GitHub-style -->
-        <a class="home-hub__tile home-hub__tile--projects" href="{{ '/projects/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-github-logo"></i>
-            </span>
-            <span class="home-hub__tag">Builds</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Projects</h3>
-            <p class="home-hub__tile-meta">
-              {{ hub_project_posts | default: 0 }}+ experiments, themes & tools shipped.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__stat-chip">
-              <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
-            </span>
-          </div>
-        </a>
-
-        <!-- Reviews / Testimonials -->
-        <a class="home-hub__tile home-hub__tile--reviews" href="{{ '/reviews/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-chat-circle-dots"></i>
-            </span>
-            <span class="home-hub__tag">Reviews</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Words from people</h3>
-            <p class="home-hub__tile-meta">
-              {{ hub_review_posts | default: 0 }}+ reviews from learners & teammates.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__cta">Read feedback →</span>
-          </div>
-        </a>
-
-        <!-- Travel -->
-        <a class="home-hub__tile home-hub__tile--travel" href="{{ '/travel/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-airplane-takeoff"></i>
-            </span>
-            <span class="home-hub__tag">Travel</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Travel stories</h3>
-            <p class="home-hub__tile-meta">
-              {{ hub_travel_posts | default: 0 }}+ trips, films & photo stories.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__cta">See journeys →</span>
-          </div>
-        </a>
-
-        <!-- Code / Snippets -->
-        <a class="home-hub__tile home-hub__tile--code" href="{{ '/snippets/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-code"></i>
-            </span>
-            <span class="home-hub__tag">Code</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Code snippets</h3>
-            <p class="home-hub__tile-meta">
-              {{ hub_code_posts | default: 0 }}+ CRM Analytics, Jekyll & Nuxt snippets.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__cta">Open snippets →</span>
-          </div>
-        </a>
-
-        <!-- Podcast / Audio (optional) -->
-        <a class="home-hub__tile home-hub__tile--podcast" href="{{ '/podcast/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-microphone"></i>
-            </span>
-            <span class="home-hub__tag">Audio</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Podcast</h3>
-            <p class="home-hub__tile-meta">
-              {{ hub_podcast_posts | default: 0 }}+ episodes to listen on the go.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__cta">Listen now →</span>
-          </div>
-        </a>
-
-        <!-- Portfolio / Everything -->
-        <a class="home-hub__tile home-hub__tile--portfolio" href="{{ '/portfolio/' | relative_url }}">
-          <div class="home-hub__tile-top">
-            <span class="home-hub__icon">
-              <i class="ph-bold ph-frames"></i>
-            </span>
-            <span class="home-hub__tag">All-in-one</span>
-          </div>
-          <div class="home-hub__tile-main">
-            <h3 class="home-hub__tile-title">Portfolio</h3>
-            <p class="home-hub__tile-meta">
-              Curated mix of videos, products & experiments.
-            </p>
-          </div>
-          <div class="home-hub__tile-footer">
-            <span class="home-hub__stat-chip">
-              <span>{{ hub_total_posts | default: 0 }}+ pieces</span>
-            </span>
-          </div>
-        </a>
+      <!-- Now + Search -->
+      <div class="home-hub__tile home-hub__tile--meta">
+        <div class="home-hub__topline">
+          <span class="home-hub__kicker">For context</span>
+        </div>
+        <h3 class="home-hub__label">
+          What I'm doing now<br>&amp; search everything
+        </h3>
+        <p class="home-hub__text">
+          See my current focus, or search {{ total_posts }}+ pieces of content across the site.
+        </p>
+        <div class="home-hub__footer home-hub__footer--split">
+          <a class="home-hub__cta" href="{{ '/now/' | relative_url }}">
+            <i class="ph-bold ph-clock-afternoon"></i>
+            <span>Visit /now</span>
+          </a>
+          <a class="home-hub__cta" href="{{ '/search/' | relative_url }}">
+            <i class="ph-bold ph-magnifying-glass"></i>
+            <span>Search site</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -235,48 +288,260 @@ layout: default
 
 
 <!-- =========================
-     WORK SUMMARY
+     TIMELINE – Horizontal journey rail (5 steps)
 ========================= -->
-<section class="home-work" aria-label="What I do">
+<section class="home-timeline" aria-label="Life & career timeline">
   <div class="container">
-    <header class="home-work__head">
-      <h2>What I do</h2>
-      <p>Engineering, analytics, and storytelling — all aimed at making decisions and stories clearer.</p>
+    <header class="home-timeline__head">
+      <h2 class="home-timeline__title">
+        From LNCT to Bangalore, Salesforce & films — in 5 phases.
+      </h2>
+      <p class="home-timeline__subtitle">
+        Slide through the journey — each stop is a chapter of how a small-town kid turned code, camera, and chaos into a career.
+      </p>
     </header>
 
-    <div class="home-work__grid">
-      <article class="home-work__card">
-        <h3><i class="ph-bold ph-chart-line-up"></i> CRM Analytics & Dashboards</h3>
-        <p>I design Salesforce CRM Analytics dashboards and quote flows that cut noise and surface the right signals for Sales, Finance, and RevOps.</p>
-        <ul>
-          <li>Production org examples, not demo sandboxes</li>
-          <li>KPIs tied to real business questions</li>
-          <li>SAQL, dataflows, & UX tuned for speed</li>
-        </ul>
-      </article>
+    <div class="home-timeline__scroller">
+      <div class="home-timeline__track">
+        <!-- Dashed rail -->
+        <div class="home-timeline__line"></div>
 
-      <article class="home-work__card">
-        <h3><i class="ph-bold ph-film-slate"></i> Films & YouTube</h3>
-        <p>Travel films, career stories, and documentary-style content with Deadpool-ish commentary and clean visuals.</p>
-        <ul>
-          <li>Hook-first scripting & structure</li>
-          <li>Minimal but cinematic setups</li>
-          <li>Series-based storytelling</li>
-        </ul>
-      </article>
+        <!-- Travelling avatar (moves between nodes) -->
+        <div class="home-timeline__avatar">
+          <img
+            src="{{ '/assets/Swarnil-Singhai.png' | relative_url }}"
+            alt="Swarnil travelling across the timeline"
+            width="96" height="96" loading="lazy"
+          />
+        </div>
 
-      <article class="home-work__card">
-        <h3><i class="ph-bold ph-users-three"></i> Mentoring & Guides</h3>
-        <p>I share practical, no-fluff lessons for college grads and job seekers figuring out Bangalore, tech, and creative careers.</p>
-        <ul>
-          <li>Bangalore job-seeker guides</li>
-          <li>Content on “what to actually do next”</li>
-          <li>Honest breakdowns of wins & mistakes</li>
-        </ul>
-      </article>
+        <!-- Steps (5 phases) -->
+        <ol class="home-timeline__steps" role="list">
+          <!-- 0. LNCT -->
+          <li class="home-timeline__step home-timeline__step--active" data-step="0">
+            <button class="home-timeline__step-btn" type="button">
+              <div class="home-timeline__node">
+                <span class="home-timeline__dot">
+                  <i class="ph-bold ph-graduation-cap" aria-hidden="true"></i>
+                </span>
+                <span class="home-timeline__meta">
+                  <span class="home-timeline__year">2013–2017</span>
+                  <span class="home-timeline__short">LNCT • CSE & films</span>
+                </span>
+              </div>
+            </button>
+            <div class="home-timeline__card">
+              <h3 class="home-timeline__label">LNCT, Bhopal – Code + camera</h3>
+              <p class="home-timeline__text">
+                Started as a CSE student, got equally obsessed with editing, storytelling,
+                and making small experiments with the camera.
+              </p>
+            </div>
+          </li>
+
+          <!-- 1. College end, no job -->
+          <li class="home-timeline__step" data-step="1">
+            <button class="home-timeline__step-btn" type="button">
+              <div class="home-timeline__node">
+                <span class="home-timeline__dot">
+                  <i class="ph-bold ph-warning-octagon" aria-hidden="true"></i>
+                </span>
+                <span class="home-timeline__meta">
+                  <span class="home-timeline__year">2017</span>
+                  <span class="home-timeline__short">No campus offer</span>
+                </span>
+              </div>
+            </button>
+            <div class="home-timeline__card">
+              <h3 class="home-timeline__label">Degree mil gaya, offer letter nahi</h3>
+              <p class="home-timeline__text">
+                Campus placements didn’t click. Everyone had job stories; I had
+                “ab kya karein?” and a head full of unfinished plans.
+              </p>
+            </div>
+          </li>
+
+          <!-- 2. Early YouTube + move decisions -->
+          <li class="home-timeline__step" data-step="2">
+            <button class="home-timeline__step-btn" type="button">
+              <div class="home-timeline__node">
+                <span class="home-timeline__dot">
+                  <i class="ph-bold ph-video-camera" aria-hidden="true"></i>
+                </span>
+                <span class="home-timeline__meta">
+                  <span class="home-timeline__year">2017–2018</span>
+                  <span class="home-timeline__short">Imswarnil launches</span>
+                </span>
+              </div>
+            </button>
+            <div class="home-timeline__card">
+              <h3 class="home-timeline__label">Imswarnil channel: confusion → content</h3>
+              <p class="home-timeline__text">
+                Turned the “stuck” phase into story. Started uploading, exploring YouTube,
+                and documenting the gap between small-town life and big-city dreams.
+              </p>
+            </div>
+          </li>
+
+          <!-- 3. Bangalore grind + first startup job -->
+          <li class="home-timeline__step" data-step="3">
+            <button class="home-timeline__step-btn" type="button">
+              <div class="home-timeline__node">
+                <span class="home-timeline__dot">
+                  <i class="ph-bold ph-map-pin-line" aria-hidden="true"></i>
+                </span>
+                <span class="home-timeline__meta">
+                  <span class="home-timeline__year">2018–2020</span>
+                  <span class="home-timeline__short">Mahroni → BLR → startup</span>
+                </span>
+              </div>
+            </button>
+            <div class="home-timeline__card">
+              <h3 class="home-timeline__label">Mahroni to Bangalore, then first dev job</h3>
+              <p class="home-timeline__text">
+                Moved to Bangalore, survived PG life, walk-ins and rejections, and
+                finally cracked that first startup role while still filming the grind.
+              </p>
+            </div>
+          </li>
+
+          <!-- 4. Salesforce / CRM Analytics arc -->
+          <li class="home-timeline__step" data-step="4">
+            <button class="home-timeline__step-btn" type="button">
+              <div class="home-timeline__node">
+                <span class="home-timeline__dot home-timeline__dot--now">
+                  <i class="ph-bold ph-chart-line-up" aria-hidden="true"></i>
+                </span>
+                <span class="home-timeline__meta">
+                  <span class="home-timeline__year">2020 → Now</span>
+                  <span class="home-timeline__short">Salesforce & films</span>
+                </span>
+              </div>
+            </button>
+            <div class="home-timeline__card home-timeline__card--now">
+              <h3 class="home-timeline__label">CRM Analytics, storytelling & 1M dream</h3>
+              <p class="home-timeline__text">
+                Shifted into Salesforce / CRM Analytics, building dashboards by day
+                and cinematic stories by night — on a long mission to 1M subscribers.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Controls + View full timeline -->
+    <div class="home-timeline__footer">
+      <div class="home-timeline__controls" aria-label="Timeline controls">
+        <button type="button" class="button-transparent home-timeline__ctrl" data-timeline-prev>
+          <i class="ph-bold ph-arrow-left" aria-hidden="true"></i>
+          <span>Previous</span>
+        </button>
+        <button type="button" class="button-transparent home-timeline__ctrl" data-timeline-next>
+          <span>Next</span>
+          <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <a class="button home-timeline__full" href="{{ '/timeline/' | relative_url }}">
+        <i class="ph-bold ph-timeline" aria-hidden="true"></i>
+        <span>View my full timeline</span>
+      </a>
     </div>
   </div>
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var timeline = document.querySelector(".home-timeline");
+  if (!timeline) return;
+
+  var track  = timeline.querySelector(".home-timeline__track");
+  var avatar = timeline.querySelector(".home-timeline__avatar");
+  var steps  = Array.prototype.slice.call(
+    timeline.querySelectorAll(".home-timeline__step[data-step]")
+  );
+  var prevBtn = timeline.querySelector("[data-timeline-prev]");
+  var nextBtn = timeline.querySelector("[data-timeline-next]");
+
+  if (!track || !avatar || !steps.length) return;
+
+  var dotCenters = [];
+  var activeIndex = 0;
+
+  function computeDotCenters() {
+    var trackRect = track.getBoundingClientRect();
+    dotCenters = steps.map(function (step) {
+      var dot = step.querySelector(".home-timeline__dot");
+      if (!dot) return 0;
+      var rect = dot.getBoundingClientRect();
+      return rect.left + rect.width / 2 - trackRect.left;
+    });
+  }
+
+  function moveAvatar() {
+    if (!dotCenters.length) return;
+    var x = dotCenters[activeIndex] - (avatar.offsetWidth / 2);
+    avatar.style.transform = "translateX(" + x + "px)";
+  }
+
+  function updateSteps() {
+    steps.forEach(function (step, idx) {
+      step.classList.toggle("home-timeline__step--active", idx === activeIndex);
+    });
+
+    if (prevBtn) prevBtn.disabled = activeIndex === 0;
+    if (nextBtn) nextBtn.disabled = activeIndex === steps.length - 1;
+  }
+
+  function setActive(index) {
+    var clamped = Math.max(0, Math.min(steps.length - 1, index));
+    if (clamped === activeIndex) return;
+    activeIndex = clamped;
+    updateSteps();
+    moveAvatar();
+
+    // Optional: auto-scroll so active node stays in view on mobile
+    var activeStep = steps[activeIndex];
+    if (activeStep) {
+      activeStep.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }
+  }
+
+  // Initial layout
+  computeDotCenters();
+  updateSteps();
+  moveAvatar();
+
+  // Recompute on resize
+  window.addEventListener("resize", function () {
+    computeDotCenters();
+    moveAvatar();
+  });
+
+  // Step click → jump to that phase
+  steps.forEach(function (step, idx) {
+    var btn = step.querySelector(".home-timeline__step-btn");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      setActive(idx);
+    });
+  });
+
+  // Controls
+  if (prevBtn) {
+    prevBtn.addEventListener("click", function () {
+      setActive(activeIndex - 1);
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener("click", function () {
+      setActive(activeIndex + 1);
+    });
+  }
+});
+</script>
+
 
 <!-- =========================
      PROCESS STEPPER / TIMELINE

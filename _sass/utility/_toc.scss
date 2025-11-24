@@ -1,272 +1,303 @@
 // ======================================================================
-// _toc.scss — TOC rail with donut + vertical timeline (no inner scroll)
+// _toc.scss — Bento-style TOC (black/grey/silver), donut + scrollspy
 // ======================================================================
 
-.toc-rail {
-  position: sticky;
-  top: calc(var(--nav-h, #{$navbar-height}) + $sp-6);
-  // no independent scrolling
-  max-height: none;
-  overflow: visible;
+.toc-shell {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-bottom: $sp-14;
+  z-index: $z-base;
+  border : none;
 
-  margin: 0;
-  padding: 0;
-
-  border-radius: $radius-5;
-  border: 1px solid;
-  font-size: $fs-2;
-
-  @include theme-block {
-    background: mix(tone(background-100, light), tone(white, light), 85%);
-    border-color: tone(border, light);
-    box-shadow: $shadow-light;
-  }
-  @include theme-block-dark {
-    background: mix(tone(background-100, dark), tone(black, dark), 85%);
-    border-color: tone(border, dark);
-    box-shadow: $shadow-dark;
-  }
-
-  @media (max-width: $bp-md) {
-    position: static;
-    margin-top: $sp-8;
+  @include mq-up($bp-md) {
+    position: sticky;
+    top: calc(var(--nav-h, #{$navbar-height}) + $sp-8);
   }
 }
 
-.toc-rail__inner {
-  padding: $sp-6 $sp-6 $sp-5;
-  display: grid;
-  gap: $sp-5;
-}
+/* --------------------------------------------------
+   Toggle bar (header / mobile bottom strip)
+-------------------------------------------------- */
 
-// ----------------------------------------------------------------------
-// Header row (donut + title + chevron)
-// ----------------------------------------------------------------------
-
-.toc-rail__header {
+.toc-toggle {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: $sp-5;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  margin: 0;
+  justify-content: space-between;
+  gap: $sp-4;
+  padding: $sp-4 $sp-6;
+  border-radius: $radius-4;
+  border: 1px dashed;
   background: transparent;
   cursor: pointer;
+  font: inherit;
   text-align: left;
-
-  @include theme-block      { color: tone(contrast, light); }
-  @include theme-block-dark { color: tone(contrast, dark);  }
-}
-
-.toc-rail__progress {
+  box-sizing: border-box;
   position: relative;
-  width: 3.25rem;
-  height: 3.25rem;
-  flex-shrink: 0;
-}
-
-.toc-rail__donut {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-  display: block;
-}
-
-.toc-rail__donut-bg,
-.toc-rail__donut-fill {
-  fill: none;
-  stroke-width: 4;
-}
-
-// base ring — light grey / silver
-.toc-rail__donut-bg {
-  @include theme-block      { stroke: mix(tone(background-200, light), tone(border, light), 50%); }
-  @include theme-block-dark { stroke: mix(tone(background-200, dark),  tone(border, dark),  60%); }
-}
-
-// progress ring — white / near white so it doesn't "choke" the line
-.toc-rail__donut-fill {
-  stroke-linecap: round;
-  @include theme-block      { stroke: tone(white, light); }
-  // 🔧 FIX: removed color.scale(), use a simple semi-opaque white instead
-  @include theme-block-dark { stroke: rgba(255, 255, 255, 0.82); }
-
-  transition: stroke-dashoffset $dur-2 $ease-in-out;
-}
-
-.toc-rail__percent {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-}
-
-.toc-rail__percent-value {
-  font-size: $fs-2;
-  font-weight: $fw-semibold;
-  line-height: 1;
-}
-
-.toc-rail__percent-label {
-  display: block;
-  font-size: $fs-1;
-  margin-top: $sp-1;
-  opacity: .75;
-}
-
-.toc-rail__titles {
-  display: grid;
-  gap: $sp-2;
-  min-width: 0;
-  flex: 1;
-}
-
-.toc-rail__label {
-  margin: 0;
-  font-size: $fs-2;
-  font-weight: $fw-semibold;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-
-  @include theme-block      { color: tone(secondary, light); }
-  @include theme-block-dark { color: tone(secondary, dark);  }
-}
-
-.toc-rail__subtitle {
-  margin: 0;
-  font-size: $fs-3;
-  line-height: $lh-tight;
-  @include theme-block      { color: tone(contrast, light); }
-  @include theme-block-dark { color: tone(contrast, dark);  }
-}
-
-.toc-rail__chevron {
-  flex-shrink: 0;
-  width: $btn-height-sm;
-  height: $btn-height-sm;
-  border-radius: $radius-pill;
-  border: 1px solid;
-  display: grid;
-  place-items: center;
-  font-size: $fs-3;
+  overflow: hidden;
   transition:
     background-color $dur-1,
-    color $dur-1,
     border-color $dur-1,
     transform $dur-1 $ease-in-out;
 
   @include theme-block {
     border-color: tone(border, light);
     color: tone(secondary, light);
-    background: rgba(255,255,255,0.88);
   }
   @include theme-block-dark {
     border-color: tone(border, dark);
     color: tone(secondary, dark);
-    background: rgba(12,12,14,0.94);
+  }
+
+  // subtle grid lines only on header
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+
+    @include theme-block {
+      background-image:
+        linear-gradient(
+          to right,
+          rgba(150,150,150,0.16) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(150,150,150,0.16) 1px,
+          transparent 1px
+        );
+    }
+    @include theme-block-dark {
+      background-image:
+        linear-gradient(
+          to right,
+          rgba(80,80,80,0.25) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(80,80,80,0.25) 1px,
+          transparent 1px
+        );
+    }
+
+    background-size: 20px 20px;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover {
+    @include theme-block {
+      background-color: tone(background-100, light);
+      color: tone(contrast, light);
+    }
+    @include theme-block-dark {
+      background-color: tone(background-100, dark);
+      color: tone(contrast, dark);
+    }
+    transform: translateY(-1px);
   }
 }
 
-.toc-rail.toc-is-collapsed .toc-rail__chevron i {
+.toc-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: $sp-3;
+  min-width: 0;
+}
+
+.toc-toggle-label {
+  font-size: $fs-3;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+
+.toc-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  border: 1px dashed;
+
+  @include theme-block {
+    border-color: tone(border, light);
+    color: tone(secondary, light);
+    background-color: tone(background, light);
+  }
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    color: tone(secondary, dark);
+    background-color: tone(background, dark);
+  }
+
+  i { font-size: $fs-2; }
+}
+
+/* --------------------------------------------------
+   Donut progress inside header
+-------------------------------------------------- */
+
+.toc-progress {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+}
+
+.toc-progress-svg {
+  width: 100%;
+  height: 100%;
   transform: rotate(-90deg);
 }
 
-.toc-rail__header:hover .toc-rail__chevron {
-  @include theme-block      { background: tone(background-100, light); color: tone(contrast, light); }
-  @include theme-block-dark { background: tone(background-100, dark);  color: tone(contrast, dark);  }
+.toc-progress-track,
+.toc-progress-bar {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
 }
 
-// ----------------------------------------------------------------------
-// Body (collapsible, but no dedicated scroll)
-// ----------------------------------------------------------------------
+.toc-progress-track {
+  stroke-dasharray: 999;
+  stroke-dashoffset: 0;
 
-.toc-rail__body {
-  max-height: none;
-  overflow: visible;
-  transition: max-height $dur-2 $ease-in-out;
+  @include theme-block      { stroke: tone(background-200, light); }
+  @include theme-block-dark { stroke: tone(background-200, dark);  }
+
+  &.toc-progress-track--done {
+    stroke: #a3a3a3;
+  }
 }
 
-.toc-rail.toc-is-collapsed .toc-rail__body {
+.toc-progress-bar {
+  stroke-dasharray: 999;
+  stroke-dashoffset: 999;
+
+  @include theme-block {
+    stroke: #111111;
+  }
+  @include theme-block-dark {
+    stroke: #f5f5f5;
+  }
+
+  &.toc-progress-bar--done {
+    stroke: #e5e5e5;
+  }
+
+  transition: stroke-dashoffset 260ms $ease-in-out, stroke 200ms ease;
+}
+
+.toc-progress-text {
+  font-size: 9px;
+  font-weight: $fw-semibold;
+  transform: rotate(90deg);
+
+  @include theme-block      { fill: #111111; }
+  @include theme-block-dark { fill: #f5f5f5;  }
+}
+
+/* --------------------------------------------------
+   Panel (transparent, dashed border)
+-------------------------------------------------- */
+
+.toc-panel {
   overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    max-height 320ms $ease-in-out,
+    opacity 200ms ease,
+    transform 260ms $ease-in-out;
 }
 
-// ----------------------------------------------------------------------
-// List & vertical timeline line
-// ----------------------------------------------------------------------
-
-.toc-rail__nav {
-  width: 100%;
+.toc-panel--open {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.toc-rail__list {
+.toc-panel-inner {
+  margin-top: $sp-5;
+  border-radius: $radius-5;
+  border: 1px dashed;
+  padding: $sp-6;
+  box-sizing: border-box;
   position: relative;
-  max-width: 100%;
-  margin-top: $sp-6;
-  padding-left: $sp-10;
-  // progress line height; JS sets --toc-progress (0–100%)
-  --toc-progress: 0%;
+  overflow: hidden; // keep content inside
+
+  @include theme-block {
+    border-color: tone(border, light);
+    background-color: transparent;
+  }
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    background-color: transparent;
+  }
 }
 
-// Base grey vertical line (from donut area)
-.toc-rail__list::before,
-.toc-rail__list::after {
-  content: "";
-  position: absolute;
-  top: -$sp-4;    // start just under donut center visually
-  bottom: $sp-2;
-  width: 2px;
-  border-radius: $radius-pill;
-  left: $sp-4;    // aligns with donut x-position
-}
+/* --------------------------------------------------
+   List / links
+//-------------------------------------------------- */
 
-// background line (grey / silver)
-.toc-rail__list::before {
-  @include theme-block      { background: mix(tone(background-200, light), tone(border, light), 65%); }
-  @include theme-block-dark { background: mix(tone(background-200, dark),  tone(border, dark),  60%); }
-}
-
-// active fill line (accent color, partial height)
-.toc-rail__list::after {
-  bottom: auto;
-  height: var(--toc-progress, 0%);
-  transform-origin: top;
-  @include theme-block      { background: tone(contrast, light); }
-  @include theme-block-dark { background: tone(white, dark);     }
-}
-
-.toc-rail li {
-  position: relative;
+.toc-nav {
   margin: 0;
-  padding: $sp-1 0;
 }
 
-// no bullets; pure timeline
-.toc-rail li::marker {
+.toc-nav-inner {
+  max-height: min(60vh, 24rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: $sp-4;
+}
+
+.toc-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-nav ul ul {
+  margin-top: $sp-2;
+  margin-left: $sp-6;
+  padding-left: 0;
+}
+
+.toc-nav li {
+  margin: 0;
+  padding: 0;
+}
+
+/* No lines on nested li */
+.toc-nav li::before {
   content: none;
 }
 
-// Nested levels: indent + soft left guide
-.toc-rail li ul,
-.toc-rail li ol {
-  margin-top: $sp-2;
-  margin-left: $sp-6;
-  padding-left: $sp-4;
-  border-left: 1px dashed;
-
-  @include theme-block      { border-color: tone(border, light); }
-  @include theme-block-dark { border-color: tone(border, dark);  }
-}
-
-// Links
-.toc-rail a {
-  position: relative;
+.toc-link {
   display: block;
-  padding: $sp-2 $sp-3;
-  border-radius: $radius-pill;
+  padding: $sp-3 $sp-4;
+  border-radius: $radius-4;
   text-decoration: none;
-  line-height: 1.3;
+  font-size: $fs-2;
+  line-height: 1.4;
+  position: relative;
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+  box-sizing: border-box;
   transition:
     background-color $dur-1,
     color $dur-1,
@@ -274,67 +305,139 @@
 
   @include theme-block {
     color: tone(secondary, light);
-
-    &:hover {
-      color: tone(contrast, light);
-      background: tone(background-100, light);
-      transform: translateX(1px);
-    }
   }
-
   @include theme-block-dark {
     color: tone(secondary, dark);
+  }
 
-    &:hover {
-      color: tone(contrast, dark);
-      background: tone(background-100, dark);
-      transform: translateX(1px);
+  &:hover {
+    @include theme-block {
+      background-color: rgba(255,255,255,0.85);
+      color: tone(contrast, light);
     }
+    @include theme-block-dark {
+      background-color: rgba(24,24,27,0.95);
+      color: tone(contrast, dark);
+    }
+    transform: translateY(-1px);
   }
 }
 
-// Active link
-.toc-rail a.toc-is-active {
-  font-weight: $fw-medium;
-
+.toc-link--active {
   @include theme-block {
+    background-color: rgba(0,0,0,0.05);
     color: tone(contrast, light);
-    background: mix(tone(background-100, light), tone(white, light), 80%);
   }
   @include theme-block-dark {
+    background-color: rgba(255,255,255,0.06);
     color: tone(contrast, dark);
-    background: mix(tone(background-100, dark), tone(black, dark), 80%);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: $sp-1;
+    top: 22%;
+    bottom: 22%;
+    width: 3px;
+    border-radius: 999px;
+
+    @include theme-block      { background-color: rgba(0,0,0,0.65); }
+    @include theme-block-dark { background-color: rgba(255,255,255,0.75); }
   }
 }
 
-// Past/current label emphasis via opacity/weight
-.toc-rail li.toc-is-past > a {
-  opacity: 0.85;
+/* Active heading highlight in content (neutral, no yellow) */
+
+[data-toc-target="true"] {
+  position: relative;
+  scroll-margin-top: calc(var(--nav-h, #{$navbar-height}) + $sp-10);
 }
 
-.toc-rail li.toc-is-current > a {
-  opacity: 1;
-  font-weight: $fw-semibold;
+[data-toc-active="true"] {
+  @include theme-block {
+    background-image: linear-gradient(
+      to right,
+      rgba(0,0,0,0.06),
+      transparent
+    );
+  }
+  @include theme-block-dark {
+    background-image: linear-gradient(
+      to right,
+      rgba(255,255,255,0.08),
+      transparent
+    );
+  }
 }
 
-// Slightly smaller for nested items
-.toc-rail li li > a {
-  font-size: $fs-1;
-  opacity: 0.95;
-}
+/* --------------------------------------------------
+   Mobile bottom dock
+//-------------------------------------------------- */
 
-// Mobile spacing tweaks
 @media (max-width: $bp-md) {
-  .toc-rail__inner {
-    padding: $sp-5 $sp-5 $sp-4;
+  .toc-shell {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 $container-gutter $container-gutter;
+    margin: 0;
+    z-index: $z-overlay - 1;
+    pointer-events: none;
   }
 
-  .toc-rail__progress {
-    width: 3rem;
-    height: 3rem;
+  .toc-toggle,
+  .toc-panel {
+    pointer-events: auto;
   }
 
-  .toc-rail__subtitle {
+  .toc-toggle {
+    border-radius: $radius-4;
+  }
+
+  .toc-panel {
+    position: absolute;
+    left: $container-gutter;
+    right: $container-gutter;
+    bottom: calc(100% + $sp-4);
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .toc-panel--open {
+    max-height: 60vh;
+  }
+
+  .toc-panel-inner {
+    border-radius: $radius-5;
+    padding: $sp-5;
+  }
+
+  .toc-nav-inner {
+    max-height: 52vh;
+  }
+
+  .toc-toggle-label {
     font-size: $fs-2;
   }
+
+  .toc-progress {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+/* --------------------------------------------------
+   Icon rotation for caret
+//-------------------------------------------------- */
+
+.toc-shell--open .toc-toggle-icon i {
+  transform: rotate(180deg);
+  transition: transform $dur-1 $ease-in-out;
+}
+
+.toc-shell:not(.toc-shell--open) .toc-toggle-icon i {
+  transform: rotate(0deg);
 }

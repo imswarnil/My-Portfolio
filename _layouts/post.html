@@ -146,31 +146,14 @@ layout: default
     </article>
 
     {% if HAS_ASIDE %}
-    <aside class="sidebar" aria-label="Sidebar">
-      <!-- Desktop sticky TOC -->
-     {% assign contentsTitle = page.toc_title | default: 'Contents' %}
-{% include utility/toc.html html=content h_min=2 h_max=3 contents_title=contentsTitle %}
+  <aside class="sidebar" aria-label="Sidebar">
+  {% assign contentsTitle = page.toc_title | default: 'Contents' %}
+  {% include utility/toc.html html=content h_min=2 h_max=3 contents_title=contentsTitle %}
 
+  {% include adsense.html type="square" %}
+  ...
+</aside>
 
-      <!-- Square Ad -->
-      {% include adsense.html type="square" %}
-
-      <!-- Tag Cloud -->
-      <section class="tag-cloud" aria-label="Tag cloud">
-        <h2 class="tagcloud-title">Tags</h2>
-        <ul class="tagcloud-list">
-          {% assign tags = site.tags | sort %}
-          {% for tag in tags %}
-            <li>
-              <a href="{{ '/tags/' | append: tag[0] | slugify | relative_url }}"
-                 style="--w: {{ tag[1].size | at_most: 12 | at_least: 4 }}">
-                 {{ tag[0] }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      </section>
-    </aside>
     {% endif %}
   </div>
 </div>

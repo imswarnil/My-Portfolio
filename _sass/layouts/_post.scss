@@ -140,8 +140,8 @@
   display: grid; gap: $sp-12; align-self: start;
 }
 .sidebar > * {
-  @include theme-block      { background: tone(surface, light); border: 1px solid tone(border, light); box-shadow: none; }
-  @include theme-block-dark { background: tone(surface, dark);  border: 1px solid tone(border, dark);  box-shadow: none; }
+  @include theme-block      { background: tone(surface, light); box-shadow: none; }
+  @include theme-block-dark { background: tone(surface, dark);  box-shadow: none; }
 }
 
 /* Tag cloud (sidebar) */
