@@ -1,0 +1,106 @@
+/* =========================================
+   HOME – PROCESS STEPPER / TIMELINE
+========================================= */
+
+.home-steps {
+  margin-block: clamp($sp-12, 6vw, $sp-16);
+  overflow-x: clip;
+}
+
+.home-steps__head {
+  max-width: 44rem;
+  margin: 0 0 $sp-8 0;
+
+  h2 {
+    margin: 0 0 $sp-3 0;
+    font-size: $fs-7;
+    line-height: $lh-tight;
+  }
+
+  p {
+    margin: 0;
+    font-size: $fs-3;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+  }
+}
+
+.home-steps__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: $radius-6;
+  border: 1px dashed;
+
+  @include theme-block {
+    border-color: tone(border, light);
+    background: tone(surface, light);
+  }
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    background: tone(surface, dark);
+  }
+}
+
+.home-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: $sp-6;
+  padding: $sp-7 $sp-8;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid;
+    @include theme-block      { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark);  }
+  }
+}
+
+.home-step__index {
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: $fw-semibold;
+  font-size: $fs-3;
+  border: 1px solid;
+
+  @include theme-block {
+    background: tone(background-100, light);
+    border-color: tone(border, light);
+    color: tone(contrast, light);
+  }
+  @include theme-block-dark {
+    background: tone(background-100, dark);
+    border-color: tone(border, dark);
+    color: tone(contrast, dark);
+  }
+}
+
+.home-step__body {
+  display: grid;
+  gap: $sp-3;
+}
+
+.home-step__title {
+  margin: 0;
+  font-size: $fs-4;
+  font-weight: $fw-semibold;
+}
+
+.home-step__text {
+  margin: 0;
+  font-size: $fs-3;
+}
+
+.home-step__bullets {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: .25rem;
+  font-size: $fs-2;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}

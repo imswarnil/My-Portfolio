@@ -1,7 +1,6 @@
 /* =========================================
    HERO
 ========================================= */
-
 .home-hero {
   padding-block: clamp($sp-10, 4.5vw, $sp-14);
   overflow-x: clip;
@@ -20,9 +19,7 @@
 
 /* Make art first on mobile and perfectly centered */
 @media (max-width: $bp-lg) {
-  .home-hero__art-wrap {
-    order: -1;
-  }
+  .home-hero__art-wrap { order: -1; }
 }
 
 .home-hero__copy {
@@ -47,10 +44,10 @@
 
 @keyframes wave {
   0%, 100% { transform: rotate(0); }
-  20% { rotate: 16deg; }
-  40% { rotate: -10deg; }
-  60% { rotate: 12deg; }
-  80% { rotate: -6deg; }
+  20%      { transform: rotate(16deg); }
+  40%      { transform: rotate(-10deg); }
+  60%      { transform: rotate(12deg); }
+  80%      { transform: rotate(-6deg); }
 }
 
 .home-hero__name {
@@ -149,60 +146,178 @@
   }
 }
 
-/* Art: SQUARE, centered */
+/* --- Art: square card that morphs to 16/9 TV --- */
 .home-hero__art-wrap {
   position: relative;
 }
 
-/* 👇 changed here: overflow: visible; img gets radius */
 .home-hero__art {
   margin: 0;
   width: min(96%, 520px);
-  aspect-ratio: 1 / 1;
-  border-radius: $radius-6;
-  overflow: visible; // allow social rail to hang outside
-  border: 1px solid;
   justify-self: center;
+  position: relative;
+}
+
+/* This is the actual frame */
+.home-hero__video-shell {
+  position: relative;
+  width: 100%;
+  border-radius: $radius-6;
+  overflow: hidden;
+  isolation: isolate;
+  transform-origin: center;
+  transition:
+    transform 350ms $ease-in-out,
+    box-shadow 300ms $ease-in-out;
 
   @include theme-block {
     background: tone(background-100, light);
-    border-color: tone(border, light);
+    border: 1px solid tone(border, light);
     box-shadow: $shadow-light;
   }
   @include theme-block-dark {
     background: tone(background-200, dark);
-    border-color: tone(border, dark);
+    border: 1px solid tone(border, dark);
     box-shadow: $shadow-dark;
   }
+}
+
+/* Ratio spacer: 1:1 → 16:9 (animated) */
+.home-hero__ratio {
+  width: 100%;
+  padding-top: 100%; /* 1:1 by default */
+  transition: padding-top 350ms $ease-in-out;
+}
+
+/* When playing: morph to 16/9 */
+.home-hero__video-shell[data-hero-state="playing"] .home-hero__ratio {
+  padding-top: 56.25%;
+}
+
+/* Subtle “card lifts” */
+.home-hero__video-shell[data-hero-state="poster"] {
+  transform: scale(.96) translateY(4px);
+}
+.home-hero__video-shell[data-hero-state="playing"] {
+  transform: scale(1) translateY(0);
+}
+
+/* Poster image with vintage overlay */
+.home-hero__video-poster {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+  transition: opacity 260ms ease;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
     display: block;
-    border-radius: inherit; // keeps square card corners clean
+    filter: contrast(1.05) saturate(.9) brightness(.96);
   }
 }
 
-@media (min-width: $bp-lg) {
-  .home-hero__art {
-    transform: perspective(1200px) rotateY(-3.25deg);
-    transform-origin: center left;
-  }
+/* Hide poster while playing */
+.home-hero__video-shell[data-hero-state="playing"] .home-hero__video-poster {
+  opacity: 0;
+}
 
-  .home-hero__art:hover {
-    transform: perspective(1200px) rotateY(-2.5deg) translateY(-2px);
+/* Old TV scanlines + grain */
+.home-hero__video-poster::before,
+.home-hero__video-poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.home-hero__video-poster::before {
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.24) 0,
+      rgba(0,0,0,0) 2px
+    );
+  background-size: 100% 3px;
+  opacity: .55;
+  mix-blend-mode: soft-light;
+}
+
+.home-hero__video-poster::after {
+  background-image:
+    radial-gradient(circle at 0 0, rgba(255,255,255,.09) 0, transparent 40%),
+    radial-gradient(circle at 100% 0, rgba(0,0,0,.12) 0, transparent 45%),
+    radial-gradient(circle at 0 100%, rgba(0,0,0,.12) 0, transparent 45%),
+    radial-gradient(circle at 100% 100%, rgba(255,255,255,.06) 0, transparent 45%);
+  mix-blend-mode: soft-light;
+  opacity: .5;
+  animation: hero-grain 2.4s steps(3) infinite;
+}
+
+@keyframes hero-grain {
+  0%   { transform: translate3d(0,0,0); }
+  25%  { transform: translate3d(-4px, 3px, 0); }
+  50%  { transform: translate3d(3px,-2px, 0); }
+  75%  { transform: translate3d(-2px,-3px, 0); }
+  100% { transform: translate3d(0,0,0); }
+}
+
+/* YouTube iframe container (filled by JS) */
+.home-hero__video-embed {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
   }
 }
 
-@media (max-width: $bp-lg) {
-  .home-hero__art {
-    transform: none;
+/* External play / pause pill */
+.home-hero__video-toggle {
+  position: absolute;
+  left: $sp-6;
+  bottom: $sp-6;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .7rem;
+  border-radius: $radius-pill;
+  border: 1px solid;
+  font-size: $fs-2;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-decoration: none;
+
+  @include theme-block {
+    background: rgba(0,0,0,.74);
+    color: tone(white, light);
+    border-color: rgba(255,255,255,.16);
+  }
+  @include theme-block-dark {
+    background: rgba(0,0,0,.78);
+    color: tone(white, dark);
+    border-color: rgba(255,255,255,.18);
+  }
+
+  i {
+    font-size: $fs-3;
+    line-height: 1;
+  }
+
+  span {
+    display: inline-block;
   }
 }
 
-/* Social rail half in/out */
+/* Social rail: inside border, not cut */
 .home-hero__social {
   position: absolute;
   margin: 0;
@@ -211,10 +326,11 @@
   display: flex;
   gap: $sp-5;
 
-  /* mobile: bottom center, half outside */
+  /* mobile: bottom inside, centered */
   left: 50%;
-  bottom: -0.75rem;
+  bottom: $sp-4;
   transform: translateX(-50%);
+  z-index: 4;
 
   li { margin: 0; }
 
@@ -249,17 +365,18 @@
   }
 }
 
-/* Desktop: vertical rail on right, half outside but not clipped */
 @media (min-width: $bp-lg) {
   .home-hero__social {
     top: 50%;
     bottom: auto;
     left: auto;
-    right: -1.1rem; // ~half of 2.2rem → nicely half in/out
+    right: $sp-4;
     transform: translateY(-50%);
     flex-direction: column;
   }
 }
 
-/* Safety: never overflow horizontally */
-.home-hero { overflow-x: clip; }
+/* Safety */
+.home-hero {
+  overflow-x: clip;
+}

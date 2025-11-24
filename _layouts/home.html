@@ -1,6 +1,8 @@
 ---
 layout: default
 ---
+
+
 <!-- =========================
      HERO
 ========================= -->
@@ -12,25 +14,33 @@ layout: default
         <p class="home-hero__hello">
           <i class="ph-bold ph-hand-waving" aria-hidden="true"></i><span>Hi,</span>
         </p>
+
         <h1 class="home-hero__name" itemprop="name">I’m Swarnil Singhai</h1>
-        <p class="home-hero__sub">Creative Engineer &amp; Filmmaker</p>
+
+        <p class="home-hero__sub">
+          {{ site.resume.tagline | default: "Software Engineer • Filmmaker • Creator" }}
+        </p>
+
         <p class="home-hero__bio">
-          I craft clean, scalable product surfaces and tell stories that stay with people.
+          I build Salesforce analytics by day and cinematic life stories by night — helping people with careers, dashboards, and decisions in between.
         </p>
 
         <nav class="home-hero__cta" aria-label="Primary actions">
-          <a class="button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
-            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i><span>Contact me</span>
+          <a class="button" href="{{ site.resume.contact.youtube | default: 'https://youtube.com/@ImSwarnil' }}">
+            <i class="ph-bold ph-youtube-logo" aria-hidden="true"></i><span>Watch my latest</span>
           </a>
-          <a class="button-transparent" href="{{ '/projects/' | relative_url }}">
-            <i class="ph-bold ph-squares-four" aria-hidden="true"></i><span>View projects</span>
+          <a class="button-transparent" href="{{ '/resume/' | relative_url }}">
+            <i class="ph-bold ph-identification-badge" aria-hidden="true"></i><span>View resume</span>
           </a>
         </nav>
 
         <div class="home-hero__meta">
           <div class="home-hero__meta-row">
             <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
-            <span>Software Engineer @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
+            <span>
+              {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
+              @ {{ site.work.company | default: 'Imswarnil Studio' }}
+            </span>
           </div>
           <div class="home-hero__meta-row">
             <i class="ph-bold ph-map-pin" aria-hidden="true"></i>
@@ -40,77 +50,196 @@ layout: default
 
         <!-- Slim pill stats -->
         <ul class="home-hero__stats" role="list" aria-label="Quick stats">
-          <li class="pill"><span class="pill__val">{{ page.stats_youtube | default: '17K+' }}</span><span class="pill__label">YT Subs</span></li>
-          <li class="pill"><span class="pill__val">{{ page.stats_experience | default: '5+ yrs' }}</span><span class="pill__label">Experience</span></li>
-          <li class="pill"><span class="pill__val">{{ page.stats_views | default: '2.4M' }}</span><span class="pill__label">Video Views</span></li>
+          <li class="pill">
+            <span class="pill__val">{{ page.stats_youtube | default: '17K+' }}</span>
+            <span class="pill__label">Legacy YT Subs</span>
+          </li>
+          <li class="pill">
+            <span class="pill__val">{{ page.stats_experience | default: '5+ yrs' }}</span>
+            <span class="pill__label">Experience</span>
+          </li>
+          <li class="pill">
+            <span class="pill__val">{{ page.stats_views | default: '2.4M' }}</span>
+            <span class="pill__label">Video Views</span>
+          </li>
         </ul>
       </div>
 
-      <!-- Art (Square) + Social rail -->
+      <!-- Art (Square → 16/9 TV) + Social rail -->
       <div class="home-hero__art-wrap">
         <figure class="home-hero__art" itemprop="image" aria-label="Portrait">
-          <img
-            src="{{ page.hero_image | default: '\assets\Swarnil-Singhai.png' }}"
-            alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
-            width="1000" height="1000" loading="eager" fetchpriority="high">
-          <!-- Socials: half inside border -->
+          <div class="home-hero__video-shell" data-hero-state="poster">
+            <!-- Ratio spacer (1:1 → 16:9 via CSS) -->
+            <div class="home-hero__ratio"></div>
+
+            <!-- Poster image with vintage feel -->
+            <div class="home-hero__video-poster">
+              <img
+                src="{{ page.hero_image | default: '/assets/Swarnil-Singhai.png' }}"
+                alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
+                width="1000" height="1000" loading="eager" fetchpriority="high">
+            </div>
+
+            <!-- YouTube embed container (iframe injected by JS) -->
+            <div
+              class="home-hero__video-embed"
+              data-youtube-id="{{ page.hero_youtube_id | default: site.hero_youtube_id | default: '73WZX9m8lWA' }}">
+            </div>
+
+            <!-- External Play / Pause button -->
+            <button class="home-hero__video-toggle" type="button" aria-label="Play reel" data-state="poster">
+              <i class="ph-bold ph-play" aria-hidden="true"></i>
+              <span>Play</span>
+            </button>
+          </div>
+
+          <!-- Socials rail -->
           <ul class="home-hero__social" role="list" aria-label="Social links">
-            <li><a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email"><i class="ph-bold ph-envelope"></i></a></li>
-            <li><a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
-            <li><a href="{{ site.social_links.LinkedIn | default: 'https://www.linkedin.com' }}" aria-label="LinkedIn"><i class="ph-bold ph-linkedin-logo"></i></a></li>
-            <li><a href="{{ site.social_links.Twitter | default: 'https://twitter.com' }}" aria-label="Twitter"><i class="ph-bold ph-twitter-logo"></i></a></li>
-            <li><a href="{{ site.social_links.Youtube | default: '/videos/' }}" aria-label="YouTube"><i class="ph-bold ph-youtube-logo"></i></a></li>
+            <li>
+              <a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email">
+                <i class="ph-bold ph-envelope"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{ site.social_links.GitHub | default: 'https://github.com/imswarnil' }}" aria-label="GitHub">
+                <i class="ph-bold ph-github-logo"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{ site.social_links.LinkedIn | default: 'https://linkedin.com/in/imswarnil' }}" aria-label="LinkedIn">
+                <i class="ph-bold ph-linkedin-logo"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{ site.social_links.Twitter | default: 'https://twitter.com/ImSwarnil' }}" aria-label="Twitter">
+                <i class="ph-bold ph-twitter-logo"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{ site.resume.contact.youtube | default: 'https://youtube.com/@ImSwarnil' }}" aria-label="YouTube">
+                <i class="ph-bold ph-youtube-logo"></i>
+              </a>
+            </li>
           </ul>
         </figure>
       </div>
     </div>
   </div>
+
+  <!-- Hero video toggle (poster ↔ YouTube iframe) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var shell = document.querySelector('.home-hero__video-shell');
+      if (!shell) return;
+
+      var embed  = shell.querySelector('.home-hero__video-embed');
+      var toggle = shell.querySelector('.home-hero__video-toggle');
+      if (!embed || !toggle) return;
+
+      var videoId = embed.dataset.youtubeId;
+      if (!videoId) return;
+
+      function setPosterState() {
+        shell.setAttribute('data-hero-state', 'poster');
+        toggle.dataset.state = 'poster';
+        toggle.setAttribute('aria-label', 'Play reel');
+        var icon = toggle.querySelector('i');
+        var labelSpan = toggle.querySelector('span');
+        if (icon) icon.className = 'ph-bold ph-play';
+        if (labelSpan) labelSpan.textContent = 'Play';
+        embed.innerHTML = ''; // remove iframe = stop playback
+      }
+
+      function setPlayingState() {
+        shell.setAttribute('data-hero-state', 'playing');
+        toggle.dataset.state = 'playing';
+        toggle.setAttribute('aria-label', 'Pause reel');
+        var icon = toggle.querySelector('i');
+        var labelSpan = toggle.querySelector('span');
+        if (icon) icon.className = 'ph-bold ph-pause';
+        if (labelSpan) labelSpan.textContent = 'Pause';
+
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('loading', 'lazy');
+        iframe.setAttribute('title', 'Imswarnil hero reel');
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute(
+          'allow',
+          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+        );
+        iframe.src =
+          'https://www.youtube.com/embed/' +
+          encodeURIComponent(videoId) +
+          '?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1&controls=0';
+
+        embed.innerHTML = '';
+        embed.appendChild(iframe);
+      }
+
+      // Respect reduced motion: default to poster
+      try {
+        var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mq.matches) shell.setAttribute('data-hero-state', 'poster');
+      } catch (e) {}
+
+      toggle.addEventListener('click', function () {
+        var state = toggle.dataset.state || 'poster';
+        if (state === 'poster') {
+          setPlayingState();
+        } else {
+          setPosterState();
+        }
+      });
+    });
+  </script>
 </section>
 
+
 <!-- =========================
-     QUICK BENTO
+     QUICK BENTO – Start here
 ========================= -->
-<section class="home-bento" aria-label="Quick actions">
+<section class="home-bento" aria-label="Start here">
   <div class="container">
     <ul class="home-bento__grid" role="list">
-      <!-- Projects (GitHub-like) -->
-      <li class="home-bento__item">
-        <a class="home-bento__tile home-bento__tile--github" href="{{ '/projects/' | relative_url }}">
-          <span class="home-bento__icon"><i class="ph-bold ph-github-logo"></i></span>
-          <div class="gh-head">
-            <span class="gh-repo">imswarnil / portfolio</span>
-          </div>
-          <div class="gh-meta">
-            <span class="dot"></span> TypeScript • SCSS
-            <span class="spacer"></span>
-            <i class="ph-bold ph-star"></i> 1.2k
-          </div>
-        </a>
-      </li>
-
-      <!-- Videos (YouTube-like) -->
-      <li class="home-bento__item">
-        <a class="home-bento__tile home-bento__tile--video" href="{{ '/videos/' | relative_url }}">
-          <span class="home-bento__icon"><i class="ph-bold ph-youtube-logo"></i></span>
-          <div class="yt-frame"><div class="yt-thumb"></div></div>
-          <div class="yt-title">Watch my latest</div>
-        </a>
-      </li>
-
-      <!-- Blog -->
-      <li class="home-bento__item">
-        <a class="home-bento__tile home-bento__tile--blog" href="{{ '/blog/' | relative_url }}">
-          <span class="home-bento__icon"><i class="ph-bold ph-newspaper-clipping"></i></span>
-          <div class="blog-title">Read the blog</div>
-          <p class="blog-excerpt">Cinematic dev, product notes, travel & stories.</p>
-        </a>
-      </li>
-
-      <!-- Resume -->
+      <!-- For recruiters / clients -->
       <li class="home-bento__item">
         <a class="home-bento__tile home-bento__tile--resume" href="{{ '/resume/' | relative_url }}">
-          <span class="home-bento__icon"><i class="ph-bold ph-identification-card"></i></span>
-          <div class="cv-line">Resume • Work & Skills</div>
+          <span class="home-bento__icon"><i class="ph-bold ph-briefcase"></i></span>
+          <div class="cv-line">Hire me for Salesforce & analytics work</div>
+        </a>
+      </li>
+
+      <!-- For learners -->
+      <li class="home-bento__item">
+        <a class="home-bento__tile home-bento__tile--video" href="{{ '/crm-analytics/' | relative_url }}">
+          <span class="home-bento__icon"><i class="ph-bold ph-chart-line-up"></i></span>
+          <div class="yt-frame"><div class="yt-thumb"></div></div>
+          <div class="yt-title">Learn Salesforce CRM Analytics</div>
+        </a>
+      </li>
+
+      <!-- For job seekers / students -->
+      <li class="home-bento__item">
+        <a class="home-bento__tile home-bento__tile--blog" href="{{ '/blog/' | relative_url }}">
+          <span class="home-bento__icon"><i class="ph-bold ph-graduation-cap"></i></span>
+          <div class="blog-title">Bangalore & career guides</div>
+          <p class="blog-excerpt">Job search, off-campus, and “what now?” after college.</p>
+        </a>
+      </li>
+
+      <!-- For creators / collabs -->
+      <li class="home-bento__item">
+        <a class="home-bento__tile home-bento__tile--github" href="{{ '/uses/' | relative_url }}">
+          <span class="home-bento__icon"><i class="ph-bold ph-film-slate"></i></span>
+          <div class="gh-head">
+            <span class="gh-repo">Gear, tools & setup</span>
+          </div>
+          <div class="gh-meta">
+            <span class="dot"></span> Camera, edit & dev stack
+            <span class="spacer"></span>
+            <i class="ph-bold ph-star"></i> For fellow creators
+          </div>
         </a>
       </li>
     </ul>
@@ -118,46 +247,192 @@ layout: default
 </section>
 
 <!-- =========================
-     MY CONTENT (featured + grouped)
+     WORK SUMMARY
 ========================= -->
-<section class="home-content" aria-label="My content">
+<section class="home-work" aria-label="What I do">
   <div class="container">
-    <div class="home-content__head">
-      <h2>My content</h2>
-      <a class="button-transparent home-content__all" href="{{ '/archive/' | relative_url }}">
-        <i class="ph-bold ph-layout"></i> View all
-      </a>
+    <header class="home-work__head">
+      <h2>What I do</h2>
+      <p>Engineering, analytics, and storytelling — all aimed at making decisions and stories clearer.</p>
+    </header>
+
+    <div class="home-work__grid">
+      <article class="home-work__card">
+        <h3><i class="ph-bold ph-chart-line-up"></i> CRM Analytics & Dashboards</h3>
+        <p>I design Salesforce CRM Analytics dashboards and quote flows that cut noise and surface the right signals for Sales, Finance, and RevOps.</p>
+        <ul>
+          <li>Production org examples, not demo sandboxes</li>
+          <li>KPIs tied to real business questions</li>
+          <li>SAQL, dataflows, & UX tuned for speed</li>
+        </ul>
+      </article>
+
+      <article class="home-work__card">
+        <h3><i class="ph-bold ph-film-slate"></i> Films & YouTube</h3>
+        <p>Travel films, career stories, and documentary-style content with Deadpool-ish commentary and clean visuals.</p>
+        <ul>
+          <li>Hook-first scripting & structure</li>
+          <li>Minimal but cinematic setups</li>
+          <li>Series-based storytelling</li>
+        </ul>
+      </article>
+
+      <article class="home-work__card">
+        <h3><i class="ph-bold ph-users-three"></i> Mentoring & Guides</h3>
+        <p>I share practical, no-fluff lessons for college grads and job seekers figuring out Bangalore, tech, and creative careers.</p>
+        <ul>
+          <li>Bangalore job-seeker guides</li>
+          <li>Content on “what to actually do next”</li>
+          <li>Honest breakdowns of wins & mistakes</li>
+        </ul>
+      </article>
     </div>
+  </div>
+</section>
 
-    <!-- Featured card -->
-    <article class="home-content__featured">
-      <div class="feat-copy">
-        <h3>Creating useful things, consistently</h3>
-        <p>From engineering write-ups to travel films—here’s the latest.</p>
-      </div>
-      <a class="feat-cta button" href="{{ '/archive/' | relative_url }}"><i class="ph-bold ph-arrow-right"></i> Browse archive</a>
-    </article>
+<!-- =========================
+     PROCESS STEPPER / TIMELINE
+========================= -->
+<section class="home-steps" aria-label="How I work">
+  <div class="container">
+    <header class="home-steps__head">
+      <h2>How I like to work</h2>
+      <p>Same mindset for dashboards, products, and films — clear steps, tight feedback loops.</p>
+    </header>
 
-    <!-- Grouped by front matter `type` -->
-    <div class="home-content__groups">
-      {% assign grouped = site.posts | group_by_exp: 'p', 'p.type | default: "writing"' %}
-      {% for grp in grouped %}
-        <section class="home-content__group">
-          <h3 class="group-title">{{ grp.name | capitalize }}</h3>
-          <ul class="group-list" role="list">
-            {% for p in grp.items limit: 4 %}
-              <li class="group-item">
-                <a class="group-card" href="{{ p.url | relative_url }}">
-                  <div class="g-meta small">{{ p.date | date: site.date_format | default: "%d %b %Y" }}</div>
-                  <h4 class="g-title">{{ p.title }}</h4>
-                  <p class="g-excerpt">{{ p.excerpt | strip_html | truncatewords: 18 }}</p>
-                </a>
-              </li>
+    <ol class="home-steps__list">
+      {% for step in site.resume.steps %}
+      <li class="home-step">
+        <div class="home-step__index">{{ forloop.index }}</div>
+        <div class="home-step__body">
+          <h3 class="home-step__title">{{ step.title }}</h3>
+          <p class="home-step__text">{{ step.text }}</p>
+          {% if step.bullets %}
+          <ul class="home-step__bullets">
+            {% for b in step.bullets %}
+              <li>{{ b }}</li>
             {% endfor %}
           </ul>
-        </section>
+          {% endif %}
+        </div>
+      </li>
       {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<!-- =========================
+     WRITING – Featured & grid
+========================= -->
+<section class="home-writing" aria-label="Writing">
+  <div class="container">
+    <header class="home-writing__head">
+      <h2>Writing</h2>
+      <p>Long-form thoughts on Salesforce, careers, Bangalore, and the creative grind.</p>
+      <a class="button-transparent home-writing__all" href="{{ '/blog/' | relative_url }}">
+        <i class="ph-bold ph-newspaper-clipping"></i> View all posts
+      </a>
+    </header>
+
+    <div class="home-writing__grid">
+      <!-- Featured post -->
+      <div class="home-writing__featured">
+        {% assign sorted_posts = site.posts | sort: 'date' | reverse %}
+        {% assign featured = sorted_posts | first %}
+        {% if featured %}
+          <article class="home-writing__featured-card">
+            <a href="{{ featured.url | relative_url }}" class="home-writing__featured-link">
+              <div class="home-writing__featured-meta small">
+                {{ featured.date | date: site.date_format | default: "%d %b %Y" }}
+                {% if featured.category %} • {{ featured.category }}{% endif %}
+              </div>
+              <h3 class="home-writing__featured-title">{{ featured.title }}</h3>
+              <p class="home-writing__featured-excerpt">
+                {{ featured.excerpt | strip_html | truncatewords: 30 }}
+              </p>
+              <span class="home-writing__featured-cta">
+                <i class="ph-bold ph-arrow-right"></i> Read story
+              </span>
+            </a>
+          </article>
+        {% else %}
+          <article class="home-writing__featured-card home-writing__featured-card--empty">
+            <h3>Stories are loading…</h3>
+            <p>Once posts are published, you’ll see a featured story here about careers, dashboards, or filmmaking.</p>
+          </article>
+        {% endif %}
+      </div>
+
+      <!-- Secondary posts -->
+      <div class="home-writing__list">
+        <ul class="home-writing__list-grid" role="list">
+          {% for p in sorted_posts limit: 4 offset: 1 %}
+          <li class="home-writing__item">
+            <a class="home-writing__card" href="{{ p.url | relative_url }}">
+              <div class="home-writing__meta small">
+                {{ p.date | date: site.date_format | default: "%d %b %Y" }}
+              </div>
+              <h3 class="home-writing__title">{{ p.title }}</h3>
+              <p class="home-writing__excerpt">{{ p.excerpt | strip_html | truncatewords: 18 }}</p>
+            </a>
+          </li>
+          {% endfor %}
+          {% if sorted_posts.size == 0 %}
+          <li class="home-writing__item">
+            <div class="home-writing__card home-writing__card--empty">
+              <h3>Nothing here yet</h3>
+              <p>First post will be about relaunching YouTube + career roadmap for freshers.</p>
+            </div>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- =========================
+     VIDEOS – Netflix-style rail
+========================= -->
+<section class="home-video" aria-label="Videos">
+  <div class="container">
+    <header class="home-video__head">
+      <h2>Videos</h2>
+      <p>Think of this like a small Netflix shelf — code, careers, and chaos in episodes.</p>
+      <a class="button-transparent home-video__all" href="{{ '/videos/' | relative_url }}">
+        <i class="ph-bold ph-youtube-logo"></i> View all videos
+      </a>
+    </header>
+
+    {% if site.videos %}
+      {% assign videos_sorted = site.videos | sort: 'date' | reverse %}
+      <div class="home-video__rail" aria-label="Video shelf">
+        <ul class="home-video__list" role="list">
+          {% for v in videos_sorted limit: 12 %}
+          <li class="home-video__item">
+            <a href="{{ v.url | relative_url }}" class="home-video__link">
+              <div class="home-video__thumb" style="--bg:url('{{ v.cover | default: site.image }}')">
+                <span class="home-video__index">{{ forloop.index }}</span>
+                {% if v.duration %}
+                  <span class="home-video__duration">{{ v.duration }}</span>
+                {% endif %}
+              </div>
+              <div class="home-video__meta">
+                <h3 class="home-video__title">{{ v.title }}</h3>
+                <p class="home-video__desc">
+                  {{ v.excerpt | default: v.description | default: "Episode on careers, coding, or creative life." | strip_html | truncatewords: 14 }}
+                </p>
+              </div>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% else %}
+      <div class="home-video__empty">
+        <p>Relaunch in progress — soon this will show a row of episodes about Bangalore job search, Salesforce, and filmmaking.</p>
+      </div>
+    {% endif %}
   </div>
 </section>
 
@@ -183,5 +458,3 @@ layout: default
     </ul>
   </div>
 </section>
-
-<!-- Icons -->

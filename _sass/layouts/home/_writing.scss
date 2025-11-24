@@ -1,0 +1,157 @@
+/* =========================================
+   HOME – WRITING
+========================================= */
+
+.home-writing {
+  margin-block: clamp($sp-12, 6vw, $sp-16);
+  overflow-x: clip;
+}
+
+.home-writing__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-5;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $sp-8;
+
+  h2 {
+    margin: 0;
+    font-size: $fs-7;
+  }
+
+  p {
+    margin: 0;
+    max-width: 32rem;
+    font-size: $fs-3;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+  }
+
+  .home-writing__all {
+    white-space: nowrap;
+  }
+}
+
+.home-writing__grid {
+  display: grid;
+  gap: $sp-8;
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: flex-start;
+  }
+}
+
+/* Featured */
+.home-writing__featured-card {
+  border-radius: $radius-6;
+  border: 1px solid;
+  padding: $sp-9;
+  height: 100%;
+
+  @include theme-block {
+    background: tone(surface, light);
+    border-color: tone(border, light);
+    box-shadow: $shadow-light;
+  }
+  @include theme-block-dark {
+    background: tone(surface, dark);
+    border-color: tone(border, dark);
+    box-shadow: $shadow-dark;
+  }
+}
+
+.home-writing__featured-card--empty {
+  text-align: left;
+}
+
+.home-writing__featured-link {
+  display: grid;
+  gap: $sp-4;
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-writing__featured-meta {
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.home-writing__featured-title {
+  margin: 0;
+  font-size: $fs-5;
+}
+
+.home-writing__featured-excerpt {
+  margin: 0;
+  font-size: $fs-3;
+}
+
+.home-writing__featured-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: $fs-2;
+  text-decoration: none;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+
+  i {
+    font-size: $fs-3;
+  }
+}
+
+/* List */
+.home-writing__list-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: $sp-5;
+}
+
+.home-writing__card {
+  border-radius: $radius-5;
+  border: 1px solid;
+  padding: $sp-7;
+  text-decoration: none;
+  display: grid;
+  gap: .45rem;
+
+  @include theme-block {
+    background: tone(surface, light);
+    border-color: tone(border, light);
+  }
+  @include theme-block-dark {
+    background: tone(surface, dark);
+    border-color: tone(border, dark);
+  }
+
+  &:hover .home-writing__title {
+    text-decoration: underline;
+  }
+}
+
+.home-writing__card--empty {
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.home-writing__meta {
+  font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.home-writing__title {
+  margin: 0;
+  font-size: $fs-4;
+  font-weight: $fw-semibold;
+}
+
+.home-writing__excerpt {
+  margin: 0;
+  font-size: $fs-2;
+}

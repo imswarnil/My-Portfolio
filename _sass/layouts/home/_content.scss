@@ -1,0 +1,112 @@
+/* =========================================
+   HOME – MY CONTENT
+========================================= */
+
+.home-content {
+  margin-block: clamp($sp-12, 6vw, $sp-16);
+  overflow-x: clip;
+}
+
+.home-content__head {
+  display: flex;
+  align-items: center;
+  gap: $sp-7;
+  justify-content: space-between;
+  margin-bottom: $sp-8;
+
+  h2 {
+    margin: 0;
+    font-size: $fs-7;
+    line-height: $lh-tight;
+  }
+}
+
+.home-content__featured {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-7;
+  border: 1px solid;
+  border-radius: $radius-6;
+  padding: clamp($sp-10, 2.6vw, $sp-12);
+
+  @include theme-block {
+    background: tone(surface, light);
+    border-color: tone(border, light);
+    box-shadow: $shadow-light;
+  }
+  @include theme-block-dark {
+    background: tone(surface, dark);
+    border-color: tone(border, dark);
+    box-shadow: $shadow-dark;
+  }
+
+  .feat-copy {
+    max-width: 60ch;
+  }
+}
+
+.home-content__all {
+  white-space: nowrap;
+}
+
+.home-content__groups {
+  display: grid;
+  gap: $sp-12;
+  margin-top: $sp-12;
+}
+
+.group-title {
+  margin: 0 0 $sp-6 0;
+  font-size: $fs-5;
+}
+
+.group-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: $sp-7;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @include mq-up($bp-lg) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.group-card {
+  display: grid;
+  gap: .35rem;
+  padding: $sp-8;
+  border: 1px solid;
+  border-radius: $radius-5;
+  text-decoration: none;
+
+  @include theme-block {
+    background: tone(surface, light);
+    border-color: tone(border, light);
+    color: tone(contrast, light);
+  }
+  @include theme-block-dark {
+    background: tone(surface, dark);
+    border-color: tone(border, dark);
+    color: tone(contrast, dark);
+  }
+
+  .g-title {
+    margin: 0;
+    font-weight: $fw-semibold;
+    line-height: $lh-tight;
+  }
+
+  .g-excerpt {
+    margin: 0;
+    font-size: $fs-2;
+    opacity: .9;
+  }
+
+  .g-meta {
+    opacity: .7;
+  }
+}
