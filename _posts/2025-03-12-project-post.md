@@ -1,7 +1,7 @@
 ---
 title: "Cinematic Portfolio v3"
 date: 2025-02-02
-type: project
+category: project
 tags: [project, web, performance]
 cover: /assets/img/dummy-project.jpg
 facts:

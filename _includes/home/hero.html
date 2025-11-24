@@ -1,0 +1,172 @@
+
+<!-- =========================
+     HERO
+========================= -->
+<section class="home-hero" itemscope itemtype="https://schema.org/Person">
+  <!-- Background grid -->
+  <div class="home-hero__bg-grid" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="home-hero__grid">
+      <!-- Copy -->
+      <div class="home-hero__copy">
+        <p class="home-hero__hello">
+          <i class="ph-bold ph-hand-waving" aria-hidden="true"></i>
+          <span class="home-hero__hello-text">Hi,</span>
+        </p>
+
+        <h1 class="home-hero__name" itemprop="name">
+          I’m Swarnil Singhai
+        </h1>
+
+        <p class="home-hero__sub">Creative Engineer &amp; Filmmaker</p>
+
+        <p class="home-hero__bio">
+          I craft clean, scalable product surfaces and tell stories that stay with people.
+        </p>
+
+        <nav class="home-hero__cta" aria-label="Primary actions">
+          <a class="button" href="mailto:{{ site.email | default: 'hello@example.com' }}">
+            <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i>
+            <span>Contact me</span>
+          </a>
+          <a class="button-transparent" href="{{ '/projects/' | relative_url }}">
+            <i class="ph-bold ph-squares-four" aria-hidden="true"></i>
+            <span>View projects</span>
+          </a>
+        </nav>
+
+        <div class="home-hero__meta">
+          <div class="home-hero__meta-row">
+            <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
+            <span>Software Engineer @ {{ site.work.company | default: 'Imswarnil Studio' }}</span>
+          </div>
+          <div class="home-hero__meta-row">
+            <i class="ph-bold ph-map-pin" aria-hidden="true"></i>
+            <span>{{ site.location | default: 'Bengaluru, India' }}</span>
+          </div>
+        </div>
+
+        <!-- Slim pill stats -->
+        <ul class="home-hero__stats" role="list" aria-label="Quick stats">
+          <li class="home-hero__pill">
+            <span class="home-hero__pill-val">{{ page.stats_youtube | default: '17K+' }}</span>
+            <span class="home-hero__pill-label">YT Subs</span>
+          </li>
+          <li class="home-hero__pill">
+            <span class="home-hero__pill-val">{{ page.stats_experience | default: '5+ yrs' }}</span>
+            <span class="home-hero__pill-label">Experience</span>
+          </li>
+          <li class="home-hero__pill">
+            <span class="home-hero__pill-val">{{ page.stats_views | default: '2.4M' }}</span>
+            <span class="home-hero__pill-label">Video Views</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Art (square card) + image + 16:9 video + Social rail -->
+      <div class="home-hero__art-wrap">
+        <figure class="home-hero__art" itemprop="image" aria-label="Portrait">
+          <div class="home-hero__media">
+            <!-- Image state (full square) -->
+            <div class="home-hero__thumb">
+              <img
+                src="{{ page.hero_image | default: '/assets/Swarnil-Singhai.png' }}"
+                alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
+                width="1000"
+                height="1000"
+                loading="eager"
+                fetchpriority="high">
+            </div>
+
+            <!-- Video state (16/9 centered inside square) -->
+            <div class="home-hero__video">
+              <div class="home-hero__video-frame">
+                <iframe
+                  id="hero-video-iframe"
+                  src="https://www.youtube.com/embed/uV3eTXpEBOg?enablejsapi=1&rel=0&playsinline=1"
+                  title="From Small Town to Bangalore : My Life Story 📜  [ Software Engineer Bangalore 🪪 ]"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+
+            <!-- Play / Pause button (icon-only) -->
+            <button
+              type="button"
+              class="home-hero__play"
+              id="hero-watch-btn"
+              aria-label="Watch my story">
+              <i class="ph-bold ph-play" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <!-- Socials: half on card edge -->
+          <ul class="home-hero__social" role="list" aria-label="Social links">
+            <li>
+              <a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email">
+                <i class="ph-bold ph-envelope"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{ site.social_links.GitHub | default: 'https://github.com' }}" aria-label="GitHub">
+                <i class="ph-bold ph-github-logo"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{ site.social_links.LinkedIn | default: 'https://www.linkedin.com' }}" aria-label="LinkedIn">
+                <i class="ph-bold ph-linkedin-logo"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{ site.social_links.Twitter | default: 'https://twitter.com' }}" aria-label="Twitter">
+                <i class="ph-bold ph-twitter-logo"></i>
+              </a>
+            </li>
+            <li>
+              <a href="{{ site.social_links.Youtube | default: '/videos/' }}" aria-label="YouTube">
+                <i class="ph-bold ph-youtube-logo"></i>
+              </a>
+            </li>
+          </ul>
+        </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- JSON-LD Person for rich snippet -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "{{ site.url | append: site.baseurl }}/#person",
+    "name": "{{ site.resume.name | default: site.title | escape }}",
+    "alternateName": "Swarnil",
+    "jobTitle": "{{ site.work.role | default: site.job_title | escape }}",
+    "description": "{{ site.description | strip_newlines | strip | escape }}",
+    "url": "{{ site.url | append: site.baseurl }}",
+    "image": "{{ site.avatarurl | default: site.logo | default: '/assets/Swarnil-Singhai.png' | absolute_url }}",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "{{ site.work.company | default: 'Imswarnil Studio' | escape }}",
+      "url": "{{ site.work.url | default: site.url | append: site.baseurl | escape }}"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "{{ site.location | default: 'Bengaluru, India' }}",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      {% if site.social and site.social.links %}
+        {% for l in site.social.links %}
+          "{{ l }}"{% unless forloop.last %}, {% endunless %}
+        {% endfor %}
+      {% endif %}
+    ]
+  }
+  </script>
+
+</section>

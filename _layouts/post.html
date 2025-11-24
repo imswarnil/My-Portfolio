@@ -148,10 +148,9 @@ layout: default
     {% if HAS_ASIDE %}
     <aside class="sidebar" aria-label="Sidebar">
       <!-- Desktop sticky TOC -->
-      <nav class="toc toc--desktop">
-        <h2 class="toc-title">On this page</h2>
-        <ol class="toc-list" id="toc-desktop"></ol>
-      </nav>
+     {% assign contentsTitle = page.toc_title | default: 'Contents' %}
+{% include utility/toc.html html=content h_min=2 h_max=3 contents_title=contentsTitle %}
+
 
       <!-- Square Ad -->
       {% include adsense.html type="square" %}
@@ -175,50 +174,3 @@ layout: default
     {% endif %}
   </div>
 </div>
-
-<!-- Build TOC from headings -->
-<script>
-(function(){
-  function buildTOC(containerId){
-    var wrap = document.getElementById(containerId);
-    if(!wrap) return;
-    var content = document.querySelector('.article .content');
-    if(!content) return;
-
-    var hs = content.querySelectorAll('h2, h3');
-    var list = document.createDocumentFragment();
-    hs.forEach(function(h, i){
-      if(!h.id){ h.id = 'h-' + (i+1); }
-      var li = document.createElement('li');
-      li.className = 'toc-item toc-' + h.tagName.toLowerCase();
-      var a = document.createElement('a');
-      a.href = '#' + h.id;
-      a.textContent = h.textContent;
-      li.appendChild(a);
-      list.appendChild(li);
-    });
-    wrap.appendChild(list);
-  }
-  buildTOC('toc-mobile');
-  buildTOC('toc-desktop');
-
-  // Share copy
-  var btn = document.querySelector('.post-share-copy');
-  if(btn){
-    btn.addEventListener('click', function(){
-      var url = btn.getAttribute('data-url') || location.href;
-      navigator.clipboard.writeText(url).then(function(){
-        btn.classList.add('copied');
-        setTimeout(function(){ btn.classList.remove('copied'); }, 1200);
-      });
-    });
-  }
-
-  // Review stars (simple fill)
-  var stars = document.querySelector('.rating-stars');
-  if(stars){
-    var s = Math.max(0, Math.min(5, parseFloat(stars.dataset.score||0)));
-    stars.style.setProperty('--score', s);
-  }
-})();
-</script>

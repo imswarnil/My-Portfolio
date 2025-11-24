@@ -2,331 +2,237 @@
 layout: default
 ---
 
+
+{% include home/hero.html %}
+
 <!-- =========================
-     HERO
+     HOME HUB – Square start here
 ========================= -->
-<section class="home-hero" itemscope itemtype="https://schema.org/Person">
+<section class="home-hub" aria-label="Start here">
   <div class="container">
-    <div class="home-hero__grid">
-      <!-- Copy -->
-      <div class="home-hero__copy">
-        <p class="home-hero__hello">
-          <i class="ph-bold ph-hand-waving" aria-hidden="true"></i><span>Hi,</span>
+    <div class="home-hub__shell">
+      <div class="home-hub__bg-grid" aria-hidden="true"></div>
+
+      <header class="home-hub__head">
+        <h2 class="home-hub__title">Start here</h2>
+        <p class="home-hub__subtitle">
+          Everything I do — work, videos, stories, code, and trips — in one quick grid.
         </p>
+      </header>
 
-        <h1 class="home-hero__name" itemprop="name">
-          I’m Swarnil Singhai
-          <button
-            class="home-hero__horn"
-            type="button"
-            aria-label="Play my name pronunciation"
-          >
-            <i class="ph-bold ph-megaphone-simple" aria-hidden="true"></i>
-          </button>
-        </h1>
+      {%- assign hub_total_posts   = site.posts | size -%}
+      {%- assign hub_blog_posts   = site.posts | where: "category", "blog"    | size -%}
+      {%- assign hub_video_posts  = site.posts | where: "category", "video"   | size -%}
+      {%- assign hub_project_posts= site.posts | where: "category", "project" | size -%}
+      {%- assign hub_travel_posts = site.posts | where: "category", "travel"  | size -%}
+      {%- assign hub_review_posts = site.posts | where: "category", "review"  | size -%}
+      {%- assign hub_course_posts = site.posts | where: "category", "course"  | size -%}
+      {%- assign hub_code_posts   = site.posts | where: "category", "code"    | size -%}
+      {%- assign hub_podcast_posts= site.posts | where: "category", "podcast" | size -%}
 
-        <p class="home-hero__sub">
-          {{ site.resume.tagline | default: "Software Engineer • Filmmaker • Creator" }}
-        </p>
-        <p class="home-hero__bio">
-          I build Salesforce analytics by day and cinematic life stories by night —
-          helping people with careers, dashboards, and decisions in between.
-        </p>
+      <div class="home-hub__grid">
+        <!-- Resume / Hire me -->
+        <a class="home-hub__tile home-hub__tile--resume" href="{{ '/resume/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-identification-card"></i>
+            </span>
+            <span class="home-hub__tag">Work</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Resume</h3>
+            <p class="home-hub__tile-meta">
+              Salesforce, analytics & filmmaking in one clean page.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__stat-label">Ready for collabs</span>
+            <span class="home-hub__cta">View resume →</span>
+          </div>
+        </a>
 
-        <nav class="home-hero__cta" aria-label="Primary actions">
-          <a class="button" href="{{ site.resume.contact.youtube | default: 'https://youtube.com/@ImSwarnil' }}">
-            <i class="ph-bold ph-youtube-logo" aria-hidden="true"></i>
-            <span>Watch my latest</span>
-          </a>
-          <a class="button-transparent" href="{{ '/projects/' | relative_url }}">
-            <i class="ph-bold ph-squares-four" aria-hidden="true"></i>
-            <span>View projects</span>
-          </a>
-        </nav>
+        <!-- Courses / CRM Analytics -->
+        <a class="home-hub__tile home-hub__tile--courses" href="{{ '/courses/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-graduation-cap"></i>
+            </span>
+            <span class="home-hub__tag">Courses</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">CRM Analytics</h3>
+            <p class="home-hub__tile-meta">
+              {{ hub_course_posts | default: 0 }} lessons on dashboards, SAQL & real projects.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__stat-dot"></span>
+            <span class="home-hub__cta">Start learning →</span>
+          </div>
+        </a>
 
-        <div class="home-hero__meta">
-          <div class="home-hero__meta-row">
-            <i class="ph-bold ph-identification-badge" aria-hidden="true"></i>
-            <span>
-              {{ site.work.role | default: 'Software Engineer & Filmmaker' }}
-              @ {{ site.work.company | default: 'Imswarnil Studio' }}
+        <!-- Videos / Channel -->
+        <a class="home-hub__tile home-hub__tile--video" href="{{ '/videos/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-youtube-logo"></i>
+            </span>
+            <span class="home-hub__tag">Videos</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Watch videos</h3>
+            <p class="home-hub__tile-meta">
+              {{ hub_video_posts | default: 0 }}+ films, web series & storytelling experiments.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__stat-chip">
+              <i class="ph-bold ph-play-circle"></i><span>Start with Episode 1</span>
             </span>
           </div>
-          <div class="home-hero__meta-row">
-            <i class="ph-bold ph-map-pin" aria-hidden="true"></i>
-            <span>{{ site.location | default: 'Bengaluru, India' }}</span>
+        </a>
+
+        <!-- Blog / Writing -->
+        <a class="home-hub__tile home-hub__tile--blog" href="{{ '/blog/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-notebook"></i>
+            </span>
+            <span class="home-hub__tag">Writing</span>
           </div>
-        </div>
-
-        <!-- Slim pill stats -->
-        <ul class="home-hero__stats" role="list" aria-label="Quick stats">
-          <li class="pill">
-            <span class="pill__val">{{ page.stats_youtube | default: '17K+' }}</span>
-            <span class="pill__label">Legacy YT Subs</span>
-          </li>
-          <li class="pill">
-            <span class="pill__val">{{ page.stats_experience | default: '5+ yrs' }}</span>
-            <span class="pill__label">Experience</span>
-          </li>
-          <li class="pill">
-            <span class="pill__val">{{ page.stats_views | default: '2.4M' }}</span>
-            <span class="pill__label">Video Views</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Art (Square poster → same place video) + Social rail -->
-      <div class="home-hero__art-wrap">
-        <figure class="home-hero__art" itemprop="image" aria-label="Portrait">
-          <div class="home-hero__video-shell" data-hero-state="poster">
-            <!-- Ratio spacer (1:1 → 16/9 via CSS) -->
-            <div class="home-hero__ratio"></div>
-
-            <!-- Poster image with vintage feel -->
-            <div class="home-hero__video-poster">
-              <img
-                src="{{ page.hero_image | default: '/assets/Swarnil-Singhai.png' }}"
-                alt="{{ page.hero_image_alt | default: 'Portrait of Swarnil Singhai' }}"
-                width="1000" height="1000"
-                loading="eager" fetchpriority="high">
-            </div>
-
-            <!-- YouTube embed container (iframe injected by JS) -->
-            <div
-              class="home-hero__video-embed"
-              data-youtube-id="{{ page.hero_youtube_id | default: site.hero_youtube_id | default: 'uV3eTXpEBOg' }}">
-            </div>
-
-            <!-- External Play / Pause button -->
-            <button class="home-hero__video-toggle" type="button" aria-label="Watch my story" data-state="poster">
-              <i class="ph-bold ph-play" aria-hidden="true"></i>
-              <span>Watch my story</span>
-            </button>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Read the blog</h3>
+            <p class="home-hub__tile-meta">
+              {{ hub_blog_posts | default: 0 }}+ posts on jobs, Bangalore & creator life.
+            </p>
           </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__cta">Browse posts →</span>
+          </div>
+        </a>
 
-          <!-- Socials rail (edge, half outside) -->
-          <ul class="home-hero__social" role="list" aria-label="Social links">
-            <li>
-              <a href="mailto:{{ site.email | default: 'hello@example.com' }}" aria-label="Email">
-                <i class="ph-bold ph-envelope"></i>
-              </a>
-            </li>
-            <li>
-              <a href="{{ site.social_links.GitHub | default: 'https://github.com/imswarnil' }}" aria-label="GitHub">
-                <i class="ph-bold ph-github-logo"></i>
-              </a>
-            </li>
-            <li>
-              <a href="{{ site.social_links.LinkedIn | default: 'https://linkedin.com/in/imswarnil' }}" aria-label="LinkedIn">
-                <i class="ph-bold ph-linkedin-logo"></i>
-              </a>
-            </li>
-            <li>
-              <a href="{{ site.social_links.Twitter | default: 'https://twitter.com/ImSwarnil' }}" aria-label="Twitter">
-                <i class="ph-bold ph-twitter-logo"></i>
-              </a>
-            </li>
-            <li>
-              <a href="{{ site.resume.contact.youtube | default: 'https://youtube.com/@ImSwarnil' }}" aria-label="YouTube">
-                <i class="ph-bold ph-youtube-logo"></i>
-              </a>
-            </li>
-          </ul>
-        </figure>
+        <!-- Projects / GitHub-style -->
+        <a class="home-hub__tile home-hub__tile--projects" href="{{ '/projects/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-github-logo"></i>
+            </span>
+            <span class="home-hub__tag">Builds</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Projects</h3>
+            <p class="home-hub__tile-meta">
+              {{ hub_project_posts | default: 0 }}+ experiments, themes & tools shipped.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__stat-chip">
+              <i class="ph-bold ph-star"></i><span>Star on GitHub</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- Reviews / Testimonials -->
+        <a class="home-hub__tile home-hub__tile--reviews" href="{{ '/reviews/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-chat-circle-dots"></i>
+            </span>
+            <span class="home-hub__tag">Reviews</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Words from people</h3>
+            <p class="home-hub__tile-meta">
+              {{ hub_review_posts | default: 0 }}+ reviews from learners & teammates.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__cta">Read feedback →</span>
+          </div>
+        </a>
+
+        <!-- Travel -->
+        <a class="home-hub__tile home-hub__tile--travel" href="{{ '/travel/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-airplane-takeoff"></i>
+            </span>
+            <span class="home-hub__tag">Travel</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Travel stories</h3>
+            <p class="home-hub__tile-meta">
+              {{ hub_travel_posts | default: 0 }}+ trips, films & photo stories.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__cta">See journeys →</span>
+          </div>
+        </a>
+
+        <!-- Code / Snippets -->
+        <a class="home-hub__tile home-hub__tile--code" href="{{ '/snippets/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-code"></i>
+            </span>
+            <span class="home-hub__tag">Code</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Code snippets</h3>
+            <p class="home-hub__tile-meta">
+              {{ hub_code_posts | default: 0 }}+ CRM Analytics, Jekyll & Nuxt snippets.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__cta">Open snippets →</span>
+          </div>
+        </a>
+
+        <!-- Podcast / Audio (optional) -->
+        <a class="home-hub__tile home-hub__tile--podcast" href="{{ '/podcast/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-microphone"></i>
+            </span>
+            <span class="home-hub__tag">Audio</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Podcast</h3>
+            <p class="home-hub__tile-meta">
+              {{ hub_podcast_posts | default: 0 }}+ episodes to listen on the go.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__cta">Listen now →</span>
+          </div>
+        </a>
+
+        <!-- Portfolio / Everything -->
+        <a class="home-hub__tile home-hub__tile--portfolio" href="{{ '/portfolio/' | relative_url }}">
+          <div class="home-hub__tile-top">
+            <span class="home-hub__icon">
+              <i class="ph-bold ph-frames"></i>
+            </span>
+            <span class="home-hub__tag">All-in-one</span>
+          </div>
+          <div class="home-hub__tile-main">
+            <h3 class="home-hub__tile-title">Portfolio</h3>
+            <p class="home-hub__tile-meta">
+              Curated mix of videos, products & experiments.
+            </p>
+          </div>
+          <div class="home-hub__tile-footer">
+            <span class="home-hub__stat-chip">
+              <span>{{ hub_total_posts | default: 0 }}+ pieces</span>
+            </span>
+          </div>
+        </a>
       </div>
     </div>
   </div>
-
-  <!-- Hero JS: video toggle + horn Web Speech -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // ---- Video toggle (poster ↔ YouTube iframe) ----
-      var shell = document.querySelector('.home-hero__video-shell');
-      if (shell) {
-        var hero   = document.querySelector('.home-hero');
-        var embed  = shell.querySelector('.home-hero__video-embed');
-        var toggle = shell.querySelector('.home-hero__video-toggle');
-        var ratio  = shell.querySelector('.home-hero__ratio');
-        var videoId = embed && embed.dataset.youtubeId;
-
-        function setPosterState() {
-          shell.setAttribute('data-hero-state', 'poster');
-          if (toggle) {
-            toggle.dataset.state = 'poster';
-            toggle.setAttribute('aria-label', 'Watch my story');
-            var icon = toggle.querySelector('i');
-            var labelSpan = toggle.querySelector('span');
-            if (icon) icon.className = 'ph-bold ph-play';
-            if (labelSpan) labelSpan.textContent = 'Watch my story';
-          }
-          if (hero) {
-            hero.classList.remove('is-playing');
-            hero.classList.add('is-poster');
-          }
-          if (embed) embed.innerHTML = '';
-        }
-
-        function setPlayingState() {
-          if (!videoId || !embed || !toggle) return;
-
-          shell.setAttribute('data-hero-state', 'playing');
-          toggle.dataset.state = 'playing';
-          toggle.setAttribute('aria-label', 'Pause story');
-          var icon = toggle.querySelector('i');
-          var labelSpan = toggle.querySelector('span');
-          if (icon) icon.className = 'ph-bold ph-pause';
-          if (labelSpan) labelSpan.textContent = 'Pause';
-
-          if (hero) {
-            hero.classList.add('is-playing');
-            hero.classList.remove('is-poster');
-          }
-
-          var iframe = document.createElement('iframe');
-          iframe.width  = '1038';
-          iframe.height = '584';
-          iframe.src =
-            'https://www.youtube.com/embed/' +
-            encodeURIComponent(videoId) +
-            '?rel=0&modestbranding=1&playsinline=1&controls=0&autoplay=1&mute=1&loop=1&playlist=' +
-            encodeURIComponent(videoId);
-          iframe.title = 'From Small Town to Bangalore : My Life Story 📜  [ Software Engineer Bangalore 🪪 ]';
-          iframe.frameBorder = '0';
-          iframe.setAttribute(
-            'allow',
-            'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-          );
-          iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-          iframe.setAttribute('allowfullscreen', '');
-
-          embed.innerHTML = '';
-          embed.appendChild(iframe);
-        }
-
-        setPosterState();
-
-        if (toggle) {
-          toggle.addEventListener('click', function () {
-            var state = toggle.dataset.state || 'poster';
-            if (state === 'poster') {
-              setPlayingState();
-            } else {
-              setPosterState();
-            }
-          });
-        }
-      }
-
-      // ---- Horn button (Web Speech API: shout / whisper / normal) ----
-      var horn = document.querySelector('.home-hero__horn');
-
-      function pingHorn(el) {
-        if (!el) return;
-        el.classList.add('is-ping');
-        setTimeout(function () { el.classList.remove('is-ping'); }, 260);
-      }
-
-      if (horn) {
-        if ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
-          // Warm up voices (some browsers lazy-load)
-          window.speechSynthesis.getVoices();
-
-          horn.addEventListener('click', function () {
-            pingHorn(horn);
-
-            var modes = ['normal', 'shout', 'whisper'];
-            var mode = modes[Math.floor(Math.random() * modes.length)];
-
-            var text;
-            var u = new SpeechSynthesisUtterance();
-
-            if (mode === 'shout') {
-              text = 'SWARNIL SINGHAI!';
-              u.rate = 1.1;
-              u.pitch = 0.9;
-              u.volume = 1.0;
-            } else if (mode === 'whisper') {
-              text = 'Swarnil Singhai.';
-              u.rate = 0.85;
-              u.pitch = 1.3;
-              u.volume = 0.35;
-            } else {
-              text = 'Read my name: Swarnil Singhai.';
-              u.rate = 1.0;
-              u.pitch = 1.0;
-              u.volume = 0.9;
-            }
-
-            u.text = text;
-            // Try to pick an English voice if available
-            var allVoices = window.speechSynthesis.getVoices() || [];
-            var en = allVoices.find(function (v) { return /en/i.test(v.lang); });
-            if (en) u.voice = en;
-
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(u);
-          });
-        } else {
-          // Fallback: just animate the horn
-          horn.addEventListener('click', function () {
-            pingHorn(horn);
-          });
-        }
-      }
-    });
-  </script>
 </section>
 
-
-<!-- =========================
-     QUICK BENTO – Start here
-========================= -->
-<section class="home-bento" aria-label="Start here">
-  <div class="container">
-    <ul class="home-bento__grid" role="list">
-      <!-- For recruiters / clients -->
-      <li class="home-bento__item">
-        <a class="home-bento__tile home-bento__tile--resume" href="{{ '/resume/' | relative_url }}">
-          <span class="home-bento__icon"><i class="ph-bold ph-briefcase"></i></span>
-          <div class="cv-line">Hire me for Salesforce & analytics work</div>
-        </a>
-      </li>
-
-      <!-- For learners -->
-      <li class="home-bento__item">
-        <a class="home-bento__tile home-bento__tile--video" href="{{ '/crm-analytics/' | relative_url }}">
-          <span class="home-bento__icon"><i class="ph-bold ph-chart-line-up"></i></span>
-          <div class="yt-frame"><div class="yt-thumb"></div></div>
-          <div class="yt-title">Learn Salesforce CRM Analytics</div>
-        </a>
-      </li>
-
-      <!-- For job seekers / students -->
-      <li class="home-bento__item">
-        <a class="home-bento__tile home-bento__tile--blog" href="{{ '/blog/' | relative_url }}">
-          <span class="home-bento__icon"><i class="ph-bold ph-graduation-cap"></i></span>
-          <div class="blog-title">Bangalore & career guides</div>
-          <p class="blog-excerpt">Job search, off-campus, and “what now?” after college.</p>
-        </a>
-      </li>
-
-      <!-- For creators / collabs -->
-      <li class="home-bento__item">
-        <a class="home-bento__tile home-bento__tile--github" href="{{ '/uses/' | relative_url }}">
-          <span class="home-bento__icon"><i class="ph-bold ph-film-slate"></i></span>
-          <div class="gh-head">
-            <span class="gh-repo">Gear, tools & setup</span>
-          </div>
-          <div class="gh-meta">
-            <span class="dot"></span> Camera, edit & dev stack
-            <span class="spacer"></span>
-            <i class="ph-bold ph-star"></i> For fellow creators
-          </div>
-        </a>
-      </li>
-    </ul>
-  </div>
-</section>
 
 <!-- =========================
      WORK SUMMARY

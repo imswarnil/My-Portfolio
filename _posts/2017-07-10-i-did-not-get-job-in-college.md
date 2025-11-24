@@ -1,5 +1,5 @@
 ---
-type: writing
+category: blog
 aside: true
 layout: post
 title: "I Didn’t Get a Job in College. Now What?—A Cinematic Guide From Mahroni to Bangalore"

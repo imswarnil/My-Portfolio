@@ -162,8 +162,11 @@
 @media (max-width: $bp-lg) {
   .post-layout { grid-template-columns: 1fr; }
   .sidebar { position: static; }
+  $sp-12--desktop { display: none; }
+  $sp-12--mobile { display: grid; margin-top: $sp-8; }
 }
 @media (min-width: $bp-lg) {
+  $sp-12--mobile { display: none; }
 }
 
 /* ---------------- Safety: media in article ---------------- */

@@ -1,0 +1,291 @@
+{% capture tocWorkspace %}
+    {% comment %}
+        Version 1.0.8
+        https://github.com/allejo/jekyll-toc
+    {% endcomment %}
+
+    {% capture my_toc %}{% endcapture %}
+    {% assign orderedList = include.ordered | default: false %}
+    {% assign minHeader = include.h_min | default: 1 %}
+    {% assign maxHeader = include.h_max | default: 6 %}
+    {% assign nodes = include.html | split: '<h' %}
+    {% assign firstHeader = true %}
+
+    {% capture listModifier %}{% if orderedList %}1.{% else %}-{% endif %}{% endcapture %}
+
+    {% for node in nodes %}
+        {% if node == "" %}
+            {% continue %}
+        {% endif %}
+
+        {% assign headerLevel = node | replace: '"', '' | slice: 0, 1 | times: 1 %}
+
+        {% if headerLevel < minHeader or headerLevel > maxHeader %}
+            {% continue %}
+        {% endif %}
+
+        {% if firstHeader %}
+            {% assign firstHeader = false %}
+            {% assign minHeader = headerLevel %}
+        {% endif %}
+
+        {% assign indentAmount = headerLevel | minus: minHeader %}
+        {% assign _workspace = node | split: '</h' %}
+
+        {% assign _idWorkspace = _workspace[0] | split: 'id="' %}
+        {% assign _idWorkspace = _idWorkspace[1] | split: '"' %}
+        {% assign html_id = _idWorkspace[0] %}
+
+        {% assign _classWorkspace = _workspace[0] | split: 'class="' %}
+        {% assign _classWorkspace = _classWorkspace[1] | split: '"' %}
+        {% assign html_class = _classWorkspace[0] %}
+
+        {% if html_class contains "no_toc" %}
+            {% continue %}
+        {% endif %}
+
+        {% capture _hAttrToStrip %}{{ _workspace[0] | split: '>' | first }}>{% endcapture %}
+        {% assign header = _workspace[0] | replace: _hAttrToStrip, '' %}
+
+        {% assign space = '' %}
+        {% for i in (1..indentAmount) %}
+            {% assign space = space | prepend: '    ' %}
+        {% endfor %}
+
+        {% unless include.item_class == blank %}
+            {% capture listItemClass %}{:.{{ include.item_class | replace: '%level%', headerLevel }}}{% endcapture %}
+        {% endunless %}
+
+        {% capture heading_body %}{% if include.sanitize %}{{ header | strip_html }}{% else %}{{ header }}{% endif %}{% endcapture %}
+        {% capture my_toc %}{{ my_toc }}
+{{ space }}{{ listModifier }} {{ listItemClass }} [{{ heading_body | replace: "|", "\|" }}]({% if include.baseurl %}{{ include.baseurl }}{% endif %}#{{ html_id }}){% if include.anchor_class %}{:.{{ include.anchor_class }}}{% endif %}{% endcapture %}
+    {% endfor %}
+
+    {% if include.class %}
+        {% capture my_toc %}{:.{{ include.class }}}
+{{ my_toc | lstrip }}{% endcapture %}
+    {% endif %}
+
+    {% if include.id %}
+        {% capture my_toc %}{: #{{ include.id }}}
+{{ my_toc | lstrip }}{% endcapture %}
+    {% endif %}
+{% endcapture -%}
+{%- assign tocWorkspace = '' -%}
+
+{%- assign contentsTitle = include.contents_title | default: 'On this page' -%}
+
+<aside class="toc-rail" data-toc data-collapsible="true">
+  <div class="toc-rail__inner">
+    <!-- Header row: donut + title + chevron (collapse toggle) -->
+    <button class="toc-rail__header" type="button" data-toc-toggle aria-expanded="true">
+      <div class="toc-rail__progress">
+        <svg class="toc-rail__donut" viewBox="0 0 40 40" aria-hidden="true">
+          <circle class="toc-rail__donut-bg" cx="20" cy="20" r="16"></circle>
+          <circle class="toc-rail__donut-fill" cx="20" cy="20" r="16" data-toc-donut></circle>
+        </svg>
+        <div class="toc-rail__percent">
+          <span class="toc-rail__percent-value" data-toc-percent>0%</span>
+          <span class="toc-rail__percent-label">Done</span>
+        </div>
+      </div>
+
+      <div class="toc-rail__titles">
+        <p class="toc-rail__label">{{ contentsTitle }}</p>
+        <p class="toc-rail__subtitle">Jump to section</p>
+      </div>
+
+      <span class="toc-rail__chevron" aria-hidden="true">
+        <i class="ph-bold ph-caret-down"></i>
+      </span>
+    </button>
+
+    <!-- Body: timeline nav -->
+    <div class="toc-rail__body" data-toc-body>
+      <nav class="toc-rail__nav" aria-label="{{ contentsTitle }}">
+        <div class="toc-rail__list">
+          {{ my_toc | markdownify | strip }}
+        </div>
+      </nav>
+    </div>
+  </div>
+</aside>
+
+<script>
+(function() {
+  function initToc(toc) {
+    if (!toc) return;
+
+    var toggle     = toc.querySelector("[data-toc-toggle]");
+    var bodyEl     = toc.querySelector("[data-toc-body]");
+    var percentEl  = toc.querySelector("[data-toc-percent]");
+    var donutEl    = toc.querySelector("[data-toc-donut]");
+    var listEl     = toc.querySelector(".toc-rail__list");
+    var navLinks   = Array.from(toc.querySelectorAll(".toc-rail__nav a[href^='#']"));
+
+    if (!navLinks.length) return;
+
+    // Collapse helper (no independent scroll)
+    function setCollapsed(collapsed) {
+      if (!bodyEl) return;
+
+      toc.classList.toggle("toc-is-collapsed", collapsed);
+      if (toggle) toggle.setAttribute("aria-expanded", String(!collapsed));
+
+      if (collapsed) {
+        bodyEl.style.maxHeight = bodyEl.scrollHeight + "px";
+        requestAnimationFrame(function () {
+          bodyEl.style.maxHeight = "0px";
+        });
+      } else {
+        bodyEl.style.maxHeight = bodyEl.scrollHeight + "px";
+        var onEnd = function (e) {
+          if (e.propertyName === "max-height") {
+            bodyEl.style.maxHeight = "none";
+            bodyEl.removeEventListener("transitionend", onEnd);
+          }
+        };
+        bodyEl.addEventListener("transitionend", onEnd);
+      }
+    }
+
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        var collapsed = toc.classList.contains("toc-is-collapsed");
+        setCollapsed(!collapsed);
+      });
+    }
+
+    // Start collapsed on mobile
+    try {
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        setCollapsed(true);
+      } else if (bodyEl) {
+        bodyEl.style.maxHeight = "none";
+      }
+    } catch (e) {}
+
+    // Build heading map
+    var items = navLinks
+      .map(function (link) {
+        var href = link.getAttribute("href") || "";
+        if (!href || href.charAt(0) !== "#") return null;
+        var id = decodeURIComponent(href.slice(1));
+        var heading = document.getElementById(id);
+        if (!heading) return null;
+        return { id: id, link: link, heading: heading };
+      })
+      .filter(Boolean);
+
+    if (!items.length) return;
+
+    var total = items.length;
+    var liNodes = items.map(function (item) {
+      return item.link.closest("li");
+    });
+
+    // Donut setup — always 100% circumference; we just animate offset
+    var radius = 16;
+    var circumference = 2 * Math.PI * radius;
+
+    if (donutEl) {
+      donutEl.style.strokeDasharray = circumference + " " + circumference;
+      donutEl.style.strokeDashoffset = circumference;
+    }
+
+    function updateProgressVisual(percent) {
+      var clamped = Math.max(0, Math.min(100, percent || 0));
+
+      if (percentEl) {
+        percentEl.textContent = clamped + "%";
+      }
+
+      if (donutEl) {
+        var offset = circumference - (clamped / 100) * circumference;
+        donutEl.style.strokeDashoffset = offset;
+      }
+
+      if (listEl) {
+        listEl.style.setProperty("--toc-progress", clamped + "%");
+      }
+    }
+
+    function setActive(id) {
+      var activeIndex = -1;
+
+      items.forEach(function (item, idx) {
+        var isActive = item.id === id;
+        if (isActive) activeIndex = idx;
+        item.link.classList.toggle("toc-is-active", isActive);
+      });
+
+      liNodes.forEach(function (li, idx) {
+        if (!li) return;
+        li.classList.remove("toc-is-current", "toc-is-past");
+        if (activeIndex === -1) return;
+        if (idx < activeIndex) li.classList.add("toc-is-past");
+        if (idx === activeIndex) li.classList.add("toc-is-current");
+      });
+
+      if (activeIndex === -1 || !total) {
+        updateProgressVisual(0);
+      } else {
+        var pct = ((activeIndex + 1) / total) * 100;
+        updateProgressVisual(Math.round(pct));
+      }
+    }
+
+    // Scrollspy via IntersectionObserver
+    if ("IntersectionObserver" in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var id = entry.target.id;
+          setActive(id);
+        });
+      }, {
+        rootMargin: "0px 0px -55% 0px",
+        threshold: 0.15
+      });
+
+      items.forEach(function (item) {
+        observer.observe(item.heading);
+      });
+    }
+
+    // Smooth scroll on click
+    navLinks.forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        var href = this.getAttribute("href");
+        if (!href || href.charAt(0) !== "#") return;
+
+        var target = document.getElementById(decodeURIComponent(href.slice(1)));
+        if (!target) return;
+
+        e.preventDefault();
+
+        var navOffset = 80; // navbar approx
+        var rect = target.getBoundingClientRect();
+        var scrollTarget = rect.top + window.pageYOffset - navOffset;
+
+        window.scrollTo({
+          top: scrollTarget,
+          behavior: "smooth"
+        });
+      });
+    });
+  }
+
+  function boot() {
+    var all = document.querySelectorAll("[data-toc]");
+    if (!all.length) return;
+    initToc(all[all.length - 1]); // use closest instance
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>

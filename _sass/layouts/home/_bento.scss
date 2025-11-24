@@ -1,170 +1,330 @@
 /* =========================================
-   HOME – QUICK BENTO
+   HOME HUB – square bento, compact
 ========================================= */
 
-.home-bento {
-  margin-block: clamp($sp-12, 6vw, $sp-16);
+.home-hub {
+  position: relative;
+  margin-block: clamp($sp-10, 5vw, $sp-14);
   overflow-x: clip;
 }
 
-.home-bento__grid {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: $sp-7;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* two-up on mobile */
-
-  @include mq-up($bp-lg) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.home-bento__item {
-  min-width: 0;
-}
-
-.home-bento__tile {
+.home-hub__shell {
   position: relative;
-  display: grid;
-  gap: $sp-5;
-  min-height: clamp(110px, 20vw, 140px);
-  padding: clamp($sp-8, 2.2vw, $sp-10);
-  border-radius: $radius-5;
-  border: 1px solid;
-  text-decoration: none;
+  border-radius: $radius-6;
+  padding: clamp($sp-8, 3vw, $sp-10);
+  overflow: hidden;
 
   @include theme-block {
-    background: tone(surface, light);
-    border-color: tone(border, light);
-    color: tone(contrast, light);
+    background: tone(background, light);
     box-shadow: $shadow-light;
+    border: 1px solid tone(border, light);
   }
   @include theme-block-dark {
-    background: tone(surface, dark);
-    border-color: tone(border, dark);
-    color: tone(contrast, dark);
+    background: tone(background, dark);
     box-shadow: $shadow-dark;
-  }
-
-  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out;
-  will-change: transform;
-
-  &:hover {
-    transform: perspective(900px) rotateX(1.25deg) rotateY(2deg) translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0,0,0,.14);
+    border: 1px solid tone(border, dark);
   }
 }
 
-/* Corner icon perched on the border */
-.home-bento__icon {
+/* Fading grid background */
+
+.home-hub__bg-grid {
   position: absolute;
-  top: -.6rem;
-  left: -.6rem;
-  inline-size: 2.2rem;
-  block-size: 2.2rem;
-  display: grid;
-  place-items: center;
-  border-radius: $radius-4;
-  border: 1px solid;
+  inset: -40%;
+  pointer-events: none;
+  z-index: 0;
+
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(160,160,160,0.14) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(160,160,160,0.14) 1px,
+      transparent 1px
+    );
+
+  background-size: 32px 32px;
+
+  mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 72%);
+  -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 72%);
+
+  opacity: 0.55;
 
   @include theme-block {
-    background: tone(surface, light);
-    border-color: tone(border, light);
-    box-shadow: $shadow-light;
+    background-image:
+      linear-gradient(
+        to right,
+        rgba(0,0,0,0.08) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.08) 1px,
+        transparent 1px
+      );
   }
   @include theme-block-dark {
-    background: tone(surface, dark);
-    border-color: tone(border, dark);
-    box-shadow: $shadow-dark;
+    background-image:
+      linear-gradient(
+        to right,
+        rgba(255,255,255,0.07) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.07) 1px,
+        transparent 1px
+      );
   }
 }
 
-/* GitHub-like */
-.home-bento__tile--github {
-  .gh-head {
-    display: flex;
-    align-items: center;
-    gap: $sp-5;
-    font-weight: $fw-semibold;
-  }
+.home-hub__head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $sp-2;
+  margin-bottom: $sp-7;
 
-  .gh-repo {
-    font-size: $fs-4;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .gh-meta {
-    display: flex;
-    align-items: center;
-    gap: $sp-6;
-    font-size: $fs-2;
-    opacity: .9;
-    flex-wrap: wrap;
-  }
-
-  .dot {
-    inline-size: .5rem;
-    block-size: .5rem;
-    border-radius: 50%;
-    background: currentColor;
-  }
-
-  .spacer {
-    inline-size: 1px;
-    block-size: 1rem;
-    background: currentColor;
-    opacity: .2;
-  }
-}
-
-/* YouTube-like */
-.home-bento__tile--video {
-  .yt-frame {
-    border-radius: $radius-4;
-    overflow: hidden;
-    border: 1px solid;
-
-    @include theme-block {
-      border-color: tone(border, light);
-      background: tone(background-100, light);
-    }
-    @include theme-block-dark {
-      border-color: tone(border, dark);
-      background: tone(background-200, dark);
-    }
-  }
-
-  .yt-thumb {
-    aspect-ratio: 16 / 9;
-    background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.18));
-  }
-
-  .yt-title {
-    font-weight: $fw-medium;
-  }
-}
-
-/* Blog */
-.home-bento__tile--blog {
-  .blog-title {
-    font-weight: $fw-semibold;
-  }
-
-  .blog-excerpt {
+  .home-hub__title {
     margin: 0;
-    font-size: $fs-2;
+    font-size: $fs-7;
+    line-height: $lh-tight;
+  }
 
+  .home-hub__subtitle {
+    margin: 0;
+    font-size: $fs-3;
+    max-width: 48ch;
     @include theme-block      { color: tone(secondary, light); }
     @include theme-block-dark { color: tone(secondary, dark);  }
   }
 }
 
-/* Resume */
-.home-bento__tile--resume {
-  .cv-line {
-    font-weight: $fw-semibold;
+/* Grid – compact squares */
+
+.home-hub__grid {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  gap: $sp-5;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Tile – square, smaller height via minmax width */
+
+.home-hub__tile {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  row-gap: $sp-3;
+
+  padding: $sp-5;
+  border-radius: $radius-5;
+  border: 1px solid;
+  box-sizing: border-box;
+  text-decoration: none;
+  cursor: pointer;
+
+  aspect-ratio: 1 / 1; // SQUARE, but smaller due to min width 180px
+
+  @include theme-block {
+    background: radial-gradient(circle at top left, #ffffff, #f3f3f3);
+    border-color: #d4d4d4;
+    color: #111;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  }
+  @include theme-block-dark {
+    background: radial-gradient(circle at top left, #202020, #060606);
+    border-color: #333;
+    color: #f5f5f5;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.7);
+  }
+
+  transition:
+    transform $dur-1 $ease-in-out,
+    box-shadow $dur-1 $ease-in-out,
+    border-color $dur-1 $ease-in-out,
+    background-color $dur-1 $ease-in-out;
+
+  &:hover {
+    transform: translateY(-3px);
+    @include theme-block {
+      box-shadow: 0 12px 26px rgba(0,0,0,0.15);
+      border-color: mix(#d4d4d4, #111, 65%);
+    }
+    @include theme-block-dark {
+      box-shadow: 0 14px 32px rgba(0,0,0,0.85);
+      border-color: mix(#333, #f5f5f5, 60%);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+/* Top row: icon + pill */
+
+.home-hub__tile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-3;
+}
+
+.home-hub__icon {
+  inline-size: 2.2rem;
+  block-size: 2.2rem;
+  border-radius: $radius-4;
+  display: grid;
+  place-items: center;
+  border: 1px solid;
+
+  i {
+    font-size: $fs-4;
+  }
+
+  @include theme-block {
+    background: rgba(255,255,255,0.86);
+    border-color: #d4d4d4;
+    color: #111;
+  }
+  @include theme-block-dark {
+    background: rgba(18,18,18,0.9);
+    border-color: #3a3a3a;
+    color: #f8f8f8;
+  }
+}
+
+.home-hub__tag {
+  padding-inline: .6rem;
+  padding-block: .15rem;
+  border-radius: 999px;
+  border: 1px solid;
+  font-size: $fs-1;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  white-space: nowrap;
+
+  @include theme-block {
+    border-color: rgba(0,0,0,0.12);
+    color: rgba(0,0,0,0.55);
+    background: rgba(255,255,255,0.9);
+  }
+  @include theme-block-dark {
+    border-color: rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.65);
+    background: rgba(12,12,12,0.9);
+  }
+}
+
+/* Middle row */
+
+.home-hub__tile-main {
+  display: grid;
+  gap: $sp-2;
+  align-content: center;
+  min-height: 0;
+}
+
+.home-hub__tile-title {
+  margin: 0;
+  font-size: $fs-4;
+  line-height: $lh-tight;
+  font-weight: $fw-semibold;
+}
+
+.home-hub__tile-meta {
+  margin: 0;
+  font-size: $fs-2;
+  max-width: 26ch;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+/* Footer row */
+
+.home-hub__tile-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-3;
+  font-size: $fs-2;
+}
+
+.home-hub__stat-label {
+  opacity: .8;
+}
+
+.home-hub__stat-dot {
+  inline-size: .5rem;
+  block-size: .5rem;
+  border-radius: 999px;
+
+  @include theme-block      { background: #111; }
+  @include theme-block-dark { background: #f5f5f5; }
+}
+
+.home-hub__stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding-inline: .6rem;
+  padding-block: .2rem;
+  border-radius: 999px;
+  border: 1px dashed;
+
+  i {
+    font-size: $fs-2;
+  }
+
+  @include theme-block {
+    border-color: rgba(0,0,0,0.25);
+    color: rgba(0,0,0,0.7);
+    background: rgba(255,255,255,0.9);
+  }
+  @include theme-block-dark {
+    border-color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.75);
+    background: rgba(8,8,8,0.95);
+  }
+}
+
+.home-hub__cta {
+  font-weight: $fw-medium;
+  white-space: nowrap;
+
+  @include theme-block      { color: #111; }
+  @include theme-block-dark { color: #f7f7f7; }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Small screens */
+
+@media (max-width: $bp-sm) {
+  .home-hub__shell {
+    padding: $sp-7;
+  }
+
+  .home-hub__tile {
+    padding: $sp-4;
+    aspect-ratio: 1 / 1;
+  }
+
+  .home-hub__tile-title {
+    font-size: $fs-3;
+  }
+
+  .home-hub__tile-meta {
+    font-size: $fs-1;
   }
 }

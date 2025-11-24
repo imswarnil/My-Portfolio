@@ -14,8 +14,11 @@
   {% include adsense.html type="horizontal" %}
   {% include footer.html %}
   </main>
-  {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
+  {% if site.service_worker != false %}
+  {% include site-sw.html %}{% endif %}
   {% include site-before-end.html %}
+  <script src="{{ '/assets/scripts/custom.js' | relative_url }}"></script>
+
 </body>
 
 </html>

@@ -1,85 +1,80 @@
 /* =========================================
-   HERO
+   HOME HERO (scoped)
 ========================================= */
+
 .home-hero {
   position: relative;
   padding-block: clamp($sp-10, 4.5vw, $sp-14);
   overflow-x: clip;
-
-  /* Fading grid background */
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: .55;
-    background-size: 32px 32px;
-    mix-blend-mode: soft-light;
-    mask-image: radial-gradient(circle at center, #000 0, #000 45%, transparent 100%);
-    -webkit-mask-image: radial-gradient(circle at center, #000 0, #000 45%, transparent 100%);
-  }
-
-  @include theme-block {
-    &::before {
-      background-image:
-        linear-gradient(
-          to right,
-          rgba(tone(border, light), .32) 1px,
-          transparent 1px
-        ),
-        linear-gradient(
-          to bottom,
-          rgba(tone(border, light), .32) 1px,
-          transparent 1px
-        );
-    }
-  }
-
-  @include theme-block-dark {
-    &::before {
-      background-image:
-        linear-gradient(
-          to right,
-          rgba(tone(border, dark), .42) 1px,
-          transparent 1px
-        ),
-        linear-gradient(
-          to bottom,
-          rgba(tone(border, dark), .42) 1px,
-          transparent 1px
-        );
-    }
-  }
-
-  .container {
-    position: relative;
-    z-index: 1; // keep content above the grid
-  }
 }
 
+/* Animated grid background */
+.home-hero__bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  background-image:
+    linear-gradient(to right,
+      rgba(0,0,0,0.06) 1px,
+      transparent 1px),
+    linear-gradient(to bottom,
+      rgba(0,0,0,0.06) 1px,
+      transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.35;
+  mask-image: radial-gradient(circle at center, black 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 78%);
+
+  @include theme-block-dark {
+    background-image:
+      linear-gradient(to right,
+        rgba(255,255,255,0.12) 1px,
+        transparent 1px),
+      linear-gradient(to bottom,
+        rgba(255,255,255,0.12) 1px,
+        transparent 1px);
+    opacity: 0.4;
+  }
+
+  animation: home-hero-grid-pan 18s linear infinite;
+}
+
+@keyframes home-hero-grid-pan {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 22px 22px, 22px 22px; }
+}
+
+/* Layout */
 .home-hero__grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: clamp($sp-8, 3vw, $sp-12);
   grid-template-columns: 1fr;
   align-items: center;
 
   @include mq-up($bp-lg) {
-    grid-template-columns: 1.05fr .95fr; // keep original balance
+    grid-template-columns: 1.05fr 0.95fr;
   }
 }
 
-/* Make art first on mobile and perfectly centered */
+/* Art first on mobile */
 @media (max-width: $bp-lg) {
-  .home-hero__art-wrap { order: -1; }
+  .home-hero__art-wrap {
+    order: -1;
+  }
 }
 
+/* Copy side */
 .home-hero__copy {
   display: grid;
   gap: $sp-6;
   min-width: 0;
 }
 
+/* Hi + hand */
 .home-hero__hello {
   margin: 0;
   display: flex;
@@ -89,17 +84,19 @@
   font-weight: $fw-medium;
 
   i {
+    color: #facc15; // yellow
+    font-size: 1.5em;
     transform-origin: 60% 60%;
-    animation: wave 1.6s ease-in-out infinite;
+    animation: home-hero-wave 1.2s ease-in-out infinite;
   }
 }
 
-@keyframes wave {
-  0%, 100% { transform: rotate(0); }
-  20%      { rotate: 16deg; }
-  40%      { rotate: -10deg; }
-  60%      { rotate: 12deg; }
-  80%      { rotate: -6deg; }
+@keyframes home-hero-wave {
+  0%,100% { transform: rotate(0deg); }
+  20%     { transform: rotate(16deg); }
+  40%     { transform: rotate(-10deg); }
+  60%     { transform: rotate(12deg); }
+  80%     { transform: rotate(-6deg); }
 }
 
 .home-hero__name {
@@ -107,68 +104,12 @@
   font-weight: $fw-bold;
   line-height: $lh-tight;
   font-size: clamp($fs-7, 6vw, $fs-10);
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: $sp-4;
-}
-
-/* Horn button next to name */
-.home-hero__horn {
-  border: 0;
-  padding: .15rem .55rem;
-  border-radius: $radius-pill;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: .25rem;
-  font-size: $fs-2;
-  line-height: 1;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition:
-    transform 160ms $ease-in-out,
-    box-shadow 160ms $ease-in-out,
-    background-color 160ms $ease-in-out,
-    color 160ms $ease-in-out;
-
-  @include theme-block {
-    background: rgba(255,255,255,.8);
-    color: tone(secondary, light);
-    box-shadow: 0 4px 10px rgba(0,0,0,.06);
-  }
-  @include theme-block-dark {
-    background: rgba(20,20,22,.9);
-    color: tone(secondary, dark);
-    box-shadow: 0 4px 12px rgba(0,0,0,.5);
-  }
-
-  i {
-    font-size: $fs-3;
-  }
-
-  &:hover {
-    transform: translateY(-1px);
-    @include theme-block      { color: tone(contrast, light); }
-    @include theme-block-dark { color: tone(contrast, dark);  }
-  }
-
-  &.is-ping {
-    animation: horn-ping 0.26s ease-out;
-  }
-}
-
-@keyframes horn-ping {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.12) translateY(-1px); }
-  100% { transform: scale(1); }
 }
 
 .home-hero__sub {
   margin: 0;
   font-size: clamp($fs-4, 2.4vw, $fs-6);
-  opacity: .94;
+  opacity: 0.92;
 }
 
 .home-hero__bio {
@@ -176,10 +117,11 @@
   max-width: 60ch;
   font-size: $fs-3;
 
-  @include theme-block      { color: tone(foreground, light); }
-  @include theme-block-dark { color: tone(foreground, dark);  }
+  @include theme-block { color: tone(foreground, light); }
+  @include theme-block-dark { color: tone(foreground, dark); }
 }
 
+/* CTA row */
 .home-hero__cta {
   display: flex;
   flex-wrap: wrap;
@@ -187,16 +129,17 @@
   align-items: center;
 
   .button {
-    @include theme-block      { color: tone(white, light); }
-    @include theme-block-dark { color: tone(black, dark);  }
+    @include theme-block { color: tone(white, light); }
+    @include theme-block-dark { color: tone(black, dark); }
 
     &:hover {
-      @include theme-block      { color: tone(white, light); }
-      @include theme-block-dark { color: tone(black, dark);  }
+      @include theme-block { color: tone(white, light); }
+      @include theme-block-dark { color: tone(black, dark); }
     }
   }
 }
 
+/* Meta */
 .home-hero__meta {
   display: grid;
   gap: $sp-3;
@@ -209,11 +152,11 @@
   gap: $sp-5;
   font-size: $fs-2;
 
-  @include theme-block      { color: tone(secondary, light); }
-  @include theme-block-dark { color: tone(secondary, dark);  }
+  @include theme-block { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark); }
 }
 
-/* Pill stats */
+/* Stats (hero-only) */
 .home-hero__stats {
   display: flex;
   flex-wrap: wrap;
@@ -223,7 +166,7 @@
   list-style: none;
 }
 
-.pill {
+.home-hero__pill {
   display: inline-flex;
   align-items: center;
   gap: $sp-5;
@@ -241,20 +184,23 @@
     border-color: tone(border, dark);
     box-shadow: $shadow-dark;
   }
-
-  .pill__val {
-    font-weight: $fw-semibold;
-    font-size: $fs-3;
-    line-height: $lh-tight;
-  }
-
-  .pill__label {
-    font-size: $fs-1;
-    opacity: .9;
-  }
 }
 
-/* Art wrapper */
+.home-hero__pill-val {
+  font-weight: $fw-semibold;
+  font-size: $fs-3;
+  line-height: $lh-tight;
+}
+
+.home-hero__pill-label {
+  font-size: $fs-1;
+  opacity: .9;
+}
+
+/* ================================
+   ART CARD (outer container)
+================================ */
+
 .home-hero__art-wrap {
   position: relative;
 }
@@ -262,161 +208,194 @@
 .home-hero__art {
   margin: 0;
   width: min(96%, 520px);
+  border-radius: $radius-6;
+  overflow: visible; // social rail hangs out
   justify-self: center;
   position: relative;
-}
-
-/* Frame container: 3D tilt towards content */
-.home-hero__video-shell {
-  position: relative;
-  width: 100%;
-  border-radius: $radius-6;
-  overflow: hidden;
-  isolation: isolate;
-  transition:
-    transform 350ms $ease-in-out,
-    box-shadow 300ms $ease-in-out;
+  padding: $sp-6; // inner padding for media
 
   @include theme-block {
     background: tone(background-100, light);
-    border: 1px solid tone(border, light);
+    border: 1px solid tone(border, light);  // single border
     box-shadow: $shadow-light;
   }
   @include theme-block-dark {
     background: tone(background-200, dark);
-    border: 1px solid tone(border, dark);
+    border: 1px solid tone(border, dark);   // single border
     box-shadow: $shadow-dark;
   }
 }
 
-/* Default no tilt on small screens for stability */
-@media (min-width: $bp-lg) {
-  .home-hero__video-shell {
-    transform: perspective(1200px) rotateY(-5deg) rotateX(1deg);
-    transform-origin: center left;
-  }
-  .home-hero__video-shell:hover {
-    transform: perspective(1200px) rotateY(-2deg) rotateX(0deg) translateY(-2px);
+@media (max-width: $bp-lg) {
+  .home-hero__art {
+    width: min(100%, 420px);
   }
 }
 
-/* Ratio spacer: square → 16/9 when playing */
-.home-hero__ratio {
+/* Inner media frame:
+   - Square by default (padding-top:100%)
+   - 16:9 when playing (padding-top:56.25%)
+   => outer height adjusts accordingly
+*/
+.home-hero__media {
+  position: relative;
   width: 100%;
-  padding-top: 100%; /* 1:1 */
-  transition: padding-top 350ms $ease-in-out;
-}
-
-.home-hero__video-shell[data-hero-state="playing"] .home-hero__ratio {
-  padding-top: 56.25%; /* 16/9 */
-}
-
-/* Poster image with vintage overlay */
-.home-hero__video-poster {
-  position: absolute;
-  inset: 0;
+  padding-top: 100%; // square by default
+  border-radius: $radius-5;
   overflow: hidden;
-  z-index: 1;
-  transition: opacity 260ms ease;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: contrast(1.05) saturate(.9) brightness(.96);
-  }
+  @include theme-block   { background: tone(background-100, light); }
+  @include theme-block-dark { background: tone(background-200, dark); }
+
+  transition:
+    padding-top 220ms $ease-in-out,
+    transform 220ms $ease-in-out,
+    border-radius 220ms $ease-in-out;
 }
 
-/* Hide poster while playing */
-.home-hero__video-shell[data-hero-state="playing"] .home-hero__video-poster {
-  opacity: 0;
+/* When playing, morph to 16:9 and subtle lift */
+.home-hero.home-hero--playing .home-hero__media {
+  padding-top: 56.25%; // 16:9
+  transform: scale(1.01);
+  border-radius: $radius-4;
 }
 
-/* Old TV scanlines + grain */
-.home-hero__video-poster::before,
-.home-hero__video-poster::after {
-  content: "";
+/* Image + video layers */
+.home-hero__thumb,
+.home-hero__video {
   position: absolute;
   inset: 0;
+  transition: opacity 0.22s $ease-in-out;
+}
+
+.home-hero__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.home-hero__thumb {
+  opacity: 1;
+}
+
+/* VIDEO: fills the media frame, keeps 16:9 via absolutely positioned iframe */
+.home-hero__video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
   pointer-events: none;
 }
 
-.home-hero__video-poster::before {
-  background-image:
-    linear-gradient(to bottom, rgba(0,0,0,.24) 0, rgba(0,0,0,0) 2px);
-  background-size: 100% 3px;
-  opacity: .55;
-  mix-blend-mode: soft-light;
-}
-
-.home-hero__video-poster::after {
-  background-image:
-    radial-gradient(circle at 0 0, rgba(255,255,255,.09) 0, transparent 40%),
-    radial-gradient(circle at 100% 0, rgba(0,0,0,.12) 0, transparent 45%),
-    radial-gradient(circle at 0 100%, rgba(0,0,0,.12) 0, transparent 45%),
-    radial-gradient(circle at 100% 100%, rgba(255,255,255,.06) 0, transparent 45%);
-  mix-blend-mode: soft-light;
-  opacity: .5;
-  animation: hero-grain 2.4s steps(3) infinite;
-}
-
-@keyframes hero-grain {
-  0%   { transform: translate3d(0,0,0); }
-  25%  { transform: translate3d(-4px, 3px, 0); }
-  50%  { transform: translate3d(3px,-2px, 0); }
-  75%  { transform: translate3d(-2px,-3px, 0); }
-  100% { transform: translate3d(0,0,0); }
-}
-
-/* YouTube iframe container (filled by JS) */
-.home-hero__video-embed {
+.home-hero__video-frame {
   position: absolute;
   inset: 0;
-  z-index: 2;
+}
 
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    display: block;
+.home-hero__video-frame iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: $radius-4;
+}
+
+/* Playing state: swap layers */
+.home-hero.home-hero--playing {
+  .home-hero__thumb {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .home-hero__video {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 
-/* External play / pause pill button */
-.home-hero__video-toggle {
+/* Play button – icon only, with tooltip */
+.home-hero__play {
   position: absolute;
-  left: $sp-6;
-  bottom: $sp-6;
-  z-index: 3;
+  left: $sp-5;
+  bottom: $sp-5;
   display: inline-flex;
   align-items: center;
-  gap: .45rem;
-  padding: .42rem .9rem;
-  border-radius: $radius-pill;
-  border: 1px solid;
-  font-size: $fs-2;
+  justify-content: center;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: $fs-4;
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: 0;
   text-decoration: none;
-  white-space: nowrap;
 
   @include theme-block {
-    background: rgba(0,0,0,.78);
+    background: tone(contrast, light);
     color: tone(white, light);
-    border-color: rgba(255,255,255,.16);
+    box-shadow: $shadow-light;
   }
   @include theme-block-dark {
-    background: rgba(0,0,0,.82);
-    color: tone(white, dark);
-    border-color: rgba(255,255,255,.18);
+    background: tone(white, dark);
+    color: tone(black, dark);
+    box-shadow: $shadow-dark;
   }
 
-  i { font-size: $fs-3; line-height: 1; }
+  transition:
+    transform $dur-1 $ease-in-out,
+    box-shadow $dur-1 $ease-in-out,
+    background-color $dur-1 $ease-in-out;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(0,0,0,.18);
+  }
+
+  /* Tooltip */
+  &::after {
+    content: "Watch my story";
+    position: absolute;
+    left: 0;  // anchor so it doesn't go out of frame
+    bottom: calc(100% + 0.55rem);
+    white-space: nowrap;
+    font-size: $fs-1;
+    padding: 0.25rem 0.55rem;
+    border-radius: $radius-3;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0);
+    transition: opacity $dur-1 $ease-in-out, transform $dur-1 $ease-in-out;
+
+    @include theme-block {
+      background: tone(background-200, light);
+      color: tone(contrast, light);
+      box-shadow: $shadow-light;
+    }
+    @include theme-block-dark {
+      background: tone(background-200, dark);
+      color: tone(contrast, dark);
+      box-shadow: $shadow-dark;
+    }
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
 }
 
-/* Social rail half in/out */
+@media (max-width: $bp-lg) {
+  .home-hero__play {
+    left: auto;
+    right: $sp-4;
+    bottom: auto;
+    top: $sp-4;
+  }
+}
+
+/* Social rail: half on border, half outside */
 .home-hero__social {
   position: absolute;
   margin: 0;
@@ -427,8 +406,9 @@
 
   /* mobile: bottom center, half outside */
   left: 50%;
-  bottom: -0.9rem;
+  bottom: -1.1rem;
   transform: translateX(-50%);
+
   li { margin: 0; }
 
   a {
@@ -439,6 +419,7 @@
     border-radius: $radius-4;
     text-decoration: none;
     border: 1px solid;
+    cursor: pointer;
 
     @include theme-block {
       background: tone(surface, light);
@@ -462,13 +443,12 @@
   }
 }
 
-/* Desktop: right-side vertical rail half outside */
 @media (min-width: $bp-lg) {
   .home-hero__social {
     top: 50%;
     bottom: auto;
     left: auto;
-    right: -1.1rem;
+    right: -1.1rem; // ~half outside
     transform: translateY(-50%);
     flex-direction: column;
   }

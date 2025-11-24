@@ -366,6 +366,7 @@
     var header   = document.getElementById("site-navbar");
     var panel    = document.getElementById("mobile-panel");
     var toggle   = document.getElementById("mobile-menu-toggle");
+    var panelClose = document.getElementById("mobile-panel-close"); // NEW
     var themeBtn = document.getElementById("theme-toggle");
 
     // ===========================
@@ -420,17 +421,6 @@
       }
     }
 
-    // Initial layout
-    applyLayout();
-    // After initial render (fonts / async stuff)
-    window.setTimeout(applyLayout, 120);
-
-    // On resize: recompute layout + height with rAF for smoother animation
-    window.addEventListener("resize", function () {
-      window.requestAnimationFrame(applyLayout);
-    });
-    window.addEventListener("orientationchange", applyLayout);
-
     // ===========================
     // MOBILE PANEL OPEN/CLOSE
     // ===========================
@@ -447,6 +437,21 @@
           panel.style.maxHeight = "0px";
         });
       }
+    }
+
+    function resetMobileSubmenus() {
+      if (!panel) return;
+      var openItems = panel.querySelectorAll(".mobile-nav-item.is-open");
+      openItems.forEach(function (item) {
+        item.classList.remove("is-open");
+        var submenu = item.querySelector(".mobile-submenu");
+        if (submenu) {
+          submenu.style.maxHeight = "0px";
+          submenu.hidden = true;
+        }
+        var btn = item.querySelector(".mobile-nav-toggle");
+        if (btn) btn.setAttribute("aria-expanded", "false");
+      });
     }
 
     function openPanel() {
@@ -469,6 +474,7 @@
       if (toggle) toggle.setAttribute("aria-expanded", "false");
       body.classList.remove("panel-open");
       setPanelHeight(false);
+      resetMobileSubmenus(); // collapse accordions when panel closes
     }
 
     function togglePanel() {
@@ -480,7 +486,21 @@
       }
     }
 
+    // Initial layout
+    applyLayout();
+    window.setTimeout(applyLayout, 120);
+
+    window.addEventListener("resize", function () {
+      window.requestAnimationFrame(applyLayout);
+    });
+    window.addEventListener("orientationchange", applyLayout);
+
     toggle && toggle.addEventListener("click", togglePanel);
+
+    // ✅ NEW: close button inside panel
+    panelClose && panelClose.addEventListener("click", function () {
+      closePanel();
+    });
 
     // Clicking a link inside the panel closes it
     panel && panel.addEventListener("click", function (e) {
@@ -506,6 +526,36 @@
         applyLayout();
       }
     });
+
+    // ===========================
+    // ✅ MOBILE SUBMENU ACCORDION
+    // ===========================
+    var mobileNav = document.querySelector(".mobile-nav");
+    if (mobileNav) {
+      mobileNav.addEventListener("click", function (e) {
+        var btn = e.target.closest(".mobile-nav-toggle");
+        if (!btn) return;
+
+        var item = btn.closest(".mobile-nav-item");
+        if (!item) return;
+        var submenu = item.querySelector(".mobile-submenu");
+        if (!submenu) return;
+
+        var isOpen = item.classList.contains("is-open");
+
+        if (isOpen) {
+          item.classList.remove("is-open");
+          submenu.style.maxHeight = "0px";
+          submenu.hidden = true;
+          btn.setAttribute("aria-expanded", "false");
+        } else {
+          item.classList.add("is-open");
+          submenu.hidden = false;
+          submenu.style.maxHeight = submenu.scrollHeight + "px";
+          btn.setAttribute("aria-expanded", "true");
+        }
+      });
+    }
 
     // ===========================
     // INLINE NAVBAR SEARCH

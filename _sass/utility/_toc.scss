@@ -1,0 +1,340 @@
+// ======================================================================
+// _toc.scss — TOC rail with donut + vertical timeline (no inner scroll)
+// ======================================================================
+
+.toc-rail {
+  position: sticky;
+  top: calc(var(--nav-h, #{$navbar-height}) + $sp-6);
+  // no independent scrolling
+  max-height: none;
+  overflow: visible;
+
+  margin: 0;
+  padding: 0;
+
+  border-radius: $radius-5;
+  border: 1px solid;
+  font-size: $fs-2;
+
+  @include theme-block {
+    background: mix(tone(background-100, light), tone(white, light), 85%);
+    border-color: tone(border, light);
+    box-shadow: $shadow-light;
+  }
+  @include theme-block-dark {
+    background: mix(tone(background-100, dark), tone(black, dark), 85%);
+    border-color: tone(border, dark);
+    box-shadow: $shadow-dark;
+  }
+
+  @media (max-width: $bp-md) {
+    position: static;
+    margin-top: $sp-8;
+  }
+}
+
+.toc-rail__inner {
+  padding: $sp-6 $sp-6 $sp-5;
+  display: grid;
+  gap: $sp-5;
+}
+
+// ----------------------------------------------------------------------
+// Header row (donut + title + chevron)
+// ----------------------------------------------------------------------
+
+.toc-rail__header {
+  display: flex;
+  align-items: center;
+  gap: $sp-5;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+
+.toc-rail__progress {
+  position: relative;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex-shrink: 0;
+}
+
+.toc-rail__donut {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  display: block;
+}
+
+.toc-rail__donut-bg,
+.toc-rail__donut-fill {
+  fill: none;
+  stroke-width: 4;
+}
+
+// base ring — light grey / silver
+.toc-rail__donut-bg {
+  @include theme-block      { stroke: mix(tone(background-200, light), tone(border, light), 50%); }
+  @include theme-block-dark { stroke: mix(tone(background-200, dark),  tone(border, dark),  60%); }
+}
+
+// progress ring — white / near white so it doesn't "choke" the line
+.toc-rail__donut-fill {
+  stroke-linecap: round;
+  @include theme-block      { stroke: tone(white, light); }
+  // 🔧 FIX: removed color.scale(), use a simple semi-opaque white instead
+  @include theme-block-dark { stroke: rgba(255, 255, 255, 0.82); }
+
+  transition: stroke-dashoffset $dur-2 $ease-in-out;
+}
+
+.toc-rail__percent {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.toc-rail__percent-value {
+  font-size: $fs-2;
+  font-weight: $fw-semibold;
+  line-height: 1;
+}
+
+.toc-rail__percent-label {
+  display: block;
+  font-size: $fs-1;
+  margin-top: $sp-1;
+  opacity: .75;
+}
+
+.toc-rail__titles {
+  display: grid;
+  gap: $sp-2;
+  min-width: 0;
+  flex: 1;
+}
+
+.toc-rail__label {
+  margin: 0;
+  font-size: $fs-2;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.toc-rail__subtitle {
+  margin: 0;
+  font-size: $fs-3;
+  line-height: $lh-tight;
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+
+.toc-rail__chevron {
+  flex-shrink: 0;
+  width: $btn-height-sm;
+  height: $btn-height-sm;
+  border-radius: $radius-pill;
+  border: 1px solid;
+  display: grid;
+  place-items: center;
+  font-size: $fs-3;
+  transition:
+    background-color $dur-1,
+    color $dur-1,
+    border-color $dur-1,
+    transform $dur-1 $ease-in-out;
+
+  @include theme-block {
+    border-color: tone(border, light);
+    color: tone(secondary, light);
+    background: rgba(255,255,255,0.88);
+  }
+  @include theme-block-dark {
+    border-color: tone(border, dark);
+    color: tone(secondary, dark);
+    background: rgba(12,12,14,0.94);
+  }
+}
+
+.toc-rail.toc-is-collapsed .toc-rail__chevron i {
+  transform: rotate(-90deg);
+}
+
+.toc-rail__header:hover .toc-rail__chevron {
+  @include theme-block      { background: tone(background-100, light); color: tone(contrast, light); }
+  @include theme-block-dark { background: tone(background-100, dark);  color: tone(contrast, dark);  }
+}
+
+// ----------------------------------------------------------------------
+// Body (collapsible, but no dedicated scroll)
+// ----------------------------------------------------------------------
+
+.toc-rail__body {
+  max-height: none;
+  overflow: visible;
+  transition: max-height $dur-2 $ease-in-out;
+}
+
+.toc-rail.toc-is-collapsed .toc-rail__body {
+  overflow: hidden;
+}
+
+// ----------------------------------------------------------------------
+// List & vertical timeline line
+// ----------------------------------------------------------------------
+
+.toc-rail__nav {
+  width: 100%;
+}
+
+.toc-rail__list {
+  position: relative;
+  max-width: 100%;
+  margin-top: $sp-6;
+  padding-left: $sp-10;
+  // progress line height; JS sets --toc-progress (0–100%)
+  --toc-progress: 0%;
+}
+
+// Base grey vertical line (from donut area)
+.toc-rail__list::before,
+.toc-rail__list::after {
+  content: "";
+  position: absolute;
+  top: -$sp-4;    // start just under donut center visually
+  bottom: $sp-2;
+  width: 2px;
+  border-radius: $radius-pill;
+  left: $sp-4;    // aligns with donut x-position
+}
+
+// background line (grey / silver)
+.toc-rail__list::before {
+  @include theme-block      { background: mix(tone(background-200, light), tone(border, light), 65%); }
+  @include theme-block-dark { background: mix(tone(background-200, dark),  tone(border, dark),  60%); }
+}
+
+// active fill line (accent color, partial height)
+.toc-rail__list::after {
+  bottom: auto;
+  height: var(--toc-progress, 0%);
+  transform-origin: top;
+  @include theme-block      { background: tone(contrast, light); }
+  @include theme-block-dark { background: tone(white, dark);     }
+}
+
+.toc-rail li {
+  position: relative;
+  margin: 0;
+  padding: $sp-1 0;
+}
+
+// no bullets; pure timeline
+.toc-rail li::marker {
+  content: none;
+}
+
+// Nested levels: indent + soft left guide
+.toc-rail li ul,
+.toc-rail li ol {
+  margin-top: $sp-2;
+  margin-left: $sp-6;
+  padding-left: $sp-4;
+  border-left: 1px dashed;
+
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+}
+
+// Links
+.toc-rail a {
+  position: relative;
+  display: block;
+  padding: $sp-2 $sp-3;
+  border-radius: $radius-pill;
+  text-decoration: none;
+  line-height: 1.3;
+  transition:
+    background-color $dur-1,
+    color $dur-1,
+    transform $dur-1 $ease-in-out;
+
+  @include theme-block {
+    color: tone(secondary, light);
+
+    &:hover {
+      color: tone(contrast, light);
+      background: tone(background-100, light);
+      transform: translateX(1px);
+    }
+  }
+
+  @include theme-block-dark {
+    color: tone(secondary, dark);
+
+    &:hover {
+      color: tone(contrast, dark);
+      background: tone(background-100, dark);
+      transform: translateX(1px);
+    }
+  }
+}
+
+// Active link
+.toc-rail a.toc-is-active {
+  font-weight: $fw-medium;
+
+  @include theme-block {
+    color: tone(contrast, light);
+    background: mix(tone(background-100, light), tone(white, light), 80%);
+  }
+  @include theme-block-dark {
+    color: tone(contrast, dark);
+    background: mix(tone(background-100, dark), tone(black, dark), 80%);
+  }
+}
+
+// Past/current label emphasis via opacity/weight
+.toc-rail li.toc-is-past > a {
+  opacity: 0.85;
+}
+
+.toc-rail li.toc-is-current > a {
+  opacity: 1;
+  font-weight: $fw-semibold;
+}
+
+// Slightly smaller for nested items
+.toc-rail li li > a {
+  font-size: $fs-1;
+  opacity: 0.95;
+}
+
+// Mobile spacing tweaks
+@media (max-width: $bp-md) {
+  .toc-rail__inner {
+    padding: $sp-5 $sp-5 $sp-4;
+  }
+
+  .toc-rail__progress {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .toc-rail__subtitle {
+    font-size: $fs-2;
+  }
+}
