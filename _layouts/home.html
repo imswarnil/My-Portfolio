@@ -5,285 +5,671 @@ layout: default
 
 {% include home/hero.html %}
 
-<!-- =========================
-     HOME HUB – Quick actions / mosaic
-========================= -->
-<section class="home-hub" aria-label="Start here">
-  <div class="container">
-    <!-- Optional heading -->
-    <header class="home-hub__head">
-      <h2 class="home-hub__title">Start anywhere, it all connects.</h2>
-      <p class="home-hub__subtitle">
-        Guides, videos, projects, reviews, courses &amp; more — this is the hub.
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/phosphor-icons@1.4.2/src/css/phosphor.css"
+/>
+
+<style>
+  /* =========================================
+     HOME HUB – BIG TYPE, 3-COL MOSAIC, 9 CARDS
+     Uses existing vars only
+  ========================================== */
+
+  .home-hub-bold {
+    padding: 4.5rem 1.5rem 5rem;
+    background: var(--color-background-100);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    font-family: var(--font-family-body, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  }
+
+  [data-color-scheme="dark"] .home-hub-bold {
+    background: var(--color-background-200);
+  }
+
+  .home-hub-bold__inner {
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+
+  .home-hub-bold__head {
+    margin-bottom: 3rem;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .home-hub-bold__eyebrow {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--color-secondary);
+  }
+
+  .home-hub-bold__title {
+    margin: 0;
+    font-family: var(--font-family-headings, inherit);
+    font-weight: 700;
+    font-size: clamp(2.1rem, 4.4vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+    color: var(--color-contrast);
+  }
+
+  .home-hub-bold__subtitle {
+    margin: 0;
+    max-width: 52ch;
+    font-size: 0.98rem;
+    color: var(--color-foreground);
+  }
+
+  /* Grid */
+
+  .home-hub-bold__grid {
+    margin-top: 2.4rem;
+    display: grid;
+    gap: 2.2rem;
+  }
+
+  @media (min-width: 640px) {
+    .home-hub-bold__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .home-hub-bold__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Mosaic variants (desktop only) */
+
+  @media (min-width: 1024px) {
+    .hub-bold-card--wide {
+      grid-column: span 2;
+    }
+
+    .hub-bold-card--tall {
+      grid-row: span 2;
+    }
+  }
+
+  /* Card base */
+
+  .hub-bold-card {
+    position: relative;
+    display: flex;
+    height: 100%;
+    padding: 2rem 1.8rem 1.8rem;
+    border-radius: var(--radius-5, 1.25rem);
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    text-decoration: none;
+    color: var(--color-foreground);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  [data-color-scheme="dark"] .hub-bold-card {
+    background: var(--color-background-300);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+  }
+
+  .hub-bold-card__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  /* Big ghost index number */
+
+  .hub-bold-card__index {
+    position: absolute;
+    top: 0.8rem;
+    right: 1.25rem;
+    font-family: var(--font-family-headings, inherit);
+    font-weight: 700;
+    font-size: 2.6rem;
+    letter-spacing: -0.05em;
+    color: var(--color-background-300);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  [data-color-scheme="dark"] .hub-bold-card__index {
+    color: rgba(255, 255, 255, 0.06);
+  }
+
+  .hub-bold-card__row {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .hub-bold-card__icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-background-100);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  [data-color-scheme="dark"] .hub-bold-card__icon {
+    background: var(--color-background-200);
+  }
+
+  .hub-bold-card__icon i {
+    font-size: 1.6rem;
+    color: var(--color-contrast);
+  }
+
+  .hub-bold-card__kicker {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-secondary);
+  }
+
+  .hub-bold-card__title {
+    margin: 0.15rem 0 0;
+    font-family: var(--font-family-headings, inherit);
+    font-weight: 700;
+    font-size: 1.18rem;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--color-contrast);
+  }
+
+  .hub-bold-card__desc {
+    margin: 0.55rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--color-foreground);
+  }
+
+  .hub-bold-card__meta {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.75rem;
+    font-size: 0.78rem;
+    color: var(--color-secondary);
+  }
+
+  .hub-bold-card__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .hub-bold-card__meta-item i {
+    font-size: 0.95rem;
+  }
+
+  .hub-bold-card__footer {
+    margin-top: auto;
+    padding-top: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.78rem;
+  }
+
+  .hub-bold-card__stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-secondary);
+  }
+
+  .hub-bold-card__stat i {
+    font-size: 0.95rem;
+  }
+
+  .hub-bold-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: auto;
+    font-weight: 500;
+    color: var(--color-contrast);
+  }
+
+  .hub-bold-card__cta i {
+    font-size: 1rem;
+  }
+
+  .hub-bold-card__cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 500;
+    color: var(--color-contrast);
+    text-decoration: none;
+  }
+
+  .hub-bold-card__cta-link i {
+    font-size: 1rem;
+  }
+
+  /* Hover – subtle */
+
+  .hub-bold-card {
+    transition:
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .hub-bold-card:hover {
+    border-color: var(--color-contrast);
+    box-shadow: 0 22px 52px rgba(0, 0, 0, 0.18);
+    transform: translateY(-2px);
+  }
+
+  .hub-bold-card:hover .hub-bold-card__cta,
+  .hub-bold-card:hover .hub-bold-card__cta-link {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .home-hub-bold {
+      padding-inline: 1.1rem;
+    }
+
+    .hub-bold-card {
+      padding: 1.7rem 1.5rem 1.6rem;
+    }
+
+    .hub-bold-card__index {
+      font-size: 2.2rem;
+      top: 0.7rem;
+      right: 1.1rem;
+    }
+
+    .hub-bold-card__row {
+      gap: 1rem;
+    }
+
+    .hub-bold-card__footer {
+      flex-wrap: wrap;
+    }
+  }
+</style>
+
+<section class="home-hub-bold" aria-label="Site hub">
+  <div class="home-hub-bold__inner">
+    <header class="home-hub-bold__head">
+      <p class="home-hub-bold__eyebrow">Start anywhere</p>
+      <h2 class="home-hub-bold__title">
+        Every link is a<br>different version of me.
+      </h2>
+      <p class="home-hub-bold__subtitle">
+        Resume, essays, videos, experiments, CRM Analytics lessons, reviews, tools and what I’m doing right now —
+        everything connects back to one story.
       </p>
     </header>
 
-    {%- comment -%}
-      Loose stats for all the “collections” you care about
-    {%- endcomment -%}
-    {% assign total_posts     = site.posts | size %}
-    {% assign blog_posts      = site.categories.blog | size %}
-    {% assign guides_posts    = site.categories.guide | size %}
-    {% assign video_posts     = site.categories.video | size %}
-    {% assign series_posts    = site.categories.series | size %}
-    {% assign project_posts   = site.categories.project | size %}
-    {% assign travel_posts    = site.categories.travel | size %}
-    {% assign review_posts    = site.categories.review | size %}
-    {% assign course_posts    = site.categories.course | size %}
-    {% assign code_posts      = site.categories.code | size %}
-    {% assign podcast_posts   = site.categories.podcast | size %}
-    {% assign job_posts       = site.categories["Job & Career"] | size %}
-
-    <div class="home-hub__grid">
-      <!-- Resume + Process -->
-      <a class="home-hub__tile home-hub__tile--resume" href="{{ '/resume/' | relative_url }}">
-        <div class="home-hub__topline">
-          <span class="home-hub__kicker">For recruiters</span>
-          <span class="home-hub__pill">Process inside</span>
-        </div>
-        <h3 class="home-hub__label">
-          Resume &amp;<br>how I work
-        </h3>
-        <p class="home-hub__text">
-          Salesforce, CRM Analytics &amp; filmmaking, plus my end-to-end delivery process.
-        </p>
-        <div class="home-hub__footer">
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-briefcase"></i>
-            <span>{{ site.resume.experience | size | default: 0 }} roles</span>
-          </span>
-          <span class="home-hub__cta">
-            <span>View resume</span>
-            <i class="ph-bold ph-arrow-up-right"></i>
-          </span>
-        </div>
-      </a>
-
-      <!-- Guides / Blog / Job & Career -->
-      <a class="home-hub__tile home-hub__tile--blog" href="{{ '/blog/' | relative_url }}">
-        <div class="home-hub__topline">
-          <span class="home-hub__kicker">For readers</span>
-        </div>
-        <h3 class="home-hub__label">
-          Guides, essays &amp;<br>career stories
-        </h3>
-        <p class="home-hub__text">
-          Bangalore moves, jobless confusion &amp; long-form guides on what to do next.
-        </p>
-        <div class="home-hub__footer">
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-notebook"></i>
-            <span>{{ blog_posts }} blog posts</span>
-          </span>
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-graduation-cap"></i>
-            <span>{{ guides_posts }} guides · {{ job_posts }} job posts</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- Videos + Webseries -->
-      <a class="home-hub__tile home-hub__tile--video" href="{{ '/videos/' | relative_url }}">
-        <div class="home-hub__topline">
-          <span class="home-hub__kicker">For watchers</span>
-        </div>
-        <h3 class="home-hub__label">
-          Videos &amp;<br>webseries
-        </h3>
-        <div class="home-hub__video-shell" aria-hidden="true">
-          <div class="home-hub__video-frame">
-            <div class="home-hub__video-track">
-              <span class="home-hub__video-dot"></span>
-              <span class="home-hub__video-dot"></span>
-              <span class="home-hub__video-dot"></span>
+    <div class="home-hub-bold__grid">
+      <!-- 01. Resume & how I work (wide) -->
+      <a class="hub-bold-card hub-bold-card--wide" href="/resume/">
+        <span class="hub-bold-card__index">01</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-briefcase"></i>
             </div>
-            <div class="home-hub__video-thumb">
-              <span class="home-hub__video-tag">Channel &amp; series</span>
-            </div>
-            <div class="home-hub__video-meta">
-              <span>{{ video_posts }} videos</span>
-              <span class="home-hub__video-duration">{{ series_posts }} webseries eps</span>
+            <div>
+              <div class="hub-bold-card__kicker">For recruiters</div>
+              <h3 class="hub-bold-card__title">Resume &amp; how I work</h3>
+              <p class="hub-bold-card__desc">
+                Salesforce, CRM Analytics and filmmaking — with process, ownership and how I ship end-to-end.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-map-pin"></i>
+                  <span>Bangalore, India</span>
+                </span>
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-rocket-launch"></i>
+                  <span>7+ years building stuff</span>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="home-hub__footer">
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-youtube-logo"></i>
-            <span>{{ page.stats_youtube | default: '17K+' }} subs (legacy)</span>
-          </span>
-          <span class="home-hub__cta">
-            <span>Watch channel</span>
-            <i class="ph-bold ph-play-circle"></i>
-          </span>
-        </div>
-      </a>
-
-      <!-- Projects -->
-      <a class="home-hub__tile home-hub__tile--projects" href="{{ '/projects/' | relative_url }}">
-        <div class="home-hub__topline">
-          <span class="home-hub__kicker">For builders</span>
-          <span class="home-hub__pill">Open source</span>
-        </div>
-        <h3 class="home-hub__label">
-          Projects &amp;<br>experiments
-        </h3>
-
-        <div class="home-hub__repo-list" aria-hidden="true">
-          <div class="home-hub__repo-row">
-            <span class="home-hub__repo-name">imswarnil / crm-analytics-academy</span>
-            <span class="home-hub__repo-meta">
-              <span class="home-hub__dot"></span> TS • Nuxt
-              <span class="home-hub__spacer"></span>
-              <i class="ph-bold ph-star"></i> 1.2k
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-identification-badge"></i>
+              <span>Roles · stack · highlights</span>
             </span>
-          </div>
-          <div class="home-hub__repo-row">
-            <span class="home-hub__repo-name">imswarnil / island-docs-theme</span>
-            <span class="home-hub__repo-meta">
-              <span class="home-hub__dot"></span> Jekyll • SCSS
-              <span class="home-hub__spacer"></span>
-              <i class="ph-bold ph-git-fork"></i> 320
+            <span class="hub-bold-card__cta">
+              <span>View resume</span>
+              <i class="ph ph-arrow-up-right"></i>
             </span>
           </div>
         </div>
-
-        <div class="home-hub__footer">
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-folder"></i>
-            <span>{{ project_posts }} projects</span>
-          </span>
-          <span class="home-hub__cta">
-            <span>Browse projects</span>
-            <i class="ph-bold ph-arrow-up-right"></i>
-          </span>
-        </div>
       </a>
 
-      <!-- Courses + Snippets – product card code example -->
-      <a class="home-hub__tile home-hub__tile--learn" href="{{ '/crm-analytics/' | relative_url }}">
-        <div class="home-hub__topline">
-          <span class="home-hub__kicker">For learners</span>
-        </div>
-        <h3 class="home-hub__label">
-          Courses &amp;<br>code snippets
-        </h3>
-
-        <div class="home-hub__code-shell" aria-hidden="true">
-          <div class="home-hub__code-header">
-            <span class="home-hub__code-lang">JSX</span>
-            <span class="home-hub__code-pill">Product card UI</span>
-          </div>
-          <pre class="home-hub__code-body">
-&lt;ProductCard
-  title="CRM Analytics Course"
-  price="₹2,999"
-  badge="Bestseller"
-  cta="Start learning"
-/&gt;
-          </pre>
-        </div>
-
-        <div class="home-hub__footer">
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-graduation-cap"></i>
-            <span>{{ course_posts }} lessons</span>
-          </span>
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-code"></i>
-            <span>{{ code_posts }} code posts</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- Honest reviews – stars + mini comment UI -->
-      <a class="home-hub__tile home-hub__tile--reviews" href="{{ '/tag/review/' | relative_url }}">
-        <div class="home-hub__topline">
-          <span class="home-hub__kicker">For curiosity</span>
-        </div>
-        <h3 class="home-hub__label">
-          Honest reviews &amp;<br>gear notes
-        </h3>
-
-        <div class="home-hub__review-shell" aria-hidden="true">
-          <div class="home-hub__review-stars">
-            <i class="ph-fill ph-star"></i>
-            <i class="ph-fill ph-star"></i>
-            <i class="ph-fill ph-star"></i>
-            <i class="ph-fill ph-star"></i>
-            <i class="ph-fill ph-star-half"></i>
-            <span class="home-hub__review-score">4.7/5</span>
-          </div>
-          <div class="home-hub__review-comment">
-            <div class="home-hub__review-meta">
-              <span class="home-hub__review-label">Recent note</span>
-              <span class="home-hub__review-tag">Tripod</span>
+      <!-- 02. Guides, essays & job stories -->
+      <a class="hub-bold-card" href="/blog/">
+        <span class="hub-bold-card__index">02</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-notebook"></i>
             </div>
-            <p class="home-hub__review-text">
-              “Survived Mahroni dust, Bangalore metro and a Leh Ladakh trip.”
-            </p>
+            <div>
+              <div class="hub-bold-card__kicker">For readers</div>
+              <h3 class="hub-bold-card__title">Guides, essays &amp; job stories</h3>
+              <p class="hub-bold-card__desc">
+                Bangalore moves, jobless confusion and long-form guides on careers, tech and creative life.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-book-open-text"></i>
+                  <span>{{ site.categories.blog | size }}+ blog posts</span>
+                </span>
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-briefcase"></i>
+                  <span>{{ site.categories["Job & Career"] | size }} job stories</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-files"></i>
+              <span>Deep dives &amp; reflections</span>
+            </span>
+            <span class="hub-bold-card__cta">
+              <span>Open blog</span>
+              <i class="ph ph-arrow-up-right"></i>
+            </span>
           </div>
         </div>
+      </a>
 
-        <div class="home-hub__footer">
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-star-half"></i>
-            <span>{{ review_posts }} reviews</span>
-          </span>
-          <span class="home-hub__cta">
-            <span>Read reviews</span>
-            <i class="ph-bold ph-arrow-up-right"></i>
-          </span>
+      <!-- 03. Videos & webseries (tall) -->
+      <a class="hub-bold-card hub-bold-card--tall" href="/videos/">
+        <span class="hub-bold-card__index">03</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-youtube-logo"></i>
+            </div>
+            <div>
+              <div class="hub-bold-card__kicker">For watchers</div>
+              <h3 class="hub-bold-card__title">Videos &amp; webseries</h3>
+              <p class="hub-bold-card__desc">
+                Travel films, job-seeker diaries, lifestyle vlogs and narrative webseries — the visual timeline.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-play-circle"></i>
+                  <span>{{ site.categories.video | size }}+ videos</span>
+                </span>
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-clapperboard"></i>
+                  <span>{{ site.categories.series | size }} webseries eps</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-users-three"></i>
+              <span>Legacy: 17K+ subs</span>
+            </span>
+            <span class="hub-bold-card__cta">
+              <span>Watch channel</span>
+              <i class="ph ph-arrow-up-right"></i>
+            </span>
+          </div>
         </div>
       </a>
 
-      <!-- Uses / Products I use -->
-      <a class="home-hub__tile home-hub__tile--uses" href="{{ '/uses/' | relative_url }}">
-        <div class="home-hub__topline">
-          <span class="home-hub__kicker">For creators</span>
-          <span class="home-hub__pill">Gear &amp; stack</span>
-        </div>
-        <h3 class="home-hub__label">
-          Products &amp;<br>tools I use
-        </h3>
-        <p class="home-hub__text">
-          Camera, edit setup, dev stack &amp; services that power my work.
-        </p>
-        <div class="home-hub__footer">
-          <span class="home-hub__stat">
-            <i class="ph-bold ph-toolbox"></i>
-            <span>Setup &amp; toolkit</span>
-          </span>
-          <span class="home-hub__cta">
-            <span>Open /uses</span>
-            <i class="ph-bold ph-arrow-up-right"></i>
-          </span>
+      <!-- 04. Projects & experiments -->
+      <a class="hub-bold-card" href="/projects/">
+        <span class="hub-bold-card__index">04</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-folder"></i>
+            </div>
+            <div>
+              <div class="hub-bold-card__kicker">For builders</div>
+              <h3 class="hub-bold-card__title">Projects &amp; experiments</h3>
+              <p class="hub-bold-card__desc">
+                Open-source themes, SaaS experiments and tools that power my content and community.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-git-branch"></i>
+                  <span>{{ site.projects | size }} projects</span>
+                </span>
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-code"></i>
+                  <span>Nuxt · Jekyll · Ghost</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-flash"></i>
+              <span>Live &amp; in-progress</span>
+            </span>
+            <span class="hub-bold-card__cta">
+              <span>Browse projects</span>
+              <i class="ph ph-arrow-up-right"></i>
+            </span>
+          </div>
         </div>
       </a>
 
-      <!-- Now + Search -->
-      <div class="home-hub__tile home-hub__tile--meta">
-        <div class="home-hub__topline">
-          <span class="home-hub__kicker">For context</span>
+      <!-- 05. Courses & CRM Analytics (wide) -->
+      <a class="hub-bold-card hub-bold-card--wide" href="/crm-analytics/">
+        <span class="hub-bold-card__index">05</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-graduation-cap"></i>
+            </div>
+            <div>
+              <div class="hub-bold-card__kicker">For learners</div>
+              <h3 class="hub-bold-card__title">Courses &amp; CRM Analytics</h3>
+              <p class="hub-bold-card__desc">
+                Structured lessons, SAQL recipes, dashboards and code snippets for Salesforce CRM Analytics.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-brackets-curly"></i>
+                  <span>{{ site.categories.course | size }} lessons</span>
+                </span>
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-chart-line-up"></i>
+                  <span>Practical, project-style flows</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-student"></i>
+              <span>From basics to advanced</span>
+            </span>
+            <span class="hub-bold-card__cta">
+              <span>Open learning hub</span>
+              <i class="ph ph-arrow-up-right"></i>
+            </span>
+          </div>
         </div>
-        <h3 class="home-hub__label">
-          What I'm doing now<br>&amp; search everything
-        </h3>
-        <p class="home-hub__text">
-          See my current focus, or search {{ total_posts }}+ pieces of content across the site.
-        </p>
-        <div class="home-hub__footer home-hub__footer--split">
-          <a class="home-hub__cta" href="{{ '/now/' | relative_url }}">
-            <i class="ph-bold ph-clock-afternoon"></i>
-            <span>Visit /now</span>
-          </a>
-          <a class="home-hub__cta" href="{{ '/search/' | relative_url }}">
-            <i class="ph-bold ph-magnifying-glass"></i>
-            <span>Search site</span>
-          </a>
+      </a>
+
+      <!-- 06. Honest reviews & gear notes -->
+      <a class="hub-bold-card" href="/tag/review/">
+        <span class="hub-bold-card__index">06</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-star-half"></i>
+            </div>
+            <div>
+              <div class="hub-bold-card__kicker">For curiosity</div>
+              <h3 class="hub-bold-card__title">Honest reviews &amp; gear notes</h3>
+              <p class="hub-bold-card__desc">
+                Camera, lenses, tripods and tools that survived Mahroni dust, Bangalore metro and road trips.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-star"></i>
+                  <span>4.7/5 average vibe</span>
+                </span>
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-hand-heart"></i>
+                  <span>{{ site.categories.review | size }} reviews</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-article"></i>
+              <span>Honest, no sponsor-speak</span>
+            </span>
+            <span class="hub-bold-card__cta">
+              <span>Read reviews</span>
+              <i class="ph ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 07. Products & tools I use -->
+      <a class="hub-bold-card" href="/uses/">
+        <span class="hub-bold-card__index">07</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-toolbox"></i>
+            </div>
+            <div>
+              <div class="hub-bold-card__kicker">For creators</div>
+              <h3 class="hub-bold-card__title">Products &amp; tools I use</h3>
+              <p class="hub-bold-card__desc">
+                Camera kit, editing pipeline, dev setup and services that keep this whole circus running.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-desktop-tower"></i>
+                  <span>Editing &amp; dev setup</span>
+                </span>
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-cloud"></i>
+                  <span>Apps &amp; online tools</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-sliders"></i>
+              <span>Updated as my stack changes</span>
+            </span>
+            <span class="hub-bold-card__cta">
+              <span>Open /uses</span>
+              <i class="ph ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 08. Now & search -->
+      <div class="hub-bold-card">
+        <span class="hub-bold-card__index">08</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-clock-afternoon"></i>
+            </div>
+            <div>
+              <div class="hub-bold-card__kicker">For context</div>
+              <h3 class="hub-bold-card__title">What I'm doing now &amp; search</h3>
+              <p class="hub-bold-card__desc">
+                See my current focus, or search across everything I’ve published on this site.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-database"></i>
+                  <span>{{ site.posts | size }}+ pieces of content</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-compass"></i>
+              <span>/now &amp; full-site search</span>
+            </span>
+            <span class="hub-bold-card__cta">
+              <a href="/now/" class="hub-bold-card__cta-link">
+                <span>Visit /now</span>
+                <i class="ph ph-arrow-up-right"></i>
+              </a>
+            </span>
+          </div>
         </div>
       </div>
+
+      <!-- 09. Newsletter & sponsors -->
+      <a class="hub-bold-card" href="/newsletter/">
+        <span class="hub-bold-card__index">09</span>
+        <div class="hub-bold-card__inner">
+          <div class="hub-bold-card__row">
+            <div class="hub-bold-card__icon">
+              <i class="ph-bold ph-envelope-simple-open"></i>
+            </div>
+            <div>
+              <div class="hub-bold-card__kicker">For superfans</div>
+              <h3 class="hub-bold-card__title">Newsletter &amp; sponsors</h3>
+              <p class="hub-bold-card__desc">
+                Occasional deep letters, behind-the-scenes notes and ways to support or sponsor my work.
+              </p>
+              <div class="hub-bold-card__meta">
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-megaphone"></i>
+                  <span>Launches &amp; big updates</span>
+                </span>
+                <span class="hub-bold-card__meta-item">
+                  <i class="ph ph-handshake"></i>
+                  <span>Collabs &amp; sponsorships</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="hub-bold-card__footer">
+            <span class="hub-bold-card__stat">
+              <i class="ph ph-envelope"></i>
+              <span>Get updates or partner</span>
+            </span>
+            <span class="hub-bold-card__cta">
+              <span>Join / sponsor</span>
+              <i class="ph ph-arrow-up-right"></i>
+            </span>
+          </div>
+        </div>
+      </a>
+
     </div>
   </div>
 </section>
-
-

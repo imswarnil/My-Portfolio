@@ -77,7 +77,6 @@ header:
   show_job_title: true      # show job title under name
   show_nav_icons: true      # show Phosphor icons in menu
   show_menu_on_mobile: true # future toggle for mobile panel
-
 # -------------------------------------------------
 # Navigation (header & footer)
 # - "sub" shows as subtitle in mobile cards
