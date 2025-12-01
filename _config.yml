@@ -88,16 +88,9 @@ navigation_header:
     url: /
     icon: house
     sub: Start here
-    children:
-      - title: About me
-        url: /about/
-      - title: Selected work
-        url: /#projects
-      - title: Speaking & collabs
-        url: /speaking/
-  - title: Elements
-    url: /elements/
-    icon: squares-four
+  - title: About
+    url: /about/
+    icon: person
     sub: Design system
     children:
       - title: Components
