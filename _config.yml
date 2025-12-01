@@ -90,7 +90,7 @@ navigation_header:
     sub: Start here
   - title: About
     url: /about/
-    icon: person
+    icon: user-square
     sub: Design system
     children:
       - title: Components
