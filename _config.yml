@@ -20,7 +20,7 @@ logo: "/assets/logos/logo.svg"  # Site logo (also jekyll-seo-tag)
 avatarurl: "/assets/logos/logo@512px.png"
 email: "contact@imswarnil.com"
 location: "Bengaluru, India"
-repo: "https://github.com/imswarnil/alembic"
+repo: "https://github.com/imswarnil.github.io"
 work:
   company: "Imswarnil Studio"
   role: "Software Engineer & Filmmaker"
