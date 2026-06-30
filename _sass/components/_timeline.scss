@@ -1,0 +1,74 @@
+// ======================================================================
+// _timeline.scss — Vertical timeline for history / changelog / journey
+// Part of the Swarnil CSS framework.
+// ======================================================================
+
+.timeline {
+  list-style: none;
+  margin: $sp-12 0;
+  padding: 0;
+}
+
+.timeline__item {
+  position: relative;
+  padding-left: $sp-16;
+  padding-bottom: $sp-12;
+
+  &:last-child { padding-bottom: 0; }
+
+  // line
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0.4375rem;
+    top: 0.75rem;
+    bottom: 0;
+    width: 2px;
+    @include theme-block      { background: tone(border, light); }
+    @include theme-block-dark { background: tone(border, dark);  }
+  }
+  &:last-child::before { display: none; }
+
+  // dot
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.4rem;
+    width: 0.9375rem;
+    height: 0.9375rem;
+    border-radius: $radius-pill;
+    border: 3px solid;
+
+    @include theme-block      { background: tone(accent, light); border-color: tone(background, light); }
+    @include theme-block-dark { background: tone(white, dark);   border-color: tone(background, dark);  }
+  }
+}
+
+.timeline__date {
+  display: block;
+  font-size: $fs-1;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: $sp-3;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.timeline__title {
+  margin: 0 0 $sp-3;
+  font-size: $fs-4;
+  font-weight: $fw-semibold;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+
+.timeline__body {
+  font-size: $fs-3;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+  > :last-child { margin-bottom: 0; }
+}

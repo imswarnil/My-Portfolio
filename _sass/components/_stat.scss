@@ -1,0 +1,59 @@
+// ======================================================================
+// _stat.scss — KPI / stat blocks
+// Part of the Swarnil CSS framework.
+// ======================================================================
+
+.stats {
+  display: grid;
+  gap: $sp-7;
+  grid-template-columns: repeat(2, 1fr);
+  margin: $sp-10 0;
+
+  @include mq-up($bp-md) { grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr)); }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: $sp-3;
+  padding: $sp-8;
+  border: 1px solid;
+  border-radius: $radius-4;
+
+  @include theme-block      { background: tone(surface, light);      border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  }
+}
+
+.stat__icon {
+  font-size: $fs-6;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.stat__value {
+  font-size: $fs-9;
+  font-weight: $fw-bold;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+
+.stat__label {
+  font-size: $fs-2;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.stat__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-2;
+  font-size: $fs-1;
+  font-weight: $fw-semibold;
+
+  &.is-up   { color: map-get($theme-light, success); @include theme-block-dark { color: map-get($theme-dark, success); } }
+  &.is-down { color: map-get($theme-light, danger);  @include theme-block-dark { color: map-get($theme-dark, danger);  } }
+}

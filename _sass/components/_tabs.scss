@@ -1,0 +1,85 @@
+// ======================================================================
+// _tabs.scss — CSS-only tabs (radio-driven, no JS required)
+// Part of the Swarnil CSS framework.
+//
+// Markup pattern (see _includes/components/tabs.html):
+//   .tabs > (input.tab__radio + label.tab__label)... + .tab__panel...
+// ======================================================================
+
+.tabs {
+  margin: $sp-10 0;
+
+  // Hide the radios that drive state
+  .tab__radio { position: absolute; opacity: 0; pointer-events: none; }
+}
+
+.tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-2;
+  padding: $sp-2;
+  border-radius: $radius-pill;
+  border: 1px solid;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+
+  @include theme-block      { background: tone(muted, light); border-color: tone(border, light); }
+  @include theme-block-dark { background: tone(muted, dark);  border-color: tone(border, dark);  }
+}
+
+.tab__label {
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-3;
+  padding: $sp-4 $sp-8;
+  border-radius: $radius-pill;
+  font-size: $fs-2;
+  font-weight: $fw-medium;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color $dur-1, color $dur-1;
+
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+
+  &:hover {
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+}
+
+.tab__panel {
+  display: none;
+  margin-top: $sp-8;
+  > :last-child { margin-bottom: 0; }
+}
+
+// Active state: each radio activates its matching label + panel.
+// Generated for up to 8 tabs (more than enough for docs).
+@for $i from 1 through 8 {
+  .tab__radio:nth-of-type(#{$i}):checked ~ .tabs__list .tab__label:nth-of-type(#{$i}) {
+    @include theme-block      { background: tone(surface, light); color: tone(contrast, light); box-shadow: $shadow-light; }
+    @include theme-block-dark { background: tone(background-200, dark); color: tone(contrast, dark); }
+  }
+  .tab__radio:nth-of-type(#{$i}):checked ~ .tab__panel:nth-of-type(#{$i}) {
+    display: block;
+    animation: tab-fade $dur-2 $ease-in-out;
+  }
+}
+
+// Keyboard focus ring on the visible label
+.tab__radio:focus-visible ~ .tabs__list .tab__label {
+  // generic hint; per-index focus is hard in pure CSS, so highlight list
+  outline: none;
+}
+.tabs:focus-within .tabs__list {
+  outline: $focus-ring-width solid rgba(106,166,255,.25);
+  outline-offset: 2px;
+}
+
+@keyframes tab-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

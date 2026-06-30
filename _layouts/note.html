@@ -1,0 +1,30 @@
+---
+layout: default
+---
+
+<div class="container container--page-narrow">
+  <article class="note typeset">
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <li><a href="{{ '/' | relative_url }}">Home</a></li>
+      <li class="sep" aria-hidden="true">/</li>
+      <li><a href="{{ '/notes/' | relative_url }}">Notes</a></li>
+      <li class="sep" aria-hidden="true">/</li>
+      <li aria-current="page">{{ page.title }}</li>
+    </nav>
+
+    <header class="note-header">
+      <h1>{{ page.title }}</h1>
+      <p class="page-meta text-muted">
+        <i class="ph-bold ph-calendar-blank" aria-hidden="true"></i>
+        {% if page.date %}<time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: site.date_format | default: "%d %b %Y" }}</time>{% endif %}
+        {% if page.tags %}<span class="dot" aria-hidden="true">•</span>{% for t in page.tags %}<span class="badge">{{ t }}</span> {% endfor %}{% endif %}
+      </p>
+    </header>
+
+    <div class="content">
+      {{ content }}
+    </div>
+
+  </article>
+</div>

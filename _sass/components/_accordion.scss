@@ -1,0 +1,69 @@
+// ======================================================================
+// _accordion.scss — Native <details>/<summary> accordion + FAQ
+// Part of the Swarnil CSS framework. No JS required.
+// ======================================================================
+
+.accordion {
+  margin: $sp-10 0;
+  border: 1px solid;
+  border-radius: $radius-4;
+  overflow: hidden;
+
+  @include theme-block      { border-color: tone(border, light); }
+  @include theme-block-dark { border-color: tone(border, dark);  }
+}
+
+.accordion__item {
+  &:not(:last-child) {
+    border-bottom: 1px solid;
+    @include theme-block      { border-color: tone(border, light); }
+    @include theme-block-dark { border-color: tone(border, dark);  }
+  }
+}
+
+.accordion__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-6;
+  padding: $sp-7 $sp-8;
+  cursor: pointer;
+  list-style: none;
+  font-weight: $fw-semibold;
+  font-size: $fs-3;
+  transition: background-color $dur-1;
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+
+  &::-webkit-details-marker { display: none; }
+
+  &:hover {
+    @include theme-block      { background: tone(background-100, light); }
+    @include theme-block-dark { background: tone(background-100, dark);  }
+  }
+
+  .accordion__icon {
+    flex-shrink: 0;
+    transition: transform $dur-2 $ease-in-out;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+  }
+}
+
+.accordion__item[open] .accordion__icon { transform: rotate(180deg); }
+
+.accordion__body {
+  padding: 0 $sp-8 $sp-7;
+  font-size: $fs-3;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+  > :last-child { margin-bottom: 0; }
+}
+
+// Subtle open animation
+.accordion__item[open] .accordion__body { animation: acc-reveal $dur-2 $ease-in-out; }
+@keyframes acc-reveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -339,6 +339,16 @@ collections:
     feature_text: |
       Welcome to the blog
     feature_image: "https://picsum.photos/2560/600?image=866"
+  projects:
+    output: true
+    title: Projects
+    description: "Things I've designed, built, and shipped."
+    permalink: /projects/:name/
+  notes:
+    output: true
+    title: Notes
+    description: "Short-form notes, TILs, and code snippets."
+    permalink: /notes/:name/
 
 defaults:
   - scope:
@@ -350,6 +360,16 @@ defaults:
       type: "posts"
     values:
       layout: post                             # Default layout for posts
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: project                          # Default layout for projects
+  - scope:
+      path: ""
+      type: "notes"
+    values:
+      layout: note                             # Default layout for notes
   - scope:
       path: ""
       type: "pages"

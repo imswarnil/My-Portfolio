@@ -1,0 +1,123 @@
+// ======================================================================
+// _stepper.scss — Vertical & horizontal numbered step flows
+// Part of the Swarnil CSS framework.
+// ======================================================================
+
+.stepper {
+  --step-size: 2.25rem;
+  list-style: none;
+  margin: $sp-12 0;
+  padding: 0;
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  counter-increment: step;
+  padding-left: calc(var(--step-size) + #{$sp-8});
+  padding-bottom: $sp-12;
+
+  &:last-child { padding-bottom: 0; }
+
+  // The connecting line
+  &::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--step-size) / 2 - 1px);
+    top: var(--step-size);
+    bottom: 0;
+    width: 2px;
+    @include theme-block      { background: tone(border, light); }
+    @include theme-block-dark { background: tone(border, dark);  }
+  }
+  &:last-child::before { display: none; }
+
+  // The number bubble
+  &::after {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--step-size);
+    height: var(--step-size);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-pill;
+    border: 1px solid;
+    font-size: $fs-2;
+    font-weight: $fw-semibold;
+    font-variant-numeric: tabular-nums;
+
+    @include theme-block      { background: tone(accent, light); color: tone(white, light); border-color: transparent; }
+    @include theme-block-dark { background: tone(white, dark);   color: tone(black, dark);  border-color: transparent; }
+  }
+}
+
+.step--done::after {
+  content: "\2713"; // check mark
+  @include theme-block      { background: map-get($theme-light, success); color: tone(white, light); }
+  @include theme-block-dark { background: map-get($theme-dark, success);  color: tone(black, dark);  }
+}
+
+.step__title {
+  margin: 0 0 $sp-3;
+  font-size: $fs-4;
+  font-weight: $fw-semibold;
+  line-height: 1.3;
+  padding-top: calc((var(--step-size) - 1.4em) / 2);
+
+  @include theme-block      { color: tone(contrast, light); }
+  @include theme-block-dark { color: tone(contrast, dark);  }
+}
+
+.step__body {
+  font-size: $fs-3;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+  > :last-child { margin-bottom: 0; }
+}
+
+// ---- Horizontal variant (progress-style) -------------------------------
+.stepper--horizontal {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0;
+  counter-reset: step;
+
+  .step {
+    padding: 0 $sp-4;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &::before {
+      left: calc(50% + var(--step-size) / 2);
+      right: calc(-50% + var(--step-size) / 2);
+      top: calc(var(--step-size) / 2 - 1px);
+      bottom: auto;
+      width: auto;
+      height: 2px;
+    }
+    &::after { position: static; margin-bottom: $sp-5; }
+  }
+
+  .step__title { padding-top: 0; font-size: $fs-3; }
+
+  // collapse to vertical on small screens
+  @media (max-width: $bp-md) {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    .step {
+      text-align: left;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: $sp-6;
+      padding: 0 0 $sp-10;
+      &::before { left: calc(var(--step-size) / 2 - 1px); right: auto; top: var(--step-size); bottom: 0; width: 2px; height: auto; }
+      &::after { margin-bottom: 0; }
+    }
+  }
+}

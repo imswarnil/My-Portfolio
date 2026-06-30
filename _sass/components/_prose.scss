@@ -1,0 +1,97 @@
+// ======================================================================
+// _prose.scss — Long-form content styling for .typeset / .prose
+// Part of the Swarnil CSS framework. Applies to rendered Markdown.
+// ======================================================================
+
+.typeset, .prose {
+  font-size: $fs-4;
+  line-height: 1.7;
+
+  // Comfortable vertical rhythm around block headings
+  h2 { margin-top: $sp-16; }
+  h3 { margin-top: $sp-12; }
+  h2, h3, h4 { scroll-margin-top: calc(#{$navbar-height} + #{$sp-10}); }
+
+  // Lead paragraph
+  .lead, > p:first-of-type.lead {
+    font-size: $fs-5;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+  }
+
+  // Links get an underline in body copy for clarity
+  p a, li a {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+    @include theme-block      { text-decoration-color: tone(border, light); }
+    @include theme-block-dark { text-decoration-color: tone(border, dark);  }
+    &:hover { text-decoration-thickness: 2px; }
+  }
+
+  // Blockquote
+  blockquote {
+    margin: $sp-12 0;
+    padding: $sp-4 $sp-10;
+    border-left: 4px solid;
+    font-size: $fs-5;
+    font-style: italic;
+
+    @include theme-block      { border-color: tone(border, light); color: tone(secondary, light); }
+    @include theme-block-dark { border-color: tone(border, dark);  color: tone(secondary, dark);  }
+
+    footer, cite {
+      display: block;
+      margin-top: $sp-4;
+      font-size: $fs-2;
+      font-style: normal;
+      @include theme-block      { color: tone(secondary, light); }
+      @include theme-block-dark { color: tone(secondary, dark);  }
+    }
+    > :last-child { margin-bottom: 0; }
+  }
+
+  // Images / figures
+  img { border-radius: $radius-4; margin-inline: auto; }
+  figure { margin: $sp-12 0; }
+  figcaption {
+    margin-top: $sp-4;
+    text-align: center;
+    font-size: $fs-2;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+  }
+
+  // Horizontal rule as a centred glyph
+  hr {
+    border: 0;
+    text-align: center;
+    margin: $sp-16 0;
+    &::before {
+      content: "* * *";
+      letter-spacing: 0.6em;
+      @include theme-block      { color: tone(secondary, light); }
+      @include theme-block-dark { color: tone(secondary, dark);  }
+    }
+  }
+
+  // Highlighted text
+  mark {
+    padding: 0.05em 0.25em;
+    border-radius: $radius-1;
+    @include theme-block      { background: rgba(map-get($theme-light, warning), 0.25); color: tone(contrast, light); }
+    @include theme-block-dark { background: rgba(map-get($theme-dark, warning), 0.25);  color: tone(contrast, dark);  }
+  }
+
+  // Definition lists
+  dt { font-weight: $fw-semibold; @include theme-block { color: tone(contrast, light); } @include theme-block-dark { color: tone(contrast, dark); } }
+  dd { margin: 0 0 $sp-6; padding-left: $sp-8; }
+
+  // Tables scroll on small screens
+  table { display: block; overflow-x: auto; white-space: nowrap; }
+  @include mq-up($bp-md) { table { display: table; white-space: normal; } }
+
+  // Task lists
+  .task-list-item { list-style: none; }
+  .task-list-item input { margin-right: $sp-4; }
+}

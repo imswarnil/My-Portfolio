@@ -1,0 +1,86 @@
+// ======================================================================
+// _card.scss — Generic surface card + feature card + grid
+// Part of the Swarnil CSS framework. Complements sections/_content-grid.
+// ======================================================================
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: $sp-5;
+  padding: $sp-8;
+  border: 1px solid;
+  border-radius: $radius-5;
+  transition: transform $dur-1 $ease-in-out, box-shadow $dur-1 $ease-in-out, border-color $dur-1 $ease-in-out;
+
+  @include theme-block      { background: tone(surface, light);       border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark);  border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+
+  > :last-child { margin-bottom: 0; }
+}
+
+// Interactive (link) cards lift on hover
+.card--link {
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-4px);
+    @include theme-block      { border-color: tone(contrast, light); }
+    @include theme-block-dark { border-color: tone(contrast, dark);  }
+  }
+}
+
+// Dashed "bento" card to match the TOC aesthetic
+.card--bento {
+  border-style: dashed;
+  box-shadow: none;
+  @include theme-block      { background: transparent; }
+  @include theme-block-dark { background: transparent; }
+}
+
+.card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: $radius-3;
+  font-size: $fs-6;
+
+  @include theme-block      { background: tone(muted, light); color: tone(contrast, light); }
+  @include theme-block-dark { background: tone(muted, dark);  color: tone(contrast, dark);  }
+}
+
+.card__title {
+  margin: 0;
+  font-size: $fs-5;
+  font-weight: $fw-semibold;
+  letter-spacing: -0.01em;
+}
+
+.card__text {
+  margin: 0;
+  font-size: $fs-3;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.card__footer {
+  margin-top: auto;
+  padding-top: $sp-5;
+  display: flex;
+  align-items: center;
+  gap: $sp-4;
+}
+
+// ---- Feature grid (auto-fit responsive) --------------------------------
+.card-grid {
+  display: grid;
+  gap: $sp-7;
+  grid-template-columns: 1fr;
+
+  @include mq-up($bp-sm) { grid-template-columns: repeat(2, 1fr); }
+  @include mq-up($bp-lg) { grid-template-columns: repeat(3, 1fr); }
+
+  &.is-2 { @include mq-up($bp-sm) { grid-template-columns: repeat(2, 1fr); } }
+  &.is-4 { @include mq-up($bp-lg) { grid-template-columns: repeat(4, 1fr); } }
+  &.is-auto { grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); }
+}

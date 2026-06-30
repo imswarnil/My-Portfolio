@@ -1,0 +1,73 @@
+// ======================================================================
+// _cta.scss — Call-to-action banner
+// Part of the Swarnil CSS framework.
+// ======================================================================
+
+.cta {
+  display: grid;
+  gap: $sp-7;
+  align-items: center;
+  padding: clamp($sp-12, 5vw, $sp-20);
+  border-radius: $radius-6;
+  border: 1px solid;
+  text-align: center;
+  margin: $sp-12 0;
+  position: relative;
+  overflow: hidden;
+
+  @include theme-block      { background: tone(surface, light);      border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+
+  // subtle bento grid texture
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-size: 22px 22px;
+
+    @include theme-block {
+      background-image:
+        linear-gradient(to right, rgba(150,150,150,0.10) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(150,150,150,0.10) 1px, transparent 1px);
+    }
+    @include theme-block-dark {
+      background-image:
+        linear-gradient(to right, rgba(120,120,120,0.14) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(120,120,120,0.14) 1px, transparent 1px);
+    }
+  }
+
+  > * { position: relative; z-index: 1; }
+}
+
+.cta__title {
+  margin: 0;
+  font-size: clamp($fs-7, 4vw, $fs-9);
+  letter-spacing: -0.02em;
+}
+
+.cta__text {
+  margin: 0 auto;
+  max-width: 42rem;
+  font-size: $fs-4;
+  @include theme-block      { color: tone(secondary, light); }
+  @include theme-block-dark { color: tone(secondary, dark);  }
+}
+
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-5;
+  justify-content: center;
+}
+
+// Left-aligned split variant
+.cta--split {
+  text-align: left;
+  @include mq-up($bp-md) {
+    grid-template-columns: 1fr auto;
+    .cta__actions { justify-content: flex-end; }
+  }
+}

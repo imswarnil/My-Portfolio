@@ -1,0 +1,98 @@
+// ======================================================================
+// _pricing.scss — Pricing / plan cards
+// Part of the Swarnil CSS framework.
+// ======================================================================
+
+.pricing {
+  display: grid;
+  gap: $sp-7;
+  grid-template-columns: 1fr;
+  margin: $sp-12 0;
+  align-items: stretch;
+
+  @include mq-up($bp-md) { grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); }
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: $sp-6;
+  padding: $sp-10;
+  border: 1px solid;
+  border-radius: $radius-5;
+  position: relative;
+
+  @include theme-block      { background: tone(surface, light);      border-color: tone(border, light); box-shadow: $shadow-light; }
+  @include theme-block-dark { background: tone(background-100, dark); border-color: tone(border, dark);  box-shadow: $shadow-dark;  }
+}
+
+.plan--featured {
+  @include theme-block      { border-color: tone(contrast, light); }
+  @include theme-block-dark { border-color: tone(contrast, dark);  }
+  @include mq-up($bp-md) { transform: scale(1.03); }
+}
+
+.plan__badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.85rem;
+  border-radius: $radius-pill;
+  font-size: $fs-1;
+  font-weight: $fw-semibold;
+
+  @include theme-block      { background: tone(accent, light); color: tone(white, light); }
+  @include theme-block-dark { background: tone(white, dark);   color: tone(black, dark);  }
+}
+
+.plan__name {
+  margin: 0;
+  font-size: $fs-5;
+  font-weight: $fw-semibold;
+}
+
+.plan__price {
+  display: flex;
+  align-items: baseline;
+  gap: $sp-3;
+
+  .amount {
+    font-size: $fs-10;
+    font-weight: $fw-bold;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    @include theme-block      { color: tone(contrast, light); }
+    @include theme-block-dark { color: tone(contrast, dark);  }
+  }
+  .period {
+    font-size: $fs-2;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+  }
+}
+
+.plan__features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $sp-4;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: $sp-4;
+    margin: 0;
+    font-size: $fs-3;
+
+    i { margin-top: 0.15em; color: map-get($theme-light, success); @include theme-block-dark { color: map-get($theme-dark, success); } }
+  }
+  li.is-off {
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+    i { @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
+  }
+}
+
+.plan__cta { margin-top: auto; }

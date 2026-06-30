@@ -1,0 +1,96 @@
+// ======================================================================
+// _helpers.scss — Utility classes for the Swarnil CSS framework
+// Low-specificity helpers; tokens from _variables.scss.
+// ======================================================================
+
+// ---- Display ----------------------------------------------------------
+.d-none   { display: none !important; }
+.d-block  { display: block !important; }
+.d-flex   { display: flex !important; }
+.d-grid   { display: grid !important; }
+.d-inline-flex { display: inline-flex !important; }
+
+// ---- Flex helpers -----------------------------------------------------
+.flex-wrap    { flex-wrap: wrap !important; }
+.flex-col     { flex-direction: column !important; }
+.items-center { align-items: center !important; }
+.items-start  { align-items: flex-start !important; }
+.justify-center  { justify-content: center !important; }
+.justify-between { justify-content: space-between !important; }
+.flex-1 { flex: 1 1 0% !important; }
+
+// ---- Gap (maps to spacing scale) --------------------------------------
+$gap-scale: (1: $sp-2, 2: $sp-4, 3: $sp-6, 4: $sp-7, 5: $sp-8, 6: $sp-10, 7: $sp-12, 8: $sp-16);
+@each $k, $v in $gap-scale {
+  .gap-#{$k} { gap: #{$v} !important; }
+}
+
+// ---- Spacing (margin / padding) ---------------------------------------
+$space-scale: (0: 0, 1: $sp-2, 2: $sp-4, 3: $sp-6, 4: $sp-7, 5: $sp-8, 6: $sp-10, 7: $sp-12, 8: $sp-16);
+@each $k, $v in $space-scale {
+  .m-#{$k}  { margin: #{$v} !important; }
+  .mt-#{$k} { margin-top: #{$v} !important; }
+  .mb-#{$k} { margin-bottom: #{$v} !important; }
+  .my-#{$k} { margin-top: #{$v} !important; margin-bottom: #{$v} !important; }
+  .mx-#{$k} { margin-left: #{$v} !important; margin-right: #{$v} !important; }
+  .p-#{$k}  { padding: #{$v} !important; }
+  .pt-#{$k} { padding-top: #{$v} !important; }
+  .pb-#{$k} { padding-bottom: #{$v} !important; }
+  .py-#{$k} { padding-top: #{$v} !important; padding-bottom: #{$v} !important; }
+  .px-#{$k} { padding-left: #{$v} !important; padding-right: #{$v} !important; }
+}
+.mx-auto { margin-left: auto !important; margin-right: auto !important; }
+
+// ---- Text -------------------------------------------------------------
+.text-center { text-align: center !important; }
+.text-left   { text-align: left !important; }
+.text-right  { text-align: right !important; }
+.text-balance { text-wrap: balance; }
+.text-sm   { font-size: $fs-2 !important; }
+.text-lg   { font-size: $fs-5 !important; }
+.fw-medium   { font-weight: $fw-medium !important; }
+.fw-semibold { font-weight: $fw-semibold !important; }
+.fw-bold     { font-weight: $fw-bold !important; }
+.uppercase   { text-transform: uppercase; letter-spacing: 0.06em; }
+.mono { font-family: $ff-mono; }
+
+.text-muted {
+  @include theme-block      { color: tone(secondary, light) !important; }
+  @include theme-block-dark { color: tone(secondary, dark) !important; }
+}
+.text-contrast {
+  @include theme-block      { color: tone(contrast, light) !important; }
+  @include theme-block-dark { color: tone(contrast, dark) !important; }
+}
+
+// ---- Misc -------------------------------------------------------------
+.rounded     { border-radius: $radius-4 !important; }
+.rounded-lg  { border-radius: $radius-6 !important; }
+.rounded-pill{ border-radius: $radius-pill !important; }
+.shadow      { box-shadow: $shadow-light !important; }
+.w-full      { width: 100% !important; }
+.overflow-hidden { overflow: hidden !important; }
+
+// ---- Responsive visibility -------------------------------------------
+.hide-mobile  { @media (max-width: $bp-md - 1px) { display: none !important; } }
+.hide-desktop { @include mq-up($bp-md) { display: none !important; } }
+
+// ---- Section heading helper (eyebrow + title) -------------------------
+.section-head {
+  text-align: center;
+  max-width: 44rem;
+  margin: 0 auto $sp-12;
+
+  .eyebrow {
+    display: inline-block;
+    font-size: $fs-1;
+    font-weight: $fw-semibold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: $sp-5;
+    @include theme-block      { color: tone(secondary, light); }
+    @include theme-block-dark { color: tone(secondary, dark);  }
+  }
+  h2 { margin-bottom: $sp-5; font-size: clamp($fs-7, 4vw, $fs-9); letter-spacing: -0.02em; }
+  p  { font-size: $fs-4; @include theme-block { color: tone(secondary, light); } @include theme-block-dark { color: tone(secondary, dark); } }
+}
