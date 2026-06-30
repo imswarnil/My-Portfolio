@@ -1,0 +1,25 @@
+{%- comment -%} Post sidebar: TOC widget + ad + about/CTA. Sticky on desktop. {%- endcomment -%}
+<div class="im-sidebar-sticky">
+  {%- if site.layout.toc != false and page.toc != false -%}
+  <section class="im-widget im-toc-widget" id="im-toc" hidden>
+    <h2 class="im-widget-title"><i class="ph-bold ph-list-bullets" aria-hidden="true"></i> On this page</h2>
+    <nav class="im-toc" aria-label="Table of contents"><ul id="im-toc-list"></ul></nav>
+  </section>
+  {%- endif -%}
+
+  {%- if site.adsense.enabled -%}
+  {% include ad.html type="square" class="im-widget" %}
+  {%- endif -%}
+
+  <section class="im-widget">
+    <h2 class="im-widget-title"><i class="ph-bold ph-user" aria-hidden="true"></i> {{ site.author | default: site.title }}</h2>
+    <p class="im-widget-text">{{ site.description | strip_html | truncate: 130 }}</p>
+    <a class="im-btn im-btn-sm im-btn-outline im-w-full" href="{{ '/about/' | relative_url }}">About me</a>
+  </section>
+
+  <section class="im-widget im-widget-cta">
+    <h2 class="im-widget-title"><i class="ph-bold ph-rocket-launch" aria-hidden="true"></i> Work with me</h2>
+    <p class="im-widget-text">Have a project or idea? Let's make it real.</p>
+    <a class="im-btn im-btn-sm im-w-full" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-paper-plane-tilt"></i> Get in touch</a>
+  </section>
+</div>

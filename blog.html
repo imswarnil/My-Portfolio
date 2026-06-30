@@ -1,0 +1,23 @@
+---
+layout: default
+title: Blog
+permalink: /blog/
+description: "Essays, how-tos and field notes on engineering & craft."
+pagination:
+  enabled: true
+  collection: blog
+---
+<section class="im-collection im-page">
+  <header class="im-collection-head">
+    <h1 class="im-collection-title">Blog</h1>
+    <p class="im-collection-desc">Essays, how-tos and field notes on engineering &amp; craft.</p>
+  </header>
+
+  <ul class="im-cards">
+    {%- for it in paginator.posts -%}
+    <li>{% include utility/card.html item=it %}</li>
+    {%- endfor -%}
+  </ul>
+
+  {% include pagination.html %}
+</section>

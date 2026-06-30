@@ -3,98 +3,107 @@ layout: default
 ---
 {%- assign coll = site.collections | where: "label", page.collection | first -%}
 {%- assign kicker = coll.singular | default: "Post" -%}
+{%- assign has_sidebar = true -%}
+{%- if site.layout.sidebar == false %}{% assign has_sidebar = false %}{% endif -%}
+{%- if page.sidebar == false %}{% assign has_sidebar = false %}{% endif -%}
 
-<article class="im-article im-page">
-  <header class="im-post-header">
-    <span class="im-kicker">{{ kicker }}</span>
-    <h1 class="im-post-title">{{ page.title }}</h1>
-    <div class="im-post-meta">
-      <img class="im-avatar" src="{{ page.author_avatar | default: site.avatarurl | default: '/assets/img/avatar.jpg' | relative_url }}" alt="" width="28" height="28">
-      <span>{{ page.author | default: site.author | default: site.title }}</span>
-      {%- if page.date %}<span class="im-dot">·</span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time>{% endif -%}
-      {%- if page.read_time %}<span class="im-dot">·</span><span>{{ page.read_time }} min read</span>{% endif -%}
-    </div>
-  </header>
-
-  {%- comment -%} ── Type-specific lead media ───────────────────────── {%- endcomment -%}
-  {%- case page.collection -%}
-    {%- when "videos" -%}
-      {%- if page.video_id -%}
-        <div class="im-post-media"><iframe src="https://www.youtube-nocookie.com/embed/{{ page.video_id }}" title="{{ page.title }}" allowfullscreen loading="lazy"></iframe></div>
-      {%- elsif page.video_embed -%}
-        <div class="im-post-media">{{ page.video_embed }}</div>
-      {%- endif -%}
-    {%- when "podcasts" -%}
-      {%- if page.audio_src -%}
-        <div class="im-post-media"><audio controls preload="none" src="{{ page.audio_src | relative_url }}"></audio></div>
-      {%- endif -%}
-    {%- when "reviews" -%}
-      {%- if page.rating -%}
-        <div class="im-rating"><span class="im-rating-stars" style="--score: {{ page.rating }}"></span><strong>{{ page.rating }}/5</strong>{% if page.item_reviewed %}<span class="im-dot">·</span><span>{{ page.item_reviewed }}</span>{% endif %}</div>
-      {%- endif -%}
-    {%- when "trips" -%}
-      {%- if page.location or page.days or page.cost -%}
-        <div class="im-factbar">
-          {%- if page.location %}<span class="im-fact"><i class="ph-bold ph-map-pin"></i><span class="im-fact-value">{{ page.location }}</span></span>{% endif -%}
-          {%- if page.days %}<span class="im-fact"><span class="im-fact-label">Duration</span><span class="im-fact-value">{{ page.days }} days</span></span>{% endif -%}
-          {%- if page.cost %}<span class="im-fact"><span class="im-fact-label">Cost</span><span class="im-fact-value">{{ page.cost }}</span></span>{% endif -%}
+<div class="im-shell{% if has_sidebar %} has-sidebar{% endif %} im-page">
+  <div class="im-shell-main">
+    <article class="im-article">
+      <header class="im-post-header">
+        <span class="im-kicker">{{ kicker }}</span>
+        <h1 class="im-post-title">{{ page.title }}</h1>
+        <div class="im-post-meta">
+          <img class="im-avatar" src="{{ page.author_avatar | default: site.avatarurl | default: '/assets/img/avatar.jpg' | relative_url }}" alt="" width="28" height="28">
+          <span>{{ page.author | default: site.author | default: site.title }}</span>
+          {%- if page.date %}<span class="im-dot">·</span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time>{% endif -%}
+          {%- if page.read_time %}<span class="im-dot">·</span><span>{{ page.read_time }} min read</span>{% endif -%}
         </div>
+      </header>
+
+      {%- comment -%} Mobile TOC (collapsible, above content) {%- endcomment -%}
+      <details class="im-toc-mobile" id="im-toc-mobile" hidden>
+        <summary><i class="ph-bold ph-list-bullets" aria-hidden="true"></i> On this page</summary>
+        <nav class="im-toc" aria-label="Table of contents"><ul id="im-toc-mobile-list"></ul></nav>
+      </details>
+
+      {%- comment -%} ── Type-specific lead block ── {%- endcomment -%}
+      {%- case page.collection -%}
+        {%- when "videos" -%}
+          {%- if page.video_id -%}
+            <div class="im-post-media"><iframe src="https://www.youtube-nocookie.com/embed/{{ page.video_id }}" title="{{ page.title }}" allowfullscreen loading="lazy"></iframe></div>
+          {%- elsif page.video_embed -%}
+            <div class="im-post-media">{{ page.video_embed }}</div>
+          {%- endif -%}
+        {%- when "prompts" -%}
+          {%- if page.prompt -%}
+            <div class="im-promptbox">
+              <div class="im-promptbox-head">{% if page.model %}<span class="im-badge">{{ page.model }}</span>{% endif %}<button class="im-btn im-btn-sm im-btn-outline" data-im-copy="{{ page.prompt | strip_newlines | escape }}"><i class="ph-bold ph-copy"></i> Copy prompt</button></div>
+              <pre class="im-promptbox-body"><code>{{ page.prompt | strip_html }}</code></pre>
+            </div>
+          {%- endif -%}
+        {%- when "snippets" -%}
+          {%- if page.lang %}<p class="im-snippet-lang"><i class="ph-bold ph-code"></i> {{ page.lang }}</p>{% endif -%}
+        {%- when "projects" -%}
+          {%- if page.facts -%}
+            <div class="im-factbar">{%- for f in page.facts %}<span class="im-fact"><span class="im-fact-label">{{ f.label }}</span><span class="im-fact-value">{{ f.value }}</span></span>{% endfor -%}</div>
+          {%- endif -%}
+      {%- endcase -%}
+
+      {%- assign cover = page.image | default: page.cover -%}
+      {%- unless page.collection == "videos" or page.collection == "snippets" or page.collection == "prompts" -%}
+        {%- if cover -%}<figure class="im-post-cover"><img src="{{ cover | relative_url }}" alt="{{ page.title }}">{% if page.cover_caption %}<figcaption>{{ page.cover_caption }}</figcaption>{% endif %}</figure>{%- endif -%}
+      {%- endunless -%}
+
+      {%- comment -%} In-article ad after the lead {%- endcomment -%}
+      {%- if site.adsense.enabled and page.ads != false %}{% include ad.html type="in_article" %}{% endif -%}
+
+      <div class="im-prose">
+        {{ content }}
+      </div>
+
+      {%- if page.tags and page.tags != empty -%}
+      <ul class="im-tags">{%- for tag in page.tags %}<li><a href="{{ '/tags/' | append: tag | slugify | relative_url }}">#{{ tag }}</a></li>{% endfor -%}</ul>
       {%- endif -%}
-    {%- when "projects" -%}
-      {%- if page.facts -%}
-        <div class="im-factbar">
-          {%- for f in page.facts %}<span class="im-fact"><span class="im-fact-label">{{ f.label }}</span><span class="im-fact-value">{{ f.value }}</span></span>{% endfor -%}
+
+      {%- assign u = page.url | absolute_url -%}
+      <div class="im-share">
+        <a class="im-btn im-btn-sm im-btn-outline" href="https://twitter.com/intent/tweet?url={{ u | uri_escape }}&text={{ page.title | uri_escape }}" target="_blank" rel="noopener"><i class="ph-bold ph-x-logo"></i> Share</a>
+        <a class="im-btn im-btn-sm im-btn-outline" href="https://www.linkedin.com/sharing/share-offsite/?url={{ u | uri_escape }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i> LinkedIn</a>
+        <button class="im-btn im-btn-sm im-btn-ghost" data-im-copy="{{ u }}"><i class="ph-bold ph-link"></i> Copy link</button>
+      </div>
+
+      <div class="im-author-card">
+        <img src="{{ page.author_avatar | default: site.avatarurl | default: '/assets/img/avatar.jpg' | relative_url }}" alt="">
+        <div>
+          <p class="im-author-name">{{ page.author | default: site.author | default: site.title }}</p>
+          <p class="im-author-bio">{{ page.author_bio | default: site.description | strip_html }}</p>
         </div>
+      </div>
+
+      {%- if page.previous.url or page.next.url -%}
+      <nav class="im-postnav" aria-label="More in {{ coll.title }}">
+        {%- if page.previous.url -%}<a href="{{ page.previous.url | relative_url }}"><span class="im-postnav-label">Previous</span><span class="im-postnav-title">{{ page.previous.title }}</span></a>{% endif -%}
+        {%- if page.next.url -%}<a class="im-postnav-next" href="{{ page.next.url | relative_url }}"><span class="im-postnav-label">Next</span><span class="im-postnav-title">{{ page.next.title }}</span></a>{% endif -%}
+      </nav>
       {%- endif -%}
-  {%- endcase -%}
-
-  {%- comment -%} Cover image (skip when video/podcast provided their own media) {%- endcomment -%}
-  {%- assign cover = page.image | default: page.cover -%}
-  {%- unless page.collection == "videos" or page.collection == "podcasts" or page.collection == "notes" -%}
-    {%- if cover -%}
-      <figure class="im-post-cover"><img src="{{ cover | relative_url }}" alt="{{ page.title }}">{% if page.cover_caption %}<figcaption>{{ page.cover_caption }}</figcaption>{% endif %}</figure>
-    {%- endif -%}
-  {%- endunless -%}
-
-  <div class="im-prose">
-    {{ content }}
+    </article>
   </div>
 
-  {%- if page.tags and page.tags != empty -%}
-  <ul class="im-tags">
-    {%- for tag in page.tags %}<li><a href="{{ '/tags/' | append: tag | slugify | relative_url }}">#{{ tag }}</a></li>{% endfor -%}
-  </ul>
+  {%- if has_sidebar -%}
+  <aside class="im-sidebar" aria-label="Sidebar">{% include sidebar.html %}</aside>
   {%- endif -%}
+</div>
 
-  {%- assign u = page.url | absolute_url -%}
-  <div class="im-share">
-    <a class="im-btn im-btn-sm im-btn-outline" href="https://twitter.com/intent/tweet?url={{ u | uri_escape }}&text={{ page.title | uri_escape }}" target="_blank" rel="noopener"><i class="ph-bold ph-x-logo"></i> Share</a>
-    <a class="im-btn im-btn-sm im-btn-outline" href="https://www.linkedin.com/sharing/share-offsite/?url={{ u | uri_escape }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i> LinkedIn</a>
-    <button class="im-btn im-btn-sm im-btn-ghost" data-im-copy="{{ u }}"><i class="ph-bold ph-link"></i> Copy link</button>
-  </div>
-
-  <div class="im-author-card">
-    <img src="{{ page.author_avatar | default: site.avatarurl | default: '/assets/img/avatar.jpg' | relative_url }}" alt="">
-    <div>
-      <p class="im-author-name">{{ page.author | default: site.author | default: site.title }}</p>
-      <p class="im-author-bio">{{ page.author_bio | default: site.description }}</p>
-    </div>
-  </div>
-
-  {%- if page.previous.url or page.next.url -%}
-  <nav class="im-postnav" aria-label="More in {{ coll.title }}">
-    {%- if page.previous.url -%}<a href="{{ page.previous.url | relative_url }}"><span class="im-postnav-label">Previous</span><span class="im-postnav-title">{{ page.previous.title }}</span></a>{% endif -%}
-    {%- if page.next.url -%}<a class="im-postnav-next" href="{{ page.next.url | relative_url }}"><span class="im-postnav-label">Next</span><span class="im-postnav-title">{{ page.next.title }}</span></a>{% endif -%}
-  </nav>
-  {%- endif -%}
-</article>
-
+{% include toc-script.html %}
 <script>
   document.querySelectorAll('[data-im-copy]').forEach(function (b) {
     b.addEventListener('click', function () {
-      navigator.clipboard && navigator.clipboard.writeText(b.getAttribute('data-im-copy'));
-      var t = b.querySelector('span') || b; var old = b.innerHTML; b.innerHTML = '<i class="ph-bold ph-check"></i> Copied';
-      setTimeout(function(){ b.innerHTML = old; }, 1500);
+      var v = b.getAttribute('data-im-copy');
+      try { var d = document.createElement('textarea'); d.innerHTML = v; v = d.value; } catch (e) {}
+      navigator.clipboard && navigator.clipboard.writeText(v);
+      var old = b.innerHTML; b.innerHTML = '<i class="ph-bold ph-check"></i> Copied';
+      setTimeout(function () { b.innerHTML = old; }, 1500);
     });
   });
 </script>

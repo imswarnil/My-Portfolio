@@ -1,74 +1,175 @@
 // ======================================================================
 // im/_footer.scss — site footer
+// Two switchable styles: --columns (rich) and --minimal (clean centred).
+// Optional .is-boxed wraps either in a rounded island card.
 // ======================================================================
 
 .im-footer {
   margin-top: var(--im-space-8);
-  padding-block: var(--im-space-7);
   border-top: 1px solid var(--im-color-border);
   background: var(--im-color-background);
 }
-
 .im-footer-inner {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--im-space-5) var(--im-space-7);
-  align-items: center;
   width: 100%;
   max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2);
   margin-inline: auto;
-  padding-inline: var(--im-gutter);
+  padding: var(--im-space-8) var(--im-gutter) var(--im-space-7);
 }
 
+// ---- Shared pieces ----------------------------------------------------
 .im-footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
   font-weight: var(--im-fw-bold);
+  font-size: var(--im-text-lg);
   letter-spacing: -0.02em;
   color: var(--im-color-contrast);
   text-decoration: none;
+  img { height: 1.6rem; width: auto; }
+}
+.im-footer-tagline {
+  margin: var(--im-space-3) 0 0;
+  max-width: 30ch;
+  font-size: var(--im-text-sm);
+  line-height: 1.6;
+  color: var(--im-color-secondary);
 }
 
-.im-footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--im-space-2) var(--im-space-5);
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.im-footer-title {
+  margin: 0 0 var(--im-space-4);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--im-color-mute);
+}
 
-  a {
-    font-size: var(--im-text-sm);
-    font-weight: var(--im-fw-medium);
-    color: var(--im-color-foreground);
-    text-decoration: none;
-    &:hover { color: var(--im-color-contrast); }
-  }
+// Aesthetic link: underline grows from the left on hover.
+.im-flink {
+  position: relative;
+  color: var(--im-color-foreground);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--im-dur-2) var(--im-ease), color var(--im-dur-1) var(--im-ease);
+  &:hover,
+  &:focus-visible { color: var(--im-color-contrast); background-size: 100% 1px; }
+}
+
+.im-footer-links {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--im-space-3);
+  font-size: var(--im-text-sm);
 }
 
 .im-footer-social {
-  display: flex;
-  gap: var(--im-space-1);
-  list-style: none;
-  margin: 0 0 0 auto;
-  padding: 0;
-
+  display: flex; gap: var(--im-space-1); flex-wrap: wrap;
+  list-style: none; margin: var(--im-space-5) 0 0; padding: 0;
   a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 50%;
-    color: var(--im-color-secondary);
-    font-size: 1.15rem;
-    text-decoration: none;
-    transition: color var(--im-dur-1) var(--im-ease), background var(--im-dur-1) var(--im-ease);
-    &:hover { color: var(--im-color-contrast); background: var(--im-color-background-100); }
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 2.25rem; height: 2.25rem; border-radius: 50%;
+    color: var(--im-color-secondary); font-size: 1.15rem; text-decoration: none;
+    border: 1px solid transparent;
+    transition: color var(--im-dur-1) var(--im-ease), background var(--im-dur-1) var(--im-ease), border-color var(--im-dur-1) var(--im-ease), transform var(--im-dur-1) var(--im-ease);
+    &:hover { color: var(--im-color-contrast); background: var(--im-color-background-100); border-color: var(--im-color-border); transform: translateY(-2px); }
   }
 }
 
+.im-footer-form {
+  display: flex; gap: var(--im-space-2); margin-top: var(--im-space-3);
+  input { flex: 1; min-width: 0; }
+  .im-btn { flex: 0 0 auto; }
+}
+
 .im-footer-copyright {
-  flex: 1 0 100%;
-  margin-top: var(--im-space-2);
+  margin: 0;
   font-size: var(--im-text-sm);
   color: var(--im-color-secondary);
+}
+
+// ======================================================================
+// Style 1 — columns (rich)
+// ======================================================================
+.im-footer--columns {
+  .im-footer-top {
+    display: grid;
+    gap: var(--im-space-7);
+    grid-template-columns: 1fr;
+    padding-bottom: var(--im-space-7);
+
+    @include mq($bp-md) { grid-template-columns: 1.4fr 2fr; gap: var(--im-space-8); }
+  }
+  .im-footer-brandcol { max-width: 32ch; }
+
+  .im-footer-cols {
+    display: grid;
+    gap: var(--im-space-6) var(--im-space-7);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    @include mq($bp-sm)  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  .im-footer-news { grid-column: 1 / -1; @include mq($bp-sm) { grid-column: auto; } }
+
+  .im-footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--im-space-3) var(--im-space-5);
+    margin-top: var(--im-space-6);
+    padding-top: var(--im-space-6);
+    border-top: 1px solid var(--im-color-border);
+  }
+  .im-footer-top-link {
+    display: inline-flex; align-items: center; gap: var(--im-space-2);
+    font-size: var(--im-text-sm); font-weight: var(--im-fw-medium);
+    color: var(--im-color-secondary); text-decoration: none;
+    transition: color var(--im-dur-1) var(--im-ease);
+    i { transition: transform var(--im-dur-1) var(--im-ease); }
+    &:hover { color: var(--im-color-contrast); i { transform: translateY(-3px); } }
+  }
+}
+
+// ======================================================================
+// Style 2 — minimal (clean, centred)
+// ======================================================================
+.im-footer--minimal {
+  text-align: center;
+  .im-footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--im-space-4);
+    max-width: calc(var(--im-container) + var(--im-gutter) * 2);
+  }
+  .im-footer-tagline { margin: 0; }
+  .im-footer-social { margin: 0; }
+
+  .im-footer-inlinenav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--im-space-2) var(--im-space-5);
+    font-size: var(--im-text-sm);
+    font-weight: var(--im-fw-medium);
+  }
+  .im-footer-copyright { margin-top: var(--im-space-2); }
+}
+
+// ======================================================================
+// Optional boxed (island) wrapper — works with either style
+// ======================================================================
+.im-footer.is-boxed {
+  border-top: 0;
+  background: transparent;
+  .im-footer-inner {
+    margin-block: var(--im-space-6);
+    padding: var(--im-space-8);
+    border: 1px solid var(--im-color-border);
+    border-radius: var(--im-radius-6);
+    background: var(--im-color-surface);
+    box-shadow: var(--im-shadow);
+  }
 }

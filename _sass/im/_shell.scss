@@ -1,0 +1,179 @@
+// ======================================================================
+// im/_shell.scss — content shell, right sidebar, TOC, ad rails, ad units
+// ======================================================================
+
+// ---- Ad rails (outer, very wide screens only) ------------------------
+.im-rails { display: block; }
+.im-rail { display: none; }
+
+@media (min-width: 1500px) {
+  .im-rails.has-rails {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, calc(var(--im-container-wide) + var(--im-gutter) * 2)) 1fr;
+    align-items: start;
+    column-gap: var(--im-space-4);
+  }
+  .im-rails.has-rails > .main { grid-column: 2; }
+  .im-rails.has-rails .im-rail {
+    display: block;
+    position: sticky;
+    top: calc(var(--im-navbar-height) + var(--im-space-4));
+    width: var(--im-rail);
+    justify-self: center;
+    margin-top: var(--im-space-6);
+  }
+  .im-rail-left  { grid-column: 1; }
+  .im-rail-right { grid-column: 3; }
+}
+
+// ---- Content shell (article + right sidebar) -------------------------
+.im-shell {
+  width: 100%;
+  max-width: calc(var(--im-container) + var(--im-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--im-gutter);
+}
+.im-shell-main { min-width: 0; }
+
+// Centre the article (reading width) when there's no sidebar.
+.im-shell:not(.has-sidebar) .im-article {
+  max-width: calc(var(--im-content) + var(--im-gutter) * 2);
+}
+
+@media (min-width: 992px) {
+  .im-shell.has-sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--im-sidebar);
+    gap: var(--im-space-8);
+    align-items: start;
+    max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2);
+  }
+  .im-shell.has-sidebar .im-article { max-width: none; padding-inline: 0; margin-inline: 0; }
+}
+
+// ---- Sidebar ----------------------------------------------------------
+.im-sidebar { min-width: 0; }
+@media (max-width: 991px) {
+  .im-sidebar { margin-top: var(--im-space-7); }
+  // hide the desktop TOC widget on mobile (mobile uses the collapsible one)
+  .im-toc-widget { display: none; }
+}
+.im-sidebar-sticky {
+  position: sticky;
+  top: calc(var(--im-navbar-height) + var(--im-space-4));
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-5);
+  max-height: calc(100vh - var(--im-navbar-height) - var(--im-space-6));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.im-widget {
+  padding: var(--im-space-5);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-4);
+  background: var(--im-color-surface);
+}
+.im-widget-title {
+  display: flex; align-items: center; gap: var(--im-space-2);
+  margin: 0 0 var(--im-space-3);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-fw-semibold);
+  color: var(--im-color-contrast);
+  > i { color: var(--im-color-secondary); }
+}
+.im-widget-text { margin: 0 0 var(--im-space-3); font-size: var(--im-text-sm); color: var(--im-color-secondary); }
+.im-widget-cta { background: var(--im-color-background-100); }
+
+// ---- TOC --------------------------------------------------------------
+.im-toc {
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { line-height: 1.3; }
+  .im-toc-sub a { padding-left: var(--im-space-4); font-size: var(--im-text-xs); }
+  a {
+    display: block;
+    padding: var(--im-space-2) var(--im-space-2);
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    font-size: var(--im-text-sm);
+    color: var(--im-color-secondary);
+    text-decoration: none;
+    transition: color var(--im-dur-1) var(--im-ease), border-color var(--im-dur-1) var(--im-ease);
+    &:hover { color: var(--im-color-contrast); }
+    &.active { color: var(--im-color-contrast); border-left-color: var(--im-color-accent); font-weight: var(--im-fw-medium); }
+  }
+}
+
+// Mobile collapsible TOC (above content)
+.im-toc-mobile {
+  margin-bottom: var(--im-space-5);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-3);
+  background: var(--im-color-surface);
+
+  summary {
+    display: flex; align-items: center; gap: var(--im-space-2);
+    padding: var(--im-space-3) var(--im-space-4);
+    font-weight: var(--im-fw-semibold);
+    font-size: var(--im-text-sm);
+    cursor: pointer;
+    list-style: none;
+    &::-webkit-details-marker { display: none; }
+    > i { color: var(--im-color-secondary); }
+  }
+  .im-toc { padding: 0 var(--im-space-3) var(--im-space-3); }
+}
+@media (min-width: 992px) { .im-toc-mobile { display: none; } }
+
+// ---- Ad unit ----------------------------------------------------------
+.im-ad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--im-space-2);
+  padding: var(--im-space-3);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-3);
+  background: var(--im-color-background-100);
+  overflow: hidden;
+
+  ins { display: block; width: 100%; }
+}
+.im-ad-label {
+  align-self: flex-start;
+  font-size: 0.625rem;
+  font-weight: var(--im-fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--im-color-mute);
+}
+.im-ad-placeholder {
+  display: grid; place-items: center;
+  width: 100%; min-height: 6rem;
+  border: 1px dashed var(--im-color-border);
+  border-radius: var(--im-radius-2);
+  color: var(--im-color-mute);
+  font-size: var(--im-text-sm);
+}
+.im-ad--horizontal { margin-block: var(--im-space-6); }
+.im-ad--horizontal .im-ad-placeholder,
+.im-ad--in_article .im-ad-placeholder { min-height: 5.5rem; }
+.im-ad--vertical .im-ad-placeholder { min-height: 30rem; }
+.im-ad--in_article { margin-block: var(--im-space-6); }
+
+// ---- Prompt box (prompts collection) ---------------------------------
+.im-promptbox {
+  margin: var(--im-space-5) 0;
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-4);
+  overflow: hidden;
+}
+.im-promptbox-head {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--im-space-3);
+  padding: var(--im-space-3) var(--im-space-4);
+  background: var(--im-color-background-100);
+  border-bottom: 1px solid var(--im-color-border);
+}
+.im-promptbox-body { margin: 0; border-radius: 0; box-shadow: none; max-height: none; }
+.im-snippet-lang { display: inline-flex; align-items: center; gap: var(--im-space-2); font-size: var(--im-text-sm); color: var(--im-color-secondary); text-transform: capitalize; }

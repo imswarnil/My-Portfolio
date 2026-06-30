@@ -1,0 +1,112 @@
+{%- comment -%}
+  Render one collection on the homepage in its signature style.
+  Params: collection (label), style, limit, title (optional)
+  styles: featured | media-list | numbered | rating | gallery | bento | compact
+{%- endcomment -%}
+{%- assign coll = site.collections | where: "label", include.collection | first -%}
+{%- assign docs = coll.docs | sort: "date" | reverse -%}
+{%- assign limit = include.limit | default: 4 -%}
+{%- if docs.size > 0 -%}
+<section class="im-home-section im-home-{{ include.style }}">
+  <div class="im-home-section-head">
+    <h2><i class="ph-bold ph-{{ coll.icon }}" aria-hidden="true"></i> {{ include.title | default: coll.title }}</h2>
+    <a class="im-home-section-link" href="{{ coll.permalink | default: coll.url | relative_url }}">All {{ coll.title | downcase }} →</a>
+  </div>
+
+  {%- case include.style -%}
+
+  {%- when "featured" -%}
+    {%- assign hero = docs | first -%}
+    <div class="im-feat">
+      {%- assign hcover = hero.image | default: hero.cover -%}{%- capture hurl -%}{% include utility/image.html image=hcover collection=hero.collection %}{%- endcapture -%}
+      <a class="im-feat-hero" href="{{ hero.url | relative_url }}">
+        <img src="{{ hurl }}" alt="" loading="lazy">
+        <span class="im-pcard-play"><i class="ph-bold ph-play"></i></span>
+        <span class="im-feat-hero-body"><span class="im-pcard-type">{{ coll.singular }}</span><span class="im-feat-hero-title">{{ hero.title }}</span></span>
+      </a>
+      <div class="im-feat-rest">
+        {%- for it in docs offset: 1 limit: 3 -%}{% include utility/card.html item=it %}{%- endfor -%}
+      </div>
+    </div>
+
+  {%- when "media-list" -%}
+    <ul class="im-medialist">
+      {%- for it in docs limit: limit -%}
+      {%- assign mcover = it.image | default: it.cover -%}{%- capture murl -%}{% include utility/image.html image=mcover collection=it.collection %}{%- endcapture -%}
+      <li class="im-medialist-row">
+        <a class="im-medialist-thumb" href="{{ it.url | relative_url }}"><img src="{{ murl }}" alt="" loading="lazy"><span class="im-pcard-play"><i class="ph-bold ph-play"></i></span></a>
+        <div class="im-medialist-body">
+          <h3 class="im-medialist-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+          <p class="im-medialist-meta">{% if it.date %}{{ it.date | date: "%b %-d, %Y" }}{% endif %}{% if it.duration %} · {{ it.duration }}{% endif %}</p>
+        </div>
+        <a class="im-btn im-btn-sm im-btn-outline" href="{{ it.url | relative_url }}"><i class="ph-bold ph-headphones"></i> Listen</a>
+      </li>
+      {%- endfor -%}
+    </ul>
+
+  {%- when "numbered" -%}
+    <ol class="im-numlist">
+      {%- for it in docs limit: limit -%}
+      <li class="im-numlist-row">
+        <span class="im-numlist-num">{{ forloop.index | prepend: "0" | slice: -2, 2 }}</span>
+        <div>
+          <h3 class="im-numlist-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+          {%- if it.excerpt %}<p class="im-numlist-excerpt">{{ it.excerpt | strip_html | truncate: 120 }}</p>{% endif -%}
+        </div>
+        <i class="ph-bold ph-arrow-right im-numlist-arrow" aria-hidden="true"></i>
+      </li>
+      {%- endfor -%}
+    </ol>
+
+  {%- when "rating" -%}
+    <ul class="im-ratelist">
+      {%- for it in docs limit: limit -%}
+      <li class="im-ratelist-row">
+        <span class="im-ratelist-score">{{ it.rating | default: "—" }}<small>/5</small></span>
+        <div>
+          <h3 class="im-ratelist-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+          {%- if it.item_reviewed %}<p class="im-ratelist-sub">{{ it.item_reviewed }}</p>{% endif -%}
+        </div>
+      </li>
+      {%- endfor -%}
+    </ul>
+
+  {%- when "gallery" -%}
+    <div class="im-gallery">
+      {%- for it in docs limit: limit -%}
+      {%- assign gcover = it.image | default: it.cover -%}{%- capture gurl -%}{% include utility/image.html image=gcover collection=it.collection %}{%- endcapture -%}
+      <a class="im-gallery-item" href="{{ it.url | relative_url }}">
+        <img src="{{ gurl }}" alt="" loading="lazy">
+        <span class="im-gallery-cap">{% if it.location %}<i class="ph-bold ph-map-pin"></i> {{ it.location }} · {% endif %}{{ it.title }}</span>
+      </a>
+      {%- endfor -%}
+    </div>
+
+  {%- when "bento" -%}
+    <div class="im-bento">
+      {%- for it in docs limit: limit -%}
+      {%- assign bcover = it.image | default: it.cover -%}{%- capture burl -%}{% include utility/image.html image=bcover collection=it.collection %}{%- endcapture -%}
+      <a class="im-bento-item{% if forloop.first %} is-feature{% endif %}" href="{{ it.url | relative_url }}">
+        <img src="{{ burl }}" alt="" loading="lazy">
+        <span class="im-bento-body"><span class="im-bento-title">{{ it.title }}</span>{% if it.excerpt %}<span class="im-bento-sub">{{ it.excerpt | strip_html | truncate: 90 }}</span>{% endif %}</span>
+      </a>
+      {%- endfor -%}
+    </div>
+
+  {%- when "compact" -%}
+    <ul class="im-notelist">
+      {%- for it in docs limit: 6 -%}
+      <li class="im-notelist-row">
+        <a href="{{ it.url | relative_url }}"><span class="im-notelist-dot"></span>
+          <span class="im-notelist-title">{{ it.title }}</span>
+          {%- if it.date %}<span class="im-notelist-date">{{ it.date | date: "%b %-d" }}</span>{% endif -%}
+        </a>
+      </li>
+      {%- endfor -%}
+    </ul>
+
+  {%- else -%}
+    <ul class="im-cards">{%- for it in docs limit: limit -%}<li>{% include utility/card.html item=it %}</li>{%- endfor -%}</ul>
+  {%- endcase -%}
+</section>
+{%- endif -%}

@@ -4,9 +4,15 @@
 <body class="layout-{{ page.layout }}{% if page.collection %} is-{{ page.collection }}{% endif %}">
   {% include header.html %}
 
-  <main class="main">
-    {{ content }}
-  </main>
+  {%- assign rails_on = false -%}
+  {%- if site.layout.ad_rails and site.adsense.enabled and page.ad_rails != false %}{% assign rails_on = true %}{% endif -%}
+  <div class="im-rails{% if rails_on %} has-rails{% endif %}">
+    {%- if rails_on -%}<aside class="im-rail im-rail-left" aria-hidden="true">{% include ad.html type="vertical" %}</aside>{%- endif -%}
+    <main class="main" id="top">
+      {{ content }}
+    </main>
+    {%- if rails_on -%}<aside class="im-rail im-rail-right" aria-hidden="true">{% include ad.html type="vertical" %}</aside>{%- endif -%}
+  </div>
 
   {% include footer.html %}
 
@@ -17,10 +23,10 @@
     // Mobile nav + theme toggle (no dependencies)
     (function () {
       var navBtn = document.querySelector('[data-im-nav-toggle]');
-      var nav = document.getElementById('im-nav');
-      if (navBtn && nav) {
+      var navbar = document.querySelector('.im-navbar');
+      if (navBtn && navbar) {
         navBtn.addEventListener('click', function () {
-          var open = nav.classList.toggle('is-open');
+          var open = navbar.classList.toggle('is-nav-open');
           navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
         });
       }
@@ -35,6 +41,26 @@
           el.setAttribute('data-color-scheme', next);
           try { localStorage.setItem('im-color-scheme', next); } catch (e) {}
         });
+      }
+      // Live GitHub star count
+      var gh = document.querySelector('[data-im-ghstars]');
+      if (gh) {
+        var repo = gh.getAttribute('data-im-ghstars');
+        var countEl = gh.querySelector('.im-ghstar-count');
+        var cached = null;
+        try { cached = JSON.parse(localStorage.getItem('im-ghstars-' + repo) || 'null'); } catch (e) {}
+        function show(n) { if (countEl) { countEl.textContent = n >= 1000 ? (n / 1000).toFixed(1) + 'k' : n; countEl.hidden = false; } }
+        if (cached && (Date.now() - cached.t) < 86400000) { show(cached.n); }
+        else {
+          fetch('https://api.github.com/repos/' + repo)
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+              if (typeof d.stargazers_count === 'number') {
+                show(d.stargazers_count);
+                try { localStorage.setItem('im-ghstars-' + repo, JSON.stringify({ n: d.stargazers_count, t: Date.now() })); } catch (e) {}
+              }
+            }).catch(function () {});
+        }
       }
     })();
   </script>

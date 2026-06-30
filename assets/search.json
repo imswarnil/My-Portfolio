@@ -11,8 +11,9 @@ sitemap: false
     {% for doc in docs %}
       {
         "title": {{ doc.title | jsonify }},
-        "excerpt": {{ doc.excerpt | markdownify | strip_html | jsonify }},
-        "content": {{ doc.content | markdownify | strip_html | jsonify }},
+        "collection": {{ collection.label | jsonify }},
+        "excerpt": {{ doc.excerpt | markdownify | strip_html | strip_newlines | jsonify }},
+        "content": {{ doc.content | markdownify | strip_html | strip_newlines | jsonify }},
         "url": {{ site.baseurl | append: doc.url | jsonify }}
       },
     {% endfor %}
@@ -21,8 +22,9 @@ sitemap: false
   {% for page in pages %}
   {
     "title": {{ page.title | jsonify }},
-    "excerpt": {{ page.excerpt | markdownify | strip_html | jsonify }},
-    "content": {{ page.content | markdownify | strip_html | jsonify }},
+    "collection": "page",
+    "excerpt": {{ page.excerpt | markdownify | strip_html | strip_newlines | jsonify }},
+    "content": {{ page.content | markdownify | strip_html | strip_newlines | jsonify }},
     "url": {{ site.baseurl | append: page.url | jsonify }}
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}

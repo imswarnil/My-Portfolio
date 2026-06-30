@@ -66,58 +66,101 @@ social_links:
 # -------------------------------------------------
 # Header UI options
 # -------------------------------------------------
+# Drives _includes/header.html. Mix and match freely.
 header:
-  enable: true              # master flag (future-proof)
-  sticky: true              # true = sticky / fixed on mobile
-  fullwidth: false          # true = edge-to-edge, false = container
-  rounded: true             # false = square edges
-  show_search: true         # show search input + shortcut + results
-  show_social: true         # show social section in mobile panel
-  show_avatar: true         # show author avatar in brand
-  show_job_title: true      # show job title under name
-  show_nav_icons: true      # show Phosphor icons in menu
-  show_menu_on_mobile: true # future toggle for mobile panel
+  layout: full            # island | full   (island = floating centered pill)
+  sticky: true              # stick to top on scroll
+  blur: true                # frosted-glass backdrop
+  brand: both               # both | logo | title
+  show_icons: true          # Phosphor icons inside nav links
+  dropdowns: true           # render item.children as a dropdown
+  megamenu: true            # items with `megamenu: true` open a wide panel
+  search: true              # search button (opens command palette, key: /)
+  dark_toggle: true         # light/dark switch
+  github:
+    enabled: true
+    repo: imswarnil/imswarnil.github.io   # owner/repo — live star count
+    show_stars: true
+  sponsor:
+    enabled: true
+    url: https://github.com/sponsors/imswarnil
+    label: Sponsor
+  cta:
+    enabled: false
+    label: Hire me
+    url: /contact/
+
+# Drives _includes/footer.html.
+footer:
+  layout: columns           # columns | minimal   ← switch footer style
+  boxed: false              # true = wrap footer in a rounded island card
+  tagline: "Engineering meets storytelling — built fast, cinematic, robust."
+  show_collections: true    # auto column linking every collection
+  show_nav: true            # navigation_footer links
+  show_social: true
+  newsletter:
+    enabled: false
+    action: ""              # form POST endpoint (Buttondown/Mailchimp/etc.)
+    placeholder: "you@email.com"
+
+# Reading layout: narrower content column + right sidebar + optional ad rails.
+layout:
+  sidebar: true             # default: show the right sidebar on posts (per-page `sidebar:` overrides)
+  ad_rails: true            # show sticky vertical ad rails on very wide screens (>=1500px)
+  toc: true                 # generate a Table of Contents widget from h2/h3
 # -------------------------------------------------
 # Navigation (header & footer)
 # - "sub" shows as subtitle in mobile cards
 # - "children" renders as submenu (desktop + mobile)
 # -------------------------------------------------
 navigation_header:
-  - title: Guides
-    url: /guides/
-    icon: graduation-cap
+  - title: Blog
+    url: /blog/
+    icon: pen-nib
   - title: Projects
     url: /projects/
     icon: rocket-launch
+  - title: Portfolio
+    url: /portfolio/
+    icon: images
   - title: Videos
     url: /videos/
     icon: video
-  - title: Notes
-    url: /notes/
-    icon: note
+  - title: Library
+    url: /snippets/
+    icon: stack
+    megamenu: true
+    blurb: "Reusable code and AI prompts you can copy and run."
+    children:
+      - title: Snippets
+        url: /snippets/
+        icon: code
+        sub: Copy-paste code
+      - title: Prompts
+        url: /prompts/
+        icon: sparkle
+        sub: AI prompts
   - title: About
     url: /about/
     icon: user
 
 navigation_footer:
-  - title: Guides
-    url: /guides/
-  - title: Reviews
-    url: /reviews/
-  - title: Trips
-    url: /trips/
-  - title: Videos
-    url: /videos/
-  - title: Podcasts
-    url: /podcasts/
-  - title: Projects
-    url: /projects/
-  - title: Notes
-    url: /notes/
+  - title: Home
+    url: /
   - title: About
     url: /about/
-  - title: Uses
-    url: /uses/
+  - title: Blog
+    url: /blog/
+  - title: Projects
+    url: /projects/
+  - title: Portfolio
+    url: /portfolio/
+  - title: Videos
+    url: /videos/
+  - title: Snippets
+    url: /snippets/
+  - title: Prompts
+    url: /prompts/
   - title: Contact
     url: /contact/
 
@@ -319,51 +362,16 @@ excerpt_separator: <!-- more -->    # Marks end of excerpt in posts
 # are read by the IM card + JSON-LD includes. `image` is the collection's
 # fallback cover used when an entry has no `image` of its own.
 collections:
-  guides:
+  blog:
     output: true
-    title: Guides
-    singular: Guide
-    description: "Long-form how-tos, playbooks and tutorials."
-    permalink: /guides/:name/
-    icon: graduation-cap
-    schema: TechArticle
-    image: "/assets/img/covers/guides.svg"
-  reviews:
-    output: true
-    title: Reviews
-    singular: Review
-    description: "Hands-on reviews of gear, tools and media."
-    permalink: /reviews/:name/
-    icon: star
-    schema: Review
-    image: "/assets/img/covers/reviews.svg"
-  trips:
-    output: true
-    title: Trips
-    singular: Trip
-    description: "Travel logs, itineraries and field notes."
-    permalink: /trips/:name/
-    icon: map-pin
-    schema: Article
-    image: "/assets/img/covers/trips.svg"
-  videos:
-    output: true
-    title: Videos
-    singular: Video
-    description: "Films, edits and video essays."
-    permalink: /videos/:name/
-    icon: video
-    schema: VideoObject
-    image: "/assets/img/covers/videos.svg"
-  podcasts:
-    output: true
-    title: Podcasts
-    singular: Podcast
-    description: "Conversations and audio episodes."
-    permalink: /podcasts/:name/
-    icon: microphone
-    schema: PodcastEpisode
-    image: "/assets/img/covers/podcasts.svg"
+    title: Blog
+    singular: Post
+    description: "Essays, how-tos and field notes on engineering & craft."
+    permalink: /blog/:name/
+    icon: pen-nib
+    schema: BlogPosting
+    style: numbered
+    image: "/assets/img/covers/blog.svg"
   projects:
     output: true
     title: Projects
@@ -372,16 +380,48 @@ collections:
     permalink: /projects/:name/
     icon: rocket-launch
     schema: CreativeWork
+    style: bento
     image: "/assets/img/covers/projects.svg"
-  notes:
+  portfolio:
     output: true
-    title: Notes
-    singular: Note
-    description: "Short-form notes, TILs and snippets."
-    permalink: /notes/:name/
-    icon: note
-    schema: Article
-    image: "/assets/img/covers/notes.svg"
+    title: Portfolio
+    singular: Work
+    description: "Selected work — film, design and product."
+    permalink: /portfolio/:name/
+    icon: images
+    schema: CreativeWork
+    style: gallery
+    image: "/assets/img/covers/portfolio.svg"
+  videos:
+    output: true
+    title: Videos
+    singular: Video
+    description: "Films, edits and video essays."
+    permalink: /videos/:name/
+    icon: video
+    schema: VideoObject
+    style: featured
+    image: "/assets/img/covers/videos.svg"
+  snippets:
+    output: true
+    title: Snippets
+    singular: Snippet
+    description: "Short, copy-pasteable code snippets and TILs."
+    permalink: /snippets/:name/
+    icon: code
+    schema: TechArticle
+    style: compact
+    image: "/assets/img/covers/snippets.svg"
+  prompts:
+    output: true
+    title: Prompts
+    singular: Prompt
+    description: "Battle-tested AI prompts you can copy and run."
+    permalink: /prompts/:name/
+    icon: sparkle
+    schema: CreativeWork
+    style: cards
+    image: "/assets/img/covers/prompts.svg"
 
 # Site-wide ultimate fallback image (used by SEO + cards as last resort)
 placeholder_image: "/assets/img/placeholder.svg"
@@ -402,12 +442,22 @@ defaults:
 plugins:
   - jekyll-sitemap
   - jekyll-mentions
+  - jekyll-paginate-v2
   - jekyll-seo-tag
   - jekyll-redirect-from
   - jekyll-feed
   - jekyll-commonmark
   - jekyll-include-cache
   - jemoji
+
+# jekyll-paginate-v2 — paginates the blog collection listing
+pagination:
+  enabled: true
+  collection: blog
+  per_page: 6
+  permalink: "/page/:num/"
+  sort_field: "date"
+  sort_reverse: true
 
 jekyll-mentions: https://twitter.com # jekyll-mentions > @reply service
 

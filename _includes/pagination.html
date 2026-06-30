@@ -1,0 +1,18 @@
+{%- comment -%} jekyll-paginate-v2 nav — prev / next + page indicator. {%- endcomment -%}
+{%- if paginator.total_pages > 1 -%}
+<nav class="im-pagination" aria-label="Pagination">
+  {%- if paginator.previous_page -%}
+    <a class="im-page-btn" href="{{ paginator.previous_page_path | relative_url }}"><i class="ph-bold ph-arrow-left"></i> Newer</a>
+  {%- else -%}
+    <span class="im-page-btn is-disabled"><i class="ph-bold ph-arrow-left"></i> Newer</span>
+  {%- endif -%}
+
+  <span class="im-page-indicator">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
+
+  {%- if paginator.next_page -%}
+    <a class="im-page-btn" href="{{ paginator.next_page_path | relative_url }}">Older <i class="ph-bold ph-arrow-right"></i></a>
+  {%- else -%}
+    <span class="im-page-btn is-disabled">Older <i class="ph-bold ph-arrow-right"></i></span>
+  {%- endif -%}
+</nav>
+{%- endif -%}

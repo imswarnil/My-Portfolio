@@ -16,41 +16,38 @@ hero_image: /assets/Swarnil-Singhai.png
       <div class="im-hero-actions">
         <a class="im-btn" href="{{ '/projects/' | relative_url }}"><i class="ph-bold ph-rocket-launch"></i> See projects</a>
         <a class="im-btn im-btn-outline" href="{{ '/about/' | relative_url }}">About me</a>
+        <button class="im-btn im-btn-ghost" data-im-search-open><i class="ph-bold ph-magnifying-glass"></i> Search <kbd class="im-search-esc">/</kbd></button>
       </div>
     </div>
     {%- if page.hero_image -%}
-    <figure class="im-hero-media">
-      <img src="{{ page.hero_image | relative_url }}" alt="{{ site.author | default: site.title }}" width="900" height="700">
-    </figure>
+    <figure class="im-hero-media"><img src="{{ page.hero_image | relative_url }}" alt="{{ site.author | default: site.title }}" width="900" height="700"></figure>
     {%- endif -%}
   </div>
 
-  {%- comment -%} Collection shortcuts {%- endcomment -%}
+  {%- comment -%} Quick links to every collection {%- endcomment -%}
   <section class="im-home-section">
     <div class="im-home-section-head"><h2>Explore</h2></div>
     <div class="im-home-collections">
       {%- for c in site.collections -%}
-        {%- unless c.label == "posts" -%}
+        {%- if c.docs.size > 0 -%}
         <a class="im-home-collection" href="{{ c.permalink | default: c.url | relative_url }}">
           <i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i>
           <span class="im-home-collection-name">{{ c.title | default: c.label }}</span>
           <span class="im-home-collection-count">{{ c.docs | size }} {{ c.title | default: c.label | downcase }}</span>
         </a>
-        {%- endunless -%}
+        {%- endif -%}
       {%- endfor -%}
     </div>
   </section>
 
-  {%- comment -%} Latest across every collection {%- endcomment -%}
-  {%- assign all = site.guides | concat: site.reviews | concat: site.trips | concat: site.videos | concat: site.podcasts | concat: site.projects | concat: site.notes | sort: "date" | reverse -%}
-  <section class="im-home-section">
-    <div class="im-home-section-head">
-      <h2>Latest</h2>
-    </div>
-    <ul class="im-cards">
-      {%- for it in all limit: 6 -%}
-        <li>{% include utility/card.html item=it %}</li>
-      {%- endfor -%}
-    </ul>
-  </section>
+  {%- comment -%} Each collection in its signature style {%- endcomment -%}
+  {% include home/collection-section.html collection="videos"    style="featured" title="Watch" %}
+  {% include home/collection-section.html collection="blog"      style="numbered" title="From the blog" %}
+  {% include home/collection-section.html collection="projects"  style="bento"    title="Projects" %}
+  {% include home/collection-section.html collection="portfolio" style="gallery"  title="Portfolio" %}
+
+  {%- if site.adsense.enabled %}{% include ad.html type="horizontal" %}{% endif %}
+
+  {% include home/collection-section.html collection="snippets"  style="compact"  title="Snippets" %}
+  {% include home/collection-section.html collection="prompts"   style="cards"    title="AI Prompts" %}
 </section>

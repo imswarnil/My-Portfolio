@@ -154,22 +154,21 @@
 }
 
 // ---- Per-collection accents ------------------------------------------
-// Left accent bar tints the card by content type.
-.im-pcard--guide    { --im-pcard-accent: #2563eb; }
-.im-pcard--review   { --im-pcard-accent: #d97706; }
-.im-pcard--trip     { --im-pcard-accent: #0d9488; }
-.im-pcard--video    { --im-pcard-accent: #dc2626; }
-.im-pcard--podcast  { --im-pcard-accent: #7c3aed; }
-.im-pcard--project  { --im-pcard-accent: #0891b2; }
-.im-pcard--note     { --im-pcard-accent: #16a34a; }
+.im-pcard--blog      { --im-pcard-accent: #2563eb; }
+.im-pcard--projects  { --im-pcard-accent: #0891b2; }
+.im-pcard--portfolio { --im-pcard-accent: #9333ea; }
+.im-pcard--videos    { --im-pcard-accent: #dc2626; }
+.im-pcard--snippets  { --im-pcard-accent: #16a34a; }
+.im-pcard--prompts   { --im-pcard-accent: #0d9488; }
 
 .im-pcard[class*="im-pcard--"] .im-pcard-type { background: var(--im-pcard-accent, var(--im-color-overlay)); }
 
-// Notes are text-first — no media, accent strip instead
-.im-pcard--note {
+// Text-first cards (snippets / prompts) — no media, accent strip instead
+.im-pcard--snippets,
+.im-pcard--prompts {
   border-left: 3px solid var(--im-pcard-accent);
   .im-pcard-body { padding-top: var(--im-space-5); }
 }
+.im-pcard--snippets .im-pcard-title { font-family: var(--im-font-mono); font-size: var(--im-text-lg); }
 
-// Reviews show a star score in the meta row
 .im-pcard-score { color: var(--im-color-warning); font-weight: var(--im-fw-semibold); }

@@ -156,6 +156,32 @@
   .im-postnav-next { text-align: right; }
 }
 
+// ---- Pagination -------------------------------------------------------
+.im-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--im-space-3);
+  margin-top: var(--im-space-7);
+  padding-top: var(--im-space-6);
+  border-top: 1px solid var(--im-color-border);
+}
+.im-page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  padding: var(--im-space-2) var(--im-space-4);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-pill);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-fw-medium);
+  color: var(--im-color-contrast);
+  text-decoration: none;
+  &:hover { background: var(--im-color-background-100); }
+  &.is-disabled { opacity: 0.4; pointer-events: none; }
+}
+.im-page-indicator { font-size: var(--im-text-sm); color: var(--im-color-secondary); }
+
 // ---- Page breadcrumb --------------------------------------------------
 .im-breadcrumb {
   display: flex;

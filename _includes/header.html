@@ -1,39 +1,104 @@
-{%- comment -%} IM site header / navigation {%- endcomment -%}
-<header class="im-navbar">
+{%- comment -%}
+  IM site header — fully driven by `site.header` config.
+  layout: island|full · sticky · blur · brand: both|logo|title ·
+  show_icons · dropdowns · megamenu · search · dark_toggle · github · sponsor · cta
+{%- endcomment -%}
+{%- assign h = site.header -%}
+{%- assign navmods = "" -%}
+{%- if h.layout == "island" %}{% assign navmods = navmods | append: " im-navbar--island" %}{% else %}{% assign navmods = navmods | append: " im-navbar--full" %}{% endif -%}
+{%- if h.sticky != false %}{% assign navmods = navmods | append: " is-sticky" %}{% endif -%}
+{%- if h.blur != false %}{% assign navmods = navmods | append: " is-blur" %}{% endif -%}
+
+<header class="im-navbar{{ navmods }}">
   <div class="im-navbar-inner">
-    <a class="im-brand" href="{{ '/' | relative_url }}">
-      {%- if site.logo -%}<img src="{{ site.logo | relative_url }}" alt="{{ site.title }}">{%- endif -%}
-      <span>{{ site.title }}</span>
+    {%- comment -%} ── Brand ── {%- endcomment -%}
+    <a class="im-brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">
+      {%- unless h.brand == "title" -%}{% if site.logo %}<img class="im-brand-logo" src="{{ site.logo | relative_url }}" alt="">{% endif %}{%- endunless -%}
+      {%- unless h.brand == "logo" -%}<span class="im-brand-name">{{ site.title }}</span>{%- endunless -%}
     </a>
 
-    <button class="im-nav-toggle" aria-label="Toggle menu" aria-expanded="false" data-im-nav-toggle>
-      <i class="ph-bold ph-list" aria-hidden="true"></i>
-    </button>
-
-    <nav aria-label="Primary">
+    {%- comment -%} ── Primary nav ── {%- endcomment -%}
+    <nav class="im-nav-wrap" aria-label="Primary">
       <ul class="im-nav" id="im-nav">
         {%- for item in site.navigation_header -%}
+          {%- assign has_children = false -%}
+          {%- if h.dropdowns != false and item.children %}{% assign has_children = true %}{% endif -%}
+          {%- assign is_mega = false -%}
+          {%- if has_children and h.megamenu != false and item.megamenu %}{% assign is_mega = true %}{% endif -%}
           {%- assign active = false -%}
-          {%- if item.url != '/' and page.url contains item.url -%}{%- assign active = true -%}{%- endif -%}
-          {%- if item.url == '/' and page.url == '/' -%}{%- assign active = true -%}{%- endif -%}
-          <li>
-            <a class="im-nav-link" href="{{ item.url | relative_url }}"{% if active %} aria-current="page"{% endif %}>
-              {%- if item.icon %}<i class="ph-bold ph-{{ item.icon }}" aria-hidden="true"></i>{% endif -%}
+          {%- if item.url != '/' and page.url contains item.url %}{% assign active = true %}{% endif -%}
+          <li class="im-nav-item{% if has_children %} has-dropdown{% endif %}{% if is_mega %} has-mega{% endif %}">
+            <a class="im-nav-link" href="{{ item.url | relative_url }}"{% if active %} aria-current="page"{% endif %}{% if has_children %} aria-haspopup="true" aria-expanded="false"{% endif %}>
+              {%- if h.show_icons != false and item.icon %}<i class="ph-bold ph-{{ item.icon }}" aria-hidden="true"></i>{% endif -%}
               <span>{{ item.title }}</span>
+              {%- if has_children %}<i class="ph-bold ph-caret-down im-nav-caret" aria-hidden="true"></i>{% endif -%}
             </a>
+
+            {%- if is_mega -%}
+            <div class="im-mega" role="menu">
+              {%- if item.blurb -%}<p class="im-mega-blurb">{{ item.blurb }}</p>{%- endif -%}
+              <div class="im-mega-grid">
+                {%- for c in item.children -%}
+                <a class="im-mega-item" href="{{ c.url | relative_url }}" role="menuitem">
+                  {%- if c.icon %}<span class="im-mega-icon"><i class="ph-bold ph-{{ c.icon }}"></i></span>{% endif -%}
+                  <span class="im-mega-text"><span class="im-mega-title">{{ c.title }}</span>{% if c.sub %}<span class="im-mega-sub">{{ c.sub }}</span>{% endif %}</span>
+                </a>
+                {%- endfor -%}
+              </div>
+            </div>
+            {%- elsif has_children -%}
+            <ul class="im-dropdown" role="menu">
+              {%- for c in item.children -%}
+              <li role="none"><a class="im-dropdown-link" href="{{ c.url | relative_url }}" role="menuitem">
+                {%- if h.show_icons != false and c.icon %}<i class="ph-bold ph-{{ c.icon }}" aria-hidden="true"></i>{% endif -%}
+                <span>{{ c.title }}</span>
+              </a></li>
+              {%- endfor -%}
+            </ul>
+            {%- endif -%}
           </li>
         {%- endfor -%}
       </ul>
     </nav>
 
+    {%- comment -%} ── Actions ── {%- endcomment -%}
     <div class="im-nav-actions">
-      <a class="im-theme-toggle" href="{{ '/search/' | relative_url }}" aria-label="Search">
-        <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+      {%- if h.github.enabled and h.github.repo -%}
+      <a class="im-ghstar" href="https://github.com/{{ h.github.repo }}" target="_blank" rel="noopener" aria-label="Star on GitHub"{% if h.github.show_stars %} data-im-ghstars="{{ h.github.repo }}"{% endif %}>
+        <i class="ph-bold ph-github-logo" aria-hidden="true"></i>
+        <span class="im-ghstar-label">Star</span>
+        {%- if h.github.show_stars %}<span class="im-ghstar-count" hidden>0</span>{% endif -%}
       </a>
-      <button class="im-theme-toggle" data-im-theme-toggle aria-label="Toggle color scheme">
+      {%- endif -%}
+
+      {%- if h.sponsor.enabled and h.sponsor.url -%}
+      <a class="im-iconbtn im-sponsor" href="{{ h.sponsor.url }}" target="_blank" rel="noopener" aria-label="{{ h.sponsor.label | default: 'Sponsor' }}" title="{{ h.sponsor.label | default: 'Sponsor' }}">
+        <i class="ph-fill ph-heart" aria-hidden="true"></i>
+      </a>
+      {%- endif -%}
+
+      {%- if h.search != false -%}
+      <button class="im-iconbtn" data-im-search-open aria-label="Search (press /)">
+        <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+      </button>
+      {%- endif -%}
+
+      {%- if h.dark_toggle != false -%}
+      <button class="im-iconbtn" data-im-theme-toggle aria-label="Toggle color scheme">
         <span class="im-icon-light"><i class="ph-bold ph-sun" aria-hidden="true"></i></span>
         <span class="im-icon-dark"><i class="ph-bold ph-moon" aria-hidden="true"></i></span>
+      </button>
+      {%- endif -%}
+
+      {%- if h.cta.enabled and h.cta.url -%}
+      <a class="im-btn im-btn-sm im-nav-cta" href="{{ h.cta.url | relative_url }}">{{ h.cta.label | default: "Contact" }}</a>
+      {%- endif -%}
+
+      <button class="im-nav-toggle" data-im-nav-toggle aria-label="Menu" aria-expanded="false" aria-controls="im-nav">
+        <i class="ph-bold ph-list" aria-hidden="true"></i>
       </button>
     </div>
   </div>
 </header>
+
+{%- if h.search != false %}{% include search-modal.html %}{% endif -%}

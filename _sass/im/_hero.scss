@@ -8,9 +8,9 @@
   align-items: center;
   padding-block: var(--im-space-7);
 
-  // Two-column split once there's room
+  // Two-column split once there's room (text-led, image smaller on the right)
   @media (min-width: $bp-lg) {
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 1.5fr 0.85fr;
     padding-block: var(--im-space-8);
   }
 }
@@ -63,10 +63,14 @@
 
 .im-hero-media {
   margin: 0;
+  max-width: 22rem;
+  margin-inline: auto;
+  justify-self: end;
 
   img,
   video {
     width: 100%;
+    aspect-ratio: 4 / 5;
     border-radius: var(--im-radius-6);
     box-shadow: var(--im-shadow-lg);
     object-fit: cover;

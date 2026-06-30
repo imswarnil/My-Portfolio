@@ -1,34 +1,83 @@
-{%- comment -%} IM site footer {%- endcomment -%}
-<footer class="im-footer">
+{%- comment -%}
+  IM footer — driven by `site.footer`.
+    layout: columns | minimal     (pick one — both fully responsive)
+    boxed:  true|false            (optional rounded "island" card wrapper)
+  Other keys: tagline, show_collections, show_nav, show_social, newsletter.
+{%- endcomment -%}
+{%- assign f = site.footer -%}
+{%- assign flayout = f.layout | default: "columns" -%}
+{%- unless flayout == "minimal" %}{% assign flayout = "columns" %}{% endunless -%}
+
+<footer class="im-footer im-footer--{{ flayout }}{% if f.boxed %} is-boxed{% endif %}">
   <div class="im-footer-inner">
-    <a class="im-footer-brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
 
-    <ul class="im-footer-nav">
+  {%- if flayout == "minimal" -%}
+    <a class="im-footer-brand" href="{{ '/' | relative_url }}">
+      {%- if site.logo %}<img src="{{ site.logo | relative_url }}" alt="">{% endif %}<span>{{ site.title }}</span>
+    </a>
+    {%- if f.tagline %}<p class="im-footer-tagline">{{ f.tagline }}</p>{% endif -%}
+
+    {%- if f.show_nav != false -%}
+    <nav class="im-footer-inlinenav" aria-label="Footer">
       {%- for item in site.navigation_footer -%}
-        <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+        <a class="im-flink" href="{{ item.url | relative_url }}">{{ item.title }}</a>
       {%- endfor -%}
-    </ul>
-
-    {%- if site.social_links -%}
-    <ul class="im-footer-social">
-      {%- for s in site.social_links -%}
-        {%- assign icon = 'link' -%}
-        {%- case s[0] -%}
-          {%- when 'Twitter'  -%}{%- assign icon = 'twitter-logo'  -%}
-          {%- when 'LinkedIn' -%}{%- assign icon = 'linkedin-logo' -%}
-          {%- when 'GitHub'   -%}{%- assign icon = 'github-logo'   -%}
-          {%- when 'RSS'      -%}{%- assign icon = 'rss'           -%}
-          {%- when 'YouTube'  -%}{%- assign icon = 'youtube-logo'  -%}
-        {%- endcase -%}
-        <li><a href="{{ s[1] }}" target="_blank" rel="me noopener" aria-label="{{ s[0] }}">
-          <i class="ph-bold ph-{{ icon }}" aria-hidden="true"></i>
-        </a></li>
-      {%- endfor -%}
-    </ul>
+    </nav>
     {%- endif -%}
 
-    <p class="im-footer-copyright">
-      © {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}. Built with Jekyll &amp; the IM CSS framework.
-    </p>
+    {%- include footer-social.html -%}
+
+    <p class="im-footer-copyright">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}</p>
+
+  {%- else -%}
+    <div class="im-footer-top">
+      <div class="im-footer-brandcol">
+        <a class="im-footer-brand" href="{{ '/' | relative_url }}">
+          {%- if site.logo %}<img src="{{ site.logo | relative_url }}" alt="">{% endif %}<span>{{ site.title }}</span>
+        </a>
+        {%- if f.tagline %}<p class="im-footer-tagline">{{ f.tagline }}</p>{% endif -%}
+        {%- include footer-social.html -%}
+      </div>
+
+      <div class="im-footer-cols">
+        {%- if f.show_collections != false -%}
+        <nav class="im-footer-col" aria-label="Explore">
+          <h3 class="im-footer-title">Explore</h3>
+          <ul class="im-footer-links">
+            {%- for c in site.collections -%}
+              {%- if c.docs.size > 0 -%}<li><a class="im-flink" href="{{ c.permalink | default: c.url | relative_url }}">{{ c.title | default: c.label }}</a></li>{%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </nav>
+        {%- endif -%}
+
+        {%- if f.show_nav != false -%}
+        <nav class="im-footer-col" aria-label="Site">
+          <h3 class="im-footer-title">Site</h3>
+          <ul class="im-footer-links">
+            {%- for item in site.navigation_footer -%}<li><a class="im-flink" href="{{ item.url | relative_url }}">{{ item.title }}</a></li>{%- endfor -%}
+          </ul>
+        </nav>
+        {%- endif -%}
+
+        {%- if f.newsletter.enabled -%}
+        <div class="im-footer-col im-footer-news">
+          <h3 class="im-footer-title">Newsletter</h3>
+          <p class="im-footer-tagline">New posts &amp; videos, no spam.</p>
+          <form class="im-footer-form" action="{{ f.newsletter.action }}" method="post">
+            <input type="email" name="email" placeholder="{{ f.newsletter.placeholder | default: 'you@email.com' }}" required aria-label="Email">
+            <button class="im-btn im-btn-sm" type="submit"><i class="ph-bold ph-paper-plane-tilt"></i></button>
+          </form>
+        </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="im-footer-bottom">
+      <p class="im-footer-copyright">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}. Built with the IM CSS framework.</p>
+      <a class="im-footer-top-link" href="#top">Back to top <i class="ph-bold ph-arrow-up"></i></a>
+    </div>
+  {%- endif -%}
+
   </div>
 </footer>

@@ -16,6 +16,8 @@
 @import "components";   // im-btn / im-card / im-badge / im-alert
 @import "collection";   // collection list pages + per-type cards
 @import "post";         // single post / page article + toc
+@import "shell";        // content shell + sidebar + toc + ad rails/units
+@import "search";       // command palette + search page
 @import "home";         // homepage composition
 @import "footer";       // site footer
 @import "utilities";    // spacing / text / flex helpers (must stay last)
