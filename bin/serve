@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Local dev server. Uses the homebrew arm64 Ruby because the macOS system
-# Ruby 2.6 cannot load sass-embedded (see CLAUDE.md / memory).
+# Local dev server + livereload.
+# Pins the chruby ruby-3.4.1 toolchain (the macOS system Ruby 2.6 cannot
+# build this site: sass-embedded / google-protobuf fail to load).
 set -e
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="$HOME/.rubies/ruby-3.4.1/bin:$PATH"
 cd "$(dirname "$0")/.."
-[ -f Gemfile.lock ] && rm -f Gemfile.lock
+rm -f Gemfile.lock
 bundle check >/dev/null 2>&1 || bundle install
 exec bundle exec jekyll serve --livereload "$@"

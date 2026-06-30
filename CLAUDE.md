@@ -13,7 +13,7 @@ bin/serve                      # local dev server + livereload (recommended)
 bin/build                      # production build into _site/
 ```
 
-`bin/serve` / `bin/build` exist because the **macOS system Ruby (2.6, `/usr/bin/ruby`) cannot build this site** — `sass-embedded` / `google-protobuf` crash with `cannot load such file -- google/protobuf_c`. The scripts force the homebrew arm64 Ruby (`/opt/homebrew/opt/ruby/bin`) onto PATH and run `bundle install` if needed. To run Jekyll directly, prefix every command with `export PATH="/opt/homebrew/opt/ruby/bin:$PATH"` first. CI (Ruby 3.1) is unaffected. `Gemfile.lock` is gitignored, so the scripts delete any stale lock before installing.
+In an interactive terminal, plain `bundle install` / `bundle exec jekyll serve` work because `~/.zshrc` activates **chruby `ruby-3.4.1`** (`~/.rubies/ruby-3.4.1`). The **macOS system Ruby (2.6, `/usr/bin/ruby`) cannot build this site** — `sass-embedded` / `google-protobuf` crash with `cannot load such file -- google/protobuf_c` — so if a shell falls back to it (e.g. chruby didn't load), builds break. `bin/serve` / `bin/build` guard against that by forcing `~/.rubies/ruby-3.4.1/bin` onto PATH. `vendor/bundle` is per-Ruby: if you switch Ruby versions, `rm -rf vendor/bundle Gemfile.lock && bundle install`. CI (Ruby 3.1) is unaffected. `Gemfile.lock` is gitignored, so the scripts delete any stale lock before installing.
 
 For a quick SCSS-only check without Jekyll: `npx --yes sass@1.77.8 --no-source-map _sass/main.scss /tmp/out.css`.
 
