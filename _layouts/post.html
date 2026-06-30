@@ -1,158 +1,100 @@
 ---
 layout: default
 ---
+{%- assign coll = site.collections | where: "label", page.collection | first -%}
+{%- assign kicker = coll.singular | default: "Post" -%}
 
-{%- assign HAS_ASIDE = page.aside | default: true -%}
-{%- assign POST_TYPE = page.type | default: 'writing' -%}
+<article class="im-article im-page">
+  <header class="im-post-header">
+    <span class="im-kicker">{{ kicker }}</span>
+    <h1 class="im-post-title">{{ page.title }}</h1>
+    <div class="im-post-meta">
+      <img class="im-avatar" src="{{ page.author_avatar | default: site.avatarurl | default: '/assets/img/avatar.jpg' | relative_url }}" alt="" width="28" height="28">
+      <span>{{ page.author | default: site.author | default: site.title }}</span>
+      {%- if page.date %}<span class="im-dot">·</span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %-d, %Y" }}</time>{% endif -%}
+      {%- if page.read_time %}<span class="im-dot">·</span><span>{{ page.read_time }} min read</span>{% endif -%}
+    </div>
+  </header>
 
-<section class="post-hero">
-  <div class="container">
-    <header class="post-header">
-      <p class="post-kicker">
-        {% case POST_TYPE %}
-          {% when 'project' %}Project
-          {% when 'video' %}Video
-          {% when 'podcast' %}Podcast
-          {% when 'guide' %}Guide
-          {% when 'review' %}Review
-          {% when 'trip' %}Travel
-          {% else %}Writing
-        {% endcase %}
-      </p>
-      <h1 class="post-title">{{ page.title }}</h1>
-      <div class="post-meta">
-        <img class="post-avatar" src="{{ page.author_avatar | default: '/assets/img/avatar.jpg' | relative_url }}" alt="{{ page.author | default: site.author }}">
-        <div class="post-byline">
-          <span class="post-author">{{ page.author | default: site.author | default: site.title }}</span>
-          <span class="post-date">{{ page.date | date: "%b %d, %Y" }}</span>
-          {% if page.reading_time %}<span class="post-dot">•</span><span class="post-read">{{ page.reading_time }} min read</span>{% endif %}
+  {%- comment -%} ── Type-specific lead media ───────────────────────── {%- endcomment -%}
+  {%- case page.collection -%}
+    {%- when "videos" -%}
+      {%- if page.video_id -%}
+        <div class="im-post-media"><iframe src="https://www.youtube-nocookie.com/embed/{{ page.video_id }}" title="{{ page.title }}" allowfullscreen loading="lazy"></iframe></div>
+      {%- elsif page.video_embed -%}
+        <div class="im-post-media">{{ page.video_embed }}</div>
+      {%- endif -%}
+    {%- when "podcasts" -%}
+      {%- if page.audio_src -%}
+        <div class="im-post-media"><audio controls preload="none" src="{{ page.audio_src | relative_url }}"></audio></div>
+      {%- endif -%}
+    {%- when "reviews" -%}
+      {%- if page.rating -%}
+        <div class="im-rating"><span class="im-rating-stars" style="--score: {{ page.rating }}"></span><strong>{{ page.rating }}/5</strong>{% if page.item_reviewed %}<span class="im-dot">·</span><span>{{ page.item_reviewed }}</span>{% endif %}</div>
+      {%- endif -%}
+    {%- when "trips" -%}
+      {%- if page.location or page.days or page.cost -%}
+        <div class="im-factbar">
+          {%- if page.location %}<span class="im-fact"><i class="ph-bold ph-map-pin"></i><span class="im-fact-value">{{ page.location }}</span></span>{% endif -%}
+          {%- if page.days %}<span class="im-fact"><span class="im-fact-label">Duration</span><span class="im-fact-value">{{ page.days }} days</span></span>{% endif -%}
+          {%- if page.cost %}<span class="im-fact"><span class="im-fact-label">Cost</span><span class="im-fact-value">{{ page.cost }}</span></span>{% endif -%}
         </div>
-      </div>
-
-      {% if page.cover %}
-      <figure class="post-cover">
-        <img src="{{ page.cover | relative_url }}" alt="{{ page.title }}">
-        {% if page.cover_caption %}<figcaption>{{ page.cover_caption }}</figcaption>{% endif %}
-      </figure>
-      {% endif %}
-
-      <!-- Mobile TOC appears directly after hero -->
-      <nav class="toc toc--mobile" aria-label="Table of contents">
-        <h2 class="toc-title">On this page</h2>
-        <ol class="toc-list" id="toc-mobile"></ol>
-      </nav>
-    </header>
-  </div>
-</section>
-
-<div class="container">
-  <div class="post-layout{% unless HAS_ASIDE %} post-layout--single{% endunless %}">
-    <article class="article">
-      <!-- Type-aware top blocks -->
-      {% case POST_TYPE %}
-        {% when 'project' %}
-          {% if page.facts %}
-          <section class="post-facts">
-            {% for f in page.facts %}
-              <div class="fact"><span class="fact-label">{{ f.label }}</span><span class="fact-value">{{ f.value }}</span></div>
-            {% endfor %}
-          </section>
-          {% endif %}
-        {% when 'video' %}
-          {% if page.video_embed %}
-          <div class="post-media">
-            {{ page.video_embed }}
-          </div>
-          {% endif %}
-        {% when 'podcast' %}
-          {% if page.audio_src %}
-          <div class="post-media">
-            <audio controls preload="none" src="{{ page.audio_src | relative_url }}"></audio>
-          </div>
-          {% endif %}
-        {% when 'review' %}
-          {% if page.rating %}
-          <div class="post-rating" role="img" aria-label="Rating {{ page.rating }} out of 5">
-            <span class="rating-label">Rating</span>
-            <div class="rating-stars" data-score="{{ page.rating }}"></div>
-          </div>
-          {% endif %}
-        {% when 'trip' %}
-          <div class="post-tripmeta">
-            {% if page.location %}<span class="trip-item"><i class="ph-bold ph-map-pin"></i>{{ page.location }}</span>{% endif %}
-            {% if page.days %}<span class="trip-item"><i class="ph-bold ph-calendar-blank"></i>{{ page.days }} days</span>{% endif %}
-            {% if page.cost %}<span class="trip-item"><i class="ph-bold ph-currency-inr"></i>{{ page.cost }}</span>{% endif %}
-          </div>
-        {% else %}
-          <!-- writing/guide defaults have no special block -->
-      {% endcase %}
-
-      <!-- The actual post content -->
-      <div class="content typeset">
-        {{ content }}
-      </div>
-
-      <!-- Tags -->
-      {% if page.tags %}
-      <ul class="post-tags">
-        {% for tag in page.tags %}
-          <li><a href="{{ '/tags/' | append: tag | slugify | relative_url }}">#{{ tag }}</a></li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-
-      <!-- Share -->
-      <section class="post-share" aria-label="Share">
-        <h2 class="sr-only">Share</h2>
-        {% assign u = page.url | absolute_url %}
-        {% assign t = page.title | uri_escape %}
-        <a class="btn btn-ghost" href="https://twitter.com/intent/tweet?url={{ u | uri_escape }}&text={{ t }}" target="_blank" rel="noopener">
-          <i class="ph-bold ph-twitter-logo"></i><span>Twitter</span>
-        </a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/sharing/share-offsite/?url={{ u | uri_escape }}" target="_blank" rel="noopener">
-          <i class="ph-bold ph-linkedin-logo"></i><span>LinkedIn</span>
-        </a>
-        <button class="btn btn-ghost post-share-copy" data-url="{{ u }}">
-          <i class="ph-bold ph-link-simple"></i><span>Copy link</span>
-        </button>
-      </section>
-
-      <!-- Author box -->
-      <section class="post-author">
-        <img class="author-avatar" src="{{ page.author_avatar | default: '/assets/img/avatar.jpg' | relative_url }}" alt="{{ page.author | default: site.author }}">
-        <div class="author-body">
-          <h3 class="author-name">{{ page.author | default: site.author | default: site.title }}</h3>
-          <p class="author-bio">{{ page.author_bio | default: site.author_bio | default: "Filmmaker + Software Engineer. Building cinematic, fast web." }}</p>
+      {%- endif -%}
+    {%- when "projects" -%}
+      {%- if page.facts -%}
+        <div class="im-factbar">
+          {%- for f in page.facts %}<span class="im-fact"><span class="im-fact-label">{{ f.label }}</span><span class="im-fact-value">{{ f.value }}</span></span>{% endfor -%}
         </div>
-      </section>
+      {%- endif -%}
+  {%- endcase -%}
 
-      <!-- Prev/Next -->
-      <nav class="post-nav" aria-label="Post navigation">
-        {% if page.previous.url %}
-        <a class="post-prev" href="{{ page.previous.url | relative_url }}">
-          <i class="ph-bold ph-arrow-left"></i>
-          <span class="label">Previous</span>
-          <span class="name">{{ page.previous.title }}</span>
-        </a>
-        {% endif %}
-        {% if page.next.url %}
-        <a class="post-next" href="{{ page.next.url | relative_url }}">
-          <span class="label">Next</span>
-          <span class="name">{{ page.next.title }}</span>
-          <i class="ph-bold ph-arrow-right"></i>
-        </a>
-        {% endif %}
-      </nav>
-    </article>
+  {%- comment -%} Cover image (skip when video/podcast provided their own media) {%- endcomment -%}
+  {%- assign cover = page.image | default: page.cover -%}
+  {%- unless page.collection == "videos" or page.collection == "podcasts" or page.collection == "notes" -%}
+    {%- if cover -%}
+      <figure class="im-post-cover"><img src="{{ cover | relative_url }}" alt="{{ page.title }}">{% if page.cover_caption %}<figcaption>{{ page.cover_caption }}</figcaption>{% endif %}</figure>
+    {%- endif -%}
+  {%- endunless -%}
 
-    {% if HAS_ASIDE %}
-  <aside class="sidebar" aria-label="Sidebar">
-  {% assign contentsTitle = page.toc_title | default: 'Contents' %}
-  {% include utility/toc.html html=content h_min=2 h_max=3 contents_title=contentsTitle %}
-
-  {% include adsense.html type="square" %}
-</aside>
-
-    {% endif %}
+  <div class="im-prose">
+    {{ content }}
   </div>
-</div>
+
+  {%- if page.tags and page.tags != empty -%}
+  <ul class="im-tags">
+    {%- for tag in page.tags %}<li><a href="{{ '/tags/' | append: tag | slugify | relative_url }}">#{{ tag }}</a></li>{% endfor -%}
+  </ul>
+  {%- endif -%}
+
+  {%- assign u = page.url | absolute_url -%}
+  <div class="im-share">
+    <a class="im-btn im-btn-sm im-btn-outline" href="https://twitter.com/intent/tweet?url={{ u | uri_escape }}&text={{ page.title | uri_escape }}" target="_blank" rel="noopener"><i class="ph-bold ph-x-logo"></i> Share</a>
+    <a class="im-btn im-btn-sm im-btn-outline" href="https://www.linkedin.com/sharing/share-offsite/?url={{ u | uri_escape }}" target="_blank" rel="noopener"><i class="ph-bold ph-linkedin-logo"></i> LinkedIn</a>
+    <button class="im-btn im-btn-sm im-btn-ghost" data-im-copy="{{ u }}"><i class="ph-bold ph-link"></i> Copy link</button>
+  </div>
+
+  <div class="im-author-card">
+    <img src="{{ page.author_avatar | default: site.avatarurl | default: '/assets/img/avatar.jpg' | relative_url }}" alt="">
+    <div>
+      <p class="im-author-name">{{ page.author | default: site.author | default: site.title }}</p>
+      <p class="im-author-bio">{{ page.author_bio | default: site.description }}</p>
+    </div>
+  </div>
+
+  {%- if page.previous.url or page.next.url -%}
+  <nav class="im-postnav" aria-label="More in {{ coll.title }}">
+    {%- if page.previous.url -%}<a href="{{ page.previous.url | relative_url }}"><span class="im-postnav-label">Previous</span><span class="im-postnav-title">{{ page.previous.title }}</span></a>{% endif -%}
+    {%- if page.next.url -%}<a class="im-postnav-next" href="{{ page.next.url | relative_url }}"><span class="im-postnav-label">Next</span><span class="im-postnav-title">{{ page.next.title }}</span></a>{% endif -%}
+  </nav>
+  {%- endif -%}
+</article>
+
+<script>
+  document.querySelectorAll('[data-im-copy]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      navigator.clipboard && navigator.clipboard.writeText(b.getAttribute('data-im-copy'));
+      var t = b.querySelector('span') || b; var old = b.innerHTML; b.innerHTML = '<i class="ph-bold ph-check"></i> Copied';
+      setTimeout(function(){ b.innerHTML = old; }, 1500);
+    });
+  });
+</script>

@@ -1,0 +1,148 @@
+// ======================================================================
+// im/_base.scss — reset + element defaults (built on --im-* tokens)
+// Trimmed from the pasted theme reset; greyscale, token-driven.
+// ======================================================================
+
+*, *::before, *::after { box-sizing: border-box; }
+
+@media (prefers-reduced-motion: no-preference) {
+  :root { scroll-behavior: smooth; }
+}
+
+html { height: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--im-font-body);
+  font-size: 16px;
+  font-weight: var(--im-fw-regular);
+  line-height: var(--im-leading-base);
+  color: var(--im-color-foreground);
+  background-color: var(--im-color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  word-break: break-word;
+}
+
+img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
+img { border-style: none; }
+svg:not([fill]) { fill: currentColor; }
+
+p { margin: 0 0 var(--im-space-4); }
+ul, ol { margin: 0 0 var(--im-space-4); padding-left: 1.5rem; }
+li + li { margin-top: var(--im-space-1); }
+
+hr {
+  height: 0;
+  margin: var(--im-space-6) 0;
+  border: 0;
+  border-top: 1px solid var(--im-color-border);
+}
+
+b, strong { font-weight: var(--im-fw-semibold); }
+small { font-size: var(--im-text-sm); }
+
+a {
+  color: var(--im-color-contrast);
+  text-decoration: underline;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.15em;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  transition: color var(--im-dur-1) var(--im-ease), text-decoration-color var(--im-dur-1) var(--im-ease);
+
+  &:hover { color: var(--im-color-accent); text-decoration-color: transparent; }
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 var(--im-space-3);
+  font-family: var(--im-font-head);
+  font-weight: var(--im-fw-semibold);
+  line-height: var(--im-leading-tight);
+  color: var(--im-color-contrast);
+  letter-spacing: -0.01em;
+}
+h1 { font-size: var(--im-text-4xl); letter-spacing: -0.02em; }
+h2 { font-size: var(--im-text-3xl); }
+h3 { font-size: var(--im-text-2xl); }
+h4 { font-size: var(--im-text-xl); }
+h5 { font-size: var(--im-text-lg); }
+h6 { font-size: var(--im-text-base); }
+
+// Quotes
+blockquote {
+  margin: var(--im-space-5) 0;
+  padding: 0.25em 0 0.25em var(--im-space-4);
+  border-left: 2px solid var(--im-color-accent);
+  color: var(--im-color-contrast);
+  font-weight: var(--im-fw-medium);
+}
+
+// Code
+code, kbd, samp, pre { font-family: var(--im-font-mono); }
+:not(pre) > code {
+  padding: 0.15em 0.4em;
+  font-size: 0.875em;
+  border-radius: var(--im-radius-1);
+  background: var(--im-color-background-100);
+  box-shadow: inset 0 0 0 1px var(--im-color-border);
+  color: var(--im-color-contrast);
+}
+pre {
+  display: block;
+  overflow: auto;
+  max-height: 500px;
+  margin: var(--im-space-5) 0;
+  padding: var(--im-space-4) var(--im-space-5);
+  font-size: var(--im-text-sm);
+  border-radius: var(--im-radius-2);
+  background: var(--im-color-background-100);
+  box-shadow: inset 0 0 0 1px var(--im-color-border);
+  color: var(--im-color-contrast);
+}
+pre code { padding: 0; background: none; box-shadow: none; font-size: inherit; }
+
+// Tables
+table {
+  width: 100%;
+  margin: var(--im-space-5) 0;
+  border-collapse: collapse;
+  font-size: var(--im-text-sm);
+}
+th, td {
+  padding: var(--im-space-3) var(--im-space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--im-color-border);
+}
+thead th { font-weight: var(--im-fw-semibold); color: var(--im-color-contrast); }
+
+// Forms
+button, input, select, textarea { font: inherit; color: inherit; }
+input, select, textarea {
+  width: 100%;
+  padding: var(--im-space-3) var(--im-space-4);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-3);
+  background: var(--im-color-surface);
+  color: var(--im-color-contrast);
+
+  &:focus-visible { outline: 2px solid var(--im-color-accent); outline-offset: 1px; }
+}
+
+figure { margin: 0; }
+figcaption {
+  margin-top: var(--im-space-2);
+  font-size: var(--im-text-sm);
+  color: var(--im-color-secondary);
+  text-align: center;
+}
+
+:focus-visible { outline: 2px solid var(--im-color-accent); outline-offset: 2px; }
+
+::selection { background: var(--im-color-accent); color: var(--im-color-accent-foreground); }
+
+// Site shell -----------------------------------------------------------
+.main { display: block; }
+.im-page { padding-block: var(--im-space-6) var(--im-space-8); }

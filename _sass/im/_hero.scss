@@ -1,0 +1,74 @@
+// ======================================================================
+// im/_hero.scss — IM CSS Framework hero / landing band
+// ======================================================================
+
+.im-hero {
+  display: grid;
+  gap: var(--im-space-7);
+  align-items: center;
+  padding-block: var(--im-space-7);
+
+  // Two-column split once there's room
+  @media (min-width: $bp-lg) {
+    grid-template-columns: 1.1fr 0.9fr;
+    padding-block: var(--im-space-8);
+  }
+}
+.im-hero-center { text-align: center; justify-items: center; }
+
+.im-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-4);
+  max-width: 40rem;
+}
+
+.im-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  align-self: flex-start;
+  padding: var(--im-space-1) var(--im-space-3);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-pill);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--im-color-secondary);
+}
+.im-hero-center .im-hero-eyebrow { align-self: center; }
+
+.im-hero-title {
+  margin: 0;
+  font-size: clamp(var(--im-text-4xl), 6vw, var(--im-text-5xl));
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.im-hero-subtitle {
+  margin: 0;
+  font-size: var(--im-text-lg);
+  line-height: var(--im-leading-base);
+  color: var(--im-color-secondary);
+}
+
+.im-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-3);
+  margin-top: var(--im-space-3);
+}
+.im-hero-center .im-hero-actions { justify-content: center; }
+
+.im-hero-media {
+  margin: 0;
+
+  img,
+  video {
+    width: 100%;
+    border-radius: var(--im-radius-6);
+    box-shadow: var(--im-shadow-lg);
+    object-fit: cover;
+  }
+}

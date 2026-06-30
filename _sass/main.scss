@@ -1,64 +1,11 @@
 @charset "utf-8";
 
 // ======================================================================
-// SWARNIL CSS  —  the design framework powering this Jekyll theme
+// IM CSS  —  the design framework powering imswarnil.com
 // ----------------------------------------------------------------------
-// Layered, token-driven architecture:
-//   1. Reset      normalize browser defaults
-//   2. Tokens     design variables, theme maps, mixins, helpers
-//   3. Base       element defaults built on the tokens
-//   4. Elements   single-purpose primitives (buttons …)
-//   5. Components  reusable UI (cards, callouts, steppers, tabs …)
-//   6. Sections   composed page regions (content grid …)
-//   7. Layouts    per-template styling (home, post, page …)
-//   8. Utilities  helpers, table-of-contents, escape hatches
+// A single, self-contained layer. Build-time SCSS config feeds runtime
+// --im-* custom properties; everything else is plain, themeable CSS.
+// See _sass/im/_index.scss for the import order.
 // ======================================================================
 
-// 1. RESET --------------------------------------------------------------
-@import "normalize";
-
-// 2. TOKENS -------------------------------------------------------------
-@import "variables";
-
-// 3. BASE ---------------------------------------------------------------
-@import "base";
-
-// 4. ELEMENTS -----------------------------------------------------------
-@import "elements/buttons";
-
-// 5. COMPONENTS ---------------------------------------------------------
-@import "components/header";
-@import "components/footer";
-@import "components/adsense";
-@import "components/card";
-@import "components/badge";
-@import "components/callout";
-@import "components/stepper";
-@import "components/tabs";
-@import "components/accordion";
-@import "components/timeline";
-@import "components/stat";
-@import "components/cta";
-@import "components/pricing";
-@import "components/prose";
-@import "components/forms";
-@import "components/misc";
-
-// 6. SECTIONS -----------------------------------------------------------
-@import "sections/content-grid";
-
-// 7. LAYOUTS ------------------------------------------------------------
-@import "layouts/home";
-@import "layouts/post";
-@import "layouts/page";
-@import "layouts/categories";
-@import "layouts/archive";
-@import "layouts/search";
-@import "layouts/resume";
-
-// 8. UTILITIES ----------------------------------------------------------
-@import "utility/toc";
-@import "utility/helpers";
-@import "utility/print";
-
-// END OF SWARNIL CSS
+@import "im/index";

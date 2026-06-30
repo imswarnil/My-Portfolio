@@ -1,0 +1,175 @@
+// ======================================================================
+// im/_collection.scss — collection list pages + per-type post cards
+// One base card (.im-pcard) with per-collection modifiers so each
+// collection reads distinctly while staying DRY.
+// ======================================================================
+
+.im-collection {
+  width: 100%;
+  max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--im-gutter);
+}
+
+.im-collection-head {
+  margin-bottom: var(--im-space-6);
+  .im-collection-title { margin: 0 0 var(--im-space-2); font-size: var(--im-text-3xl); }
+  .im-collection-desc  { margin: 0; color: var(--im-color-secondary); font-size: var(--im-text-lg); }
+}
+
+.im-cards {
+  display: grid;
+  gap: var(--im-gutter);
+  grid-template-columns: 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @include mq($bp-sm) { grid-template-columns: repeat(2, 1fr); }
+  @include mq($bp-lg) { grid-template-columns: repeat(3, 1fr); }
+}
+
+// ---- Base post card ---------------------------------------------------
+.im-pcard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--im-color-surface);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-5);
+  box-shadow: var(--im-shadow);
+  transition: transform var(--im-dur-1) var(--im-ease), border-color var(--im-dur-1) var(--im-ease), box-shadow var(--im-dur-1) var(--im-ease);
+
+  &:hover { transform: translateY(-4px); border-color: var(--im-color-contrast); box-shadow: var(--im-shadow-lg); }
+}
+
+.im-pcard-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--im-color-background-200);
+
+  img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--im-dur-2) var(--im-ease); }
+  .im-pcard:hover & img { transform: scale(1.04); }
+}
+
+// Type chip sitting on the media
+.im-pcard-type {
+  position: absolute;
+  top: var(--im-space-3);
+  left: var(--im-space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  padding: var(--im-space-1) var(--im-space-3);
+  border-radius: var(--im-radius-pill);
+  background: var(--im-color-overlay);
+  color: #fff;
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+// Duration / badge bottom-right (video/podcast/trip)
+.im-pcard-badge {
+  position: absolute;
+  bottom: var(--im-space-3);
+  right: var(--im-space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  padding: var(--im-space-1) var(--im-space-2);
+  border-radius: var(--im-radius-1);
+  background: var(--im-color-overlay);
+  color: #fff;
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-medium);
+}
+
+// Play glyph overlay for media collections
+.im-pcard-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  opacity: 0.92;
+  pointer-events: none;
+  &::before {
+    content: "";
+    width: 3.25rem; height: 3.25rem;
+    border-radius: 50%;
+    background: var(--im-color-overlay);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.25) inset;
+  }
+  i, svg { position: absolute; font-size: 1.4rem; }
+}
+
+.im-pcard-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-2);
+  padding: var(--im-space-5);
+  flex: 1;
+}
+
+.im-pcard-title {
+  margin: 0;
+  font-size: var(--im-text-xl);
+  font-weight: var(--im-fw-semibold);
+  letter-spacing: -0.01em;
+  a { color: var(--im-color-contrast); text-decoration: none; }
+  a:hover { color: var(--im-color-accent); }
+}
+
+.im-pcard-excerpt {
+  margin: 0;
+  font-size: var(--im-text-sm);
+  color: var(--im-color-foreground);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.im-pcard-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-1) var(--im-space-3);
+  margin-top: auto;
+  padding-top: var(--im-space-2);
+  font-size: var(--im-text-xs);
+  color: var(--im-color-secondary);
+}
+
+.im-pcard-tagrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2);
+  font-size: var(--im-text-xs);
+  .im-pcard-tag { color: var(--im-color-secondary); }
+}
+
+// ---- Per-collection accents ------------------------------------------
+// Left accent bar tints the card by content type.
+.im-pcard--guide    { --im-pcard-accent: #2563eb; }
+.im-pcard--review   { --im-pcard-accent: #d97706; }
+.im-pcard--trip     { --im-pcard-accent: #0d9488; }
+.im-pcard--video    { --im-pcard-accent: #dc2626; }
+.im-pcard--podcast  { --im-pcard-accent: #7c3aed; }
+.im-pcard--project  { --im-pcard-accent: #0891b2; }
+.im-pcard--note     { --im-pcard-accent: #16a34a; }
+
+.im-pcard[class*="im-pcard--"] .im-pcard-type { background: var(--im-pcard-accent, var(--im-color-overlay)); }
+
+// Notes are text-first — no media, accent strip instead
+.im-pcard--note {
+  border-left: 3px solid var(--im-pcard-accent);
+  .im-pcard-body { padding-top: var(--im-space-5); }
+}
+
+// Reviews show a star score in the meta row
+.im-pcard-score { color: var(--im-color-warning); font-weight: var(--im-fw-semibold); }

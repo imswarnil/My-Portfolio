@@ -83,55 +83,39 @@ header:
 # - "children" renders as submenu (desktop + mobile)
 # -------------------------------------------------
 navigation_header:
-  - title: Home
-    url: /
-    icon: house
-    sub: Start here
-  - title: About
-    url: /about/
-    icon: user-square
-    sub: Design system
-    children:
-      - title: Components
-        url: /elements/#components
-      - title: Layouts
-        url: /elements/#layouts
-  - title: Learn
-    url: /learn/
+  - title: Guides
+    url: /guides/
     icon: graduation-cap
-    children:
-      - title: CRM Analytics
-        url: /crm-analytics/
-        icon: chart-bar
-      - title: YouTube Tips
-        url: /youtube-tips/
-        icon: youtube-logo
-  - title: Archive
-    url: /archive/
-    icon: article
-    sub: All content
-    children:
-      - title: Blog
-        url: /blog/
-      - title: Videos
-        url: /videos/
-  - title: Categories
-    url: /categories/
-    icon: tag
-    sub: Topics
-
-# Example footer nav if you want later
-navigation_footer:
-  - title: About
-    url: /about/
-  - title: Work
-    url: /#projects
-  - title: Blog
-    url: /blog/
+  - title: Projects
+    url: /projects/
+    icon: rocket-launch
   - title: Videos
     url: /videos/
-  - title: Speaking
-    url: /speaking/
+    icon: video
+  - title: Notes
+    url: /notes/
+    icon: note
+  - title: About
+    url: /about/
+    icon: user
+
+navigation_footer:
+  - title: Guides
+    url: /guides/
+  - title: Reviews
+    url: /reviews/
+  - title: Trips
+    url: /trips/
+  - title: Videos
+    url: /videos/
+  - title: Podcasts
+    url: /podcasts/
+  - title: Projects
+    url: /projects/
+  - title: Notes
+    url: /notes/
+  - title: About
+    url: /about/
   - title: Uses
     url: /uses/
   - title: Contact
@@ -331,65 +315,99 @@ resume:
 permalink: pretty                   # Permalink style (/YYYY/MM/DD/page-name/)
 excerpt_separator: <!-- more -->    # Marks end of excerpt in posts
 
+# Seven content-typed collections. Custom keys (singular / icon / image)
+# are read by the IM card + JSON-LD includes. `image` is the collection's
+# fallback cover used when an entry has no `image` of its own.
 collections:
-  posts:
-    title: Posts                    # Needed for Siteleaf
+  guides:
     output: true
-    description: "My thoughts and ideas" # The post list page content
-    feature_text: |
-      Welcome to the blog
-    feature_image: "https://picsum.photos/2560/600?image=866"
+    title: Guides
+    singular: Guide
+    description: "Long-form how-tos, playbooks and tutorials."
+    permalink: /guides/:name/
+    icon: graduation-cap
+    schema: TechArticle
+    image: "/assets/img/covers/guides.svg"
+  reviews:
+    output: true
+    title: Reviews
+    singular: Review
+    description: "Hands-on reviews of gear, tools and media."
+    permalink: /reviews/:name/
+    icon: star
+    schema: Review
+    image: "/assets/img/covers/reviews.svg"
+  trips:
+    output: true
+    title: Trips
+    singular: Trip
+    description: "Travel logs, itineraries and field notes."
+    permalink: /trips/:name/
+    icon: map-pin
+    schema: Article
+    image: "/assets/img/covers/trips.svg"
+  videos:
+    output: true
+    title: Videos
+    singular: Video
+    description: "Films, edits and video essays."
+    permalink: /videos/:name/
+    icon: video
+    schema: VideoObject
+    image: "/assets/img/covers/videos.svg"
+  podcasts:
+    output: true
+    title: Podcasts
+    singular: Podcast
+    description: "Conversations and audio episodes."
+    permalink: /podcasts/:name/
+    icon: microphone
+    schema: PodcastEpisode
+    image: "/assets/img/covers/podcasts.svg"
   projects:
     output: true
     title: Projects
-    description: "Things I've designed, built, and shipped."
+    singular: Project
+    description: "Things I've designed, built and shipped."
     permalink: /projects/:name/
+    icon: rocket-launch
+    schema: CreativeWork
+    image: "/assets/img/covers/projects.svg"
   notes:
     output: true
     title: Notes
-    description: "Short-form notes, TILs, and code snippets."
+    singular: Note
+    description: "Short-form notes, TILs and snippets."
     permalink: /notes/:name/
+    icon: note
+    schema: Article
+    image: "/assets/img/covers/notes.svg"
+
+# Site-wide ultimate fallback image (used by SEO + cards as last resort)
+placeholder_image: "/assets/img/placeholder.svg"
 
 defaults:
   - scope:
       path: ""
     values:
-      image: "/assets/default-social-image.png" # Default image for sharing
-  - scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: post                             # Default layout for posts
-  - scope:
-      path: ""
-      type: "projects"
-    values:
-      layout: project                          # Default layout for projects
-  - scope:
-      path: ""
-      type: "notes"
-    values:
-      layout: note                             # Default layout for notes
+      image: "/assets/img/placeholder.svg"   # default social/share image
+      layout: post                            # every collection entry → post
   - scope:
       path: ""
       type: "pages"
     values:
-      layout: page                             # Default layout for pages
+      layout: page                            # standalone pages → page
 
 # 3. Plugins & gem settings
 plugins:
   - jekyll-sitemap
   - jekyll-mentions
-  - jekyll-paginate
   - jekyll-seo-tag
   - jekyll-redirect-from
   - jekyll-feed
   - jekyll-commonmark
   - jekyll-include-cache
   - jemoji
-
-paginate: 10                      # jekyll-paginate > items per page
-paginate_path: archive/page:num   # jekyll-paginate > blog page
 
 jekyll-mentions: https://twitter.com # jekyll-mentions > @reply service
 

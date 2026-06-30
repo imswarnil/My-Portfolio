@@ -1,0 +1,182 @@
+// ======================================================================
+// im/_post.scss — single post / page article + prose + TOC
+// ======================================================================
+
+.im-article {
+  width: 100%;
+  max-width: calc(var(--im-container-narrow) + var(--im-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--im-gutter);
+}
+
+// ---- Post header ------------------------------------------------------
+.im-post-header { margin-bottom: var(--im-space-6); }
+
+.im-kicker {
+  display: inline-block;
+  margin-bottom: var(--im-space-3);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--im-color-secondary);
+}
+
+.im-post-title {
+  margin: 0 0 var(--im-space-4);
+  font-size: clamp(var(--im-text-3xl), 5vw, var(--im-text-4xl));
+  line-height: 1.1;
+}
+
+.im-post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-2) var(--im-space-3);
+  font-size: var(--im-text-sm);
+  color: var(--im-color-secondary);
+
+  .im-avatar { width: 1.75rem; height: 1.75rem; border-radius: 50%; }
+  .im-dot { opacity: 0.5; }
+}
+
+.im-post-cover {
+  margin: var(--im-space-6) 0;
+  img { width: 100%; border-radius: var(--im-radius-5); }
+}
+
+// ---- Post media (video / audio) --------------------------------------
+.im-post-media {
+  margin: var(--im-space-5) 0;
+  iframe, video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: var(--im-radius-4);
+  }
+  audio { width: 100%; }
+}
+
+// ---- Review rating ----------------------------------------------------
+.im-rating { display: inline-flex; align-items: center; gap: var(--im-space-2); }
+.im-rating-stars {
+  --pct: calc(var(--score, 0) / 5 * 100%);
+  display: inline-block;
+  font-size: var(--im-text-lg);
+  line-height: 1;
+  background: linear-gradient(90deg, var(--im-color-warning) var(--pct), var(--im-color-background-300) var(--pct));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  &::before { content: "★★★★★"; }
+}
+
+// ---- Trip facts -------------------------------------------------------
+.im-factbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2) var(--im-space-5);
+  margin: var(--im-space-4) 0;
+  padding: var(--im-space-4);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-4);
+  background: var(--im-color-background-100);
+  font-size: var(--im-text-sm);
+
+  .im-fact { display: inline-flex; align-items: center; gap: var(--im-space-2); }
+  .im-fact-label { color: var(--im-color-secondary); }
+  .im-fact-value { font-weight: var(--im-fw-semibold); color: var(--im-color-contrast); }
+}
+
+// ---- Prose (rendered markdown) ---------------------------------------
+.im-prose {
+  font-size: var(--im-text-lg);
+  color: var(--im-color-foreground);
+
+  > * + * { margin-top: var(--im-space-4); }
+  h2, h3, h4 { margin-top: var(--im-space-6); scroll-margin-top: calc(var(--im-navbar-height) + var(--im-space-4)); }
+  img { border-radius: var(--im-radius-4); }
+  > :first-child { margin-top: 0; }
+}
+
+// ---- Tags -------------------------------------------------------------
+.im-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2);
+  margin: var(--im-space-6) 0 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    padding: var(--im-space-1) var(--im-space-3);
+    border-radius: var(--im-radius-1);
+    background: var(--im-color-background-100);
+    color: var(--im-color-contrast);
+    font-size: var(--im-text-sm);
+    text-decoration: none;
+    &:hover { background: var(--im-color-background-200); }
+  }
+}
+
+// ---- Share + author + prev/next --------------------------------------
+.im-share {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-2);
+  margin: var(--im-space-6) 0;
+}
+
+.im-author-card {
+  display: flex;
+  gap: var(--im-space-4);
+  align-items: center;
+  margin: var(--im-space-6) 0;
+  padding: var(--im-space-5);
+  border-radius: var(--im-radius-5);
+  background: var(--im-color-background-100);
+
+  img { width: 3.25rem; height: 3.25rem; border-radius: 50%; flex: 0 0 auto; }
+  .im-author-name { margin: 0; font-size: var(--im-text-lg); }
+  .im-author-bio  { margin: var(--im-space-1) 0 0; font-size: var(--im-text-sm); color: var(--im-color-secondary); }
+}
+
+.im-postnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-space-4);
+  margin-top: var(--im-space-6);
+  border-top: 1px solid var(--im-color-border);
+  padding-top: var(--im-space-5);
+
+  a { flex: 1 1 0; min-width: 12rem; text-decoration: none; color: var(--im-color-contrast); }
+  .im-postnav-label { display: block; font-size: var(--im-text-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--im-color-secondary); }
+  .im-postnav-title { font-weight: var(--im-fw-semibold); }
+  .im-postnav-next { text-align: right; }
+}
+
+// ---- Page breadcrumb --------------------------------------------------
+.im-breadcrumb {
+  display: flex;
+  gap: var(--im-space-2);
+  font-size: var(--im-text-sm);
+  color: var(--im-color-secondary);
+  margin-bottom: var(--im-space-3);
+  a { color: inherit; text-decoration: none; &:hover { color: var(--im-color-contrast); } }
+}
+
+// ---- TOC --------------------------------------------------------------
+.im-toc {
+  font-size: var(--im-text-sm);
+  ol, ul { list-style: none; margin: 0; padding-left: var(--im-space-3); }
+  > ol, > ul { padding-left: 0; }
+  a { color: var(--im-color-secondary); text-decoration: none; display: block; padding: var(--im-space-1) 0; &:hover, &.active { color: var(--im-color-contrast); } }
+}
+.im-toc-title {
+  margin-bottom: var(--im-space-3);
+  font-size: var(--im-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--im-color-secondary);
+}

@@ -1,0 +1,129 @@
+// ======================================================================
+// im/_tokens.scss — IM CSS Framework design tokens
+// ----------------------------------------------------------------------
+// Emits CSS custom properties, all prefixed `--im-`, so the framework is
+// fully themeable at runtime. Colours are sourced from the SCSS theme
+// maps in _variables.scss (single source of truth); the spacing, radius,
+// type and layout scales are defined here as the canonical `im` scales.
+//
+// Theme switching mirrors the data-attribute pattern used site-wide:
+//   :root                              -> light (default)
+//   :root[data-color-scheme="dark"]    -> dark
+//   :root[data-color-scheme="system"]  -> follows prefers-color-scheme
+// ======================================================================
+
+// ---- Canonical IM scales (consumed by tokens + utilities) -------------
+$im-space: (
+  0:  0,
+  1:  0.25rem,
+  2:  0.5rem,
+  3:  0.75rem,
+  4:  1rem,
+  5:  1.5rem,
+  6:  2rem,
+  7:  3rem,
+  8:  4rem,
+  9:  6rem,
+  10: 8rem,
+) !default;
+
+$im-radius: (
+  1:    6px,
+  2:    8px,
+  3:    10px,
+  4:    14px,
+  5:    18px,
+  6:    24px,
+  pill: 999px,
+) !default;
+
+$im-text: (
+  xs:   0.75rem,
+  sm:   0.875rem,
+  base: 1rem,
+  lg:   1.125rem,
+  xl:   1.25rem,
+  2xl:  1.5rem,
+  3xl:  2rem,
+  4xl:  2.5rem,
+  5xl:  3.25rem,
+) !default;
+
+// ---- :root — light theme + static scales ------------------------------
+:root {
+  // Colours (light)
+  @each $key, $val in $theme-light {
+    --im-color-#{$key}: #{$val};
+  }
+  // Convenience accent-foreground (text that sits on the accent colour)
+  --im-color-accent-foreground: #{tone(white, light)};
+
+  // Spacing
+  @each $key, $val in $im-space {
+    --im-space-#{$key}: #{$val};
+  }
+
+  // Radius
+  @each $key, $val in $im-radius {
+    --im-radius-#{$key}: #{$val};
+  }
+
+  // Typography
+  --im-font-body: #{$ff-body};
+  --im-font-head: #{$ff-head};
+  --im-font-mono: #{$ff-mono};
+
+  @each $key, $val in $im-text {
+    --im-text-#{$key}: #{$val};
+  }
+
+  --im-fw-regular:  #{$fw-regular};
+  --im-fw-medium:   #{$fw-medium};
+  --im-fw-semibold: #{$fw-semibold};
+  --im-fw-bold:     #{$fw-bold};
+
+  --im-leading-tight: #{$lh-tight};
+  --im-leading-base:  #{$lh-base};
+
+  // Layout
+  --im-container:       #{$island-width};       // 1100px island
+  --im-container-wide:  82.5rem;                // 1320px
+  --im-container-narrow: 44rem;                 // prose / reading width
+  --im-gutter:          #{$container-gutter};
+  --im-navbar-height:   #{$navbar-height};
+
+  // Shadows
+  --im-shadow-sm: 0 1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.08);
+  --im-shadow:    #{$shadow-light};
+  --im-shadow-lg: 0 24px 60px -12px rgba(0,0,0,0.22), 0 8px 24px -10px rgba(0,0,0,0.18);
+
+  // Motion
+  --im-dur-1: #{$dur-1};
+  --im-dur-2: #{$dur-2};
+  --im-ease:  #{$ease-in-out};
+
+  // Z-index
+  --im-z-header:  #{$z-header};
+  --im-z-overlay: #{$z-overlay};
+  --im-z-modal:   #{$z-modal};
+  --im-z-toast:   #{$z-toast};
+
+  color-scheme: light;
+}
+
+// ---- Dark theme overrides ---------------------------------------------
+@mixin im-dark-tokens {
+  @each $key, $val in $theme-dark {
+    --im-color-#{$key}: #{$val};
+  }
+  --im-color-accent-foreground: #{tone(black, dark)};
+  --im-shadow:    #{$shadow-dark};
+  --im-shadow-lg: 0 24px 60px -12px rgba(0,0,0,0.55), 0 8px 24px -10px rgba(0,0,0,0.5);
+  color-scheme: dark;
+}
+
+:root[data-color-scheme="dark"] { @include im-dark-tokens; }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-color-scheme="system"] { @include im-dark-tokens; }
+}

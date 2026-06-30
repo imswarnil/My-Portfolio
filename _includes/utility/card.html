@@ -1,0 +1,9 @@
+{%- case include.item.collection -%}
+  {%- when "videos"   -%}{% include cards/video.html   item=include.item %}
+  {%- when "podcasts" -%}{% include cards/podcast.html item=include.item %}
+  {%- when "reviews"  -%}{% include cards/review.html  item=include.item %}
+  {%- when "trips"    -%}{% include cards/trip.html    item=include.item %}
+  {%- when "projects" -%}{% include cards/project.html item=include.item %}
+  {%- when "notes"    -%}{% include cards/note.html    item=include.item %}
+  {%- else            -%}{% include cards/guide.html   item=include.item %}
+{%- endcase -%}

@@ -1,0 +1,107 @@
+// ======================================================================
+// im/_config.scss — IM CSS Framework build-time config (SCSS only)
+// ----------------------------------------------------------------------
+// Breakpoints, theme colour maps, type/space scales and helper mixins.
+// These never reach the browser directly; they feed _tokens.scss which
+// emits the runtime --im-* custom properties. Single source of truth.
+// ======================================================================
+@use "sass:map";
+@use "sass:math";
+
+// ---- Breakpoints ------------------------------------------------------
+$bp-sm: 540px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+
+@mixin mq($bp) { @media (min-width: $bp) { @content; } }
+@mixin mq-down($bp) { @media (max-width: $bp - 1px) { @content; } }
+
+// ---- Z-index ----------------------------------------------------------
+$z-header:  1000;
+$z-overlay: 1100;
+$z-modal:   1200;
+$z-toast:   1300;
+
+// ---- Typography -------------------------------------------------------
+$ff-body: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, system-ui, sans-serif;
+$ff-head: $ff-body;
+$ff-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Liberation Mono", Consolas, monospace;
+
+$fw-regular:  400;
+$fw-medium:   500;
+$fw-semibold: 600;
+$fw-bold:     700;
+
+$lh-tight: 1.2;
+$lh-base:  1.6;
+
+// ---- Layout -----------------------------------------------------------
+$island-width:     68.75rem;   // 1100px reading island
+$container-gutter: 1.25rem;
+$navbar-height:    3.625rem;    // 58px
+
+// ---- Shadows / motion -------------------------------------------------
+$shadow-light: 0 10px 30px -10px rgba(0, 0, 0, 0.20), 0 4px 10px -6px rgba(0, 0, 0, 0.16);
+$shadow-dark:  0 20px 60px -10px rgba(0, 0, 0, 0.45), 0 4px 20px -8px rgba(0, 0, 0, 0.40);
+
+$dur-1: 180ms;
+$dur-2: 260ms;
+$ease-in-out: cubic-bezier(.25, 1, .5, 1);
+
+// ---- Theme colour maps ------------------------------------------------
+// Inspired by the pasted theme: neutral greyscale + semantic accents.
+$theme-light: (
+  accent:          #000000,
+  contrast:        #000000,
+  foreground:      #4d4d4d,
+  secondary:       #757575,
+  mute:            #b2b2b2,
+
+  background:      #ffffff,
+  background-100:  #f3f3f3,
+  background-200:  #ededed,
+  background-300:  #dadada,
+  surface:         #ffffff,
+  muted:           #f1f1f1,
+  overlay:         rgba(5, 5, 5, 0.7),
+
+  border:          rgba(0, 0, 0, 0.14),
+
+  white:           #ffffff,
+  black:           #000000,
+
+  success:         #348f3f,
+  warning:         #d97706,
+  danger:          #c34d4d,
+);
+
+$theme-dark: (
+  accent:          #ffffff,
+  contrast:        #ffffff,
+  foreground:      #aaaaaa,
+  secondary:       #808080,
+  mute:            #666666,
+
+  background:      #0f0f0f,
+  background-100:  #212121,
+  background-200:  #282828,
+  background-300:  #3f3f3f,
+  surface:         #161616,
+  muted:           #1c1c1c,
+  overlay:         rgba(5, 5, 5, 0.7),
+
+  border:          rgba(255, 255, 255, 0.16),
+
+  white:           #ffffff,
+  black:           #000000,
+
+  success:         #22c55e,
+  warning:         #f59e0b,
+  danger:          #ef4444,
+);
+
+@function tone($key, $mode: light) {
+  @if $mode == dark { @return map.get($theme-dark, $key); }
+  @return map.get($theme-light, $key);
+}

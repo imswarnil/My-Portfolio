@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: 'en-US' }}">
 {% include head.html %}
-<body class="layout-{{ page.layout }}{% if page.title %} {{ page.title | slugify }}{% endif %}">
+<body class="layout-{{ page.layout }}{% if page.collection %} is-{{ page.collection }}{% endif %}">
   {% include header.html %}
-{% if page.rails != false %}
-<div class="ad-rails" aria-hidden="false">
-<div class="ad-rail ad-rail--left">{% include adsense.html type="vertical" %}</div>
- <div class="ad-rail ad-rail--right"> {% include adsense.html type="vertical" %} </div>
-</div>
-{% endif %}
+
   <main class="main">
-      {{ content }}
-  {% include adsense.html type="horizontal" %}
-  {% include footer.html %}
+    {{ content }}
   </main>
-  {% if site.service_worker != false %}
-  {% include site-sw.html %}{% endif %}
+
+  {% include footer.html %}
+
+  {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
   {% include site-before-end.html %}
+
+  <script>
+    // Mobile nav + theme toggle (no dependencies)
+    (function () {
+      var navBtn = document.querySelector('[data-im-nav-toggle]');
+      var nav = document.getElementById('im-nav');
+      if (navBtn && nav) {
+        navBtn.addEventListener('click', function () {
+          var open = nav.classList.toggle('is-open');
+          navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
+      var themeBtn = document.querySelector('[data-im-theme-toggle]');
+      if (themeBtn) {
+        themeBtn.addEventListener('click', function () {
+          var el = document.documentElement;
+          var cur = el.getAttribute('data-color-scheme');
+          var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = cur === 'dark' || (cur === 'system' && sysDark);
+          var next = isDark ? 'light' : 'dark';
+          el.setAttribute('data-color-scheme', next);
+          try { localStorage.setItem('im-color-scheme', next); } catch (e) {}
+        });
+      }
+    })();
+  </script>
   <script src="{{ '/assets/scripts/custom.js' | relative_url }}"></script>
-
 </body>
-
 </html>

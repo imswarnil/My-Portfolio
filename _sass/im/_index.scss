@@ -1,0 +1,21 @@
+// ======================================================================
+// im/_index.scss — IM CSS Framework entry point
+// ----------------------------------------------------------------------
+// The `im-*` framework: runtime --im-* tokens, structural layout, hero,
+// core components and utility classes. Import order matters — tokens
+// first (so every layer can read them), utilities last (so their
+// !important helpers win).
+// ======================================================================
+
+@import "config";       // SCSS maps, breakpoints, mixins (build-time only)
+@import "tokens";       // --im-* custom properties (light + dark)
+@import "base";         // reset + element typography
+@import "navbar";       // site header / navigation
+@import "layout";       // im-container / im-row / im-col / im-section
+@import "hero";         // im-hero
+@import "components";   // im-btn / im-card / im-badge / im-alert
+@import "collection";   // collection list pages + per-type cards
+@import "post";         // single post / page article + toc
+@import "home";         // homepage composition
+@import "footer";       // site footer
+@import "utilities";    // spacing / text / flex helpers (must stay last)

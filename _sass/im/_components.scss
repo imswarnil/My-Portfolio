@@ -1,0 +1,178 @@
+// ======================================================================
+// im/_components.scss — IM CSS Framework core components
+// Buttons, cards, badges, alerts. All driven by --im-* tokens.
+// ======================================================================
+
+// ---- Buttons ----------------------------------------------------------
+.im-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--im-space-2);
+  min-height: 2.5rem;
+  padding: var(--im-space-3) var(--im-space-5);
+  border: 1px solid transparent;
+  border-radius: var(--im-radius-pill);
+  font-family: var(--im-font-body);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-fw-semibold);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform var(--im-dur-1) var(--im-ease),
+    box-shadow var(--im-dur-1) var(--im-ease),
+    background-color var(--im-dur-1) var(--im-ease),
+    border-color var(--im-dur-1) var(--im-ease),
+    color var(--im-dur-1) var(--im-ease),
+    opacity var(--im-dur-1) var(--im-ease);
+
+  // Default = solid accent
+  background: var(--im-color-accent);
+  color: var(--im-color-accent-foreground);
+
+  &:hover { transform: translateY(-2px); box-shadow: var(--im-shadow); }
+  &:active { transform: translateY(0); }
+  &:disabled,
+  &[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  > svg { width: 1.05em; height: 1.05em; flex: 0 0 auto; }
+}
+
+.im-btn-outline {
+  background: transparent;
+  border-color: var(--im-color-border);
+  color: var(--im-color-contrast);
+  &:hover { background: var(--im-color-background-100); border-color: var(--im-color-contrast); }
+}
+.im-btn-ghost {
+  background: transparent;
+  color: var(--im-color-secondary);
+  &:hover { background: var(--im-color-background-100); color: var(--im-color-contrast); box-shadow: none; transform: none; }
+}
+.im-btn-muted {
+  background: var(--im-color-background-100);
+  color: var(--im-color-contrast);
+  &:hover { background: var(--im-color-background-200); }
+}
+
+// Sizes
+.im-btn-sm { min-height: 2rem;   padding: var(--im-space-2) var(--im-space-4); font-size: var(--im-text-xs); }
+.im-btn-lg { min-height: 3rem;   padding: var(--im-space-4) var(--im-space-6); font-size: var(--im-text-base); }
+.im-btn-block { display: flex; width: 100%; }
+.im-btn-icon { padding: var(--im-space-3); border-radius: 50%; aspect-ratio: 1; min-height: 2.5rem; }
+
+// ---- Cards ------------------------------------------------------------
+.im-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--im-space-4);
+  padding: var(--im-space-6);
+  background: var(--im-color-surface);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-5);
+  box-shadow: var(--im-shadow);
+  transition: transform var(--im-dur-1) var(--im-ease), border-color var(--im-dur-1) var(--im-ease), box-shadow var(--im-dur-1) var(--im-ease);
+
+  > :last-child { margin-bottom: 0; }
+}
+.im-card-link {
+  cursor: pointer;
+  &:hover { transform: translateY(-4px); border-color: var(--im-color-contrast); box-shadow: var(--im-shadow-lg); }
+}
+.im-card-flat   { box-shadow: none; }
+.im-card-dashed { border-style: dashed; box-shadow: none; background: transparent; }
+.im-card-muted  { background: var(--im-color-background-100); }
+
+.im-card-media {
+  margin: calc(var(--im-space-6) * -1) calc(var(--im-space-6) * -1) 0;
+  border-radius: var(--im-radius-5) var(--im-radius-5) 0 0;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+
+  img, video { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.im-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--im-radius-3);
+  background: var(--im-color-muted);
+  color: var(--im-color-contrast);
+  font-size: var(--im-text-2xl);
+}
+
+.im-card-title {
+  margin: 0;
+  font-size: var(--im-text-xl);
+  font-weight: var(--im-fw-semibold);
+  letter-spacing: -0.01em;
+  color: var(--im-color-contrast);
+}
+.im-card-subtitle {
+  margin: calc(var(--im-space-2) * -1) 0 0;
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-fw-medium);
+  color: var(--im-color-secondary);
+}
+.im-card-body,
+.im-card-text {
+  margin: 0;
+  color: var(--im-color-foreground);
+}
+.im-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--im-space-3);
+  font-size: var(--im-text-sm);
+  color: var(--im-color-secondary);
+}
+.im-card-footer {
+  margin-top: auto;
+  padding-top: var(--im-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-3);
+}
+
+// ---- Badge / pill -----------------------------------------------------
+.im-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  padding: var(--im-space-1) var(--im-space-3);
+  border-radius: var(--im-radius-pill);
+  background: var(--im-color-background-100);
+  color: var(--im-color-contrast);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-semibold);
+  line-height: 1.4;
+}
+.im-badge-accent  { background: var(--im-color-accent);  color: var(--im-color-accent-foreground); }
+.im-badge-success { background: var(--im-color-success); color: #fff; }
+.im-badge-warning { background: var(--im-color-warning); color: #fff; }
+.im-badge-danger  { background: var(--im-color-danger);  color: #fff; }
+.im-badge-outline { background: transparent; border: 1px solid var(--im-color-border); color: var(--im-color-secondary); }
+
+// ---- Alert / callout --------------------------------------------------
+.im-alert {
+  display: flex;
+  gap: var(--im-space-3);
+  padding: var(--im-space-4) var(--im-space-5);
+  border: 1px solid var(--im-color-border);
+  border-left-width: 3px;
+  border-radius: var(--im-radius-3);
+  background: var(--im-color-background-100);
+  color: var(--im-color-foreground);
+
+  > :last-child { margin-bottom: 0; }
+}
+.im-alert-success { border-left-color: var(--im-color-success); }
+.im-alert-warning { border-left-color: var(--im-color-warning); }
+.im-alert-danger  { border-left-color: var(--im-color-danger); }
+.im-alert-accent  { border-left-color: var(--im-color-accent); }

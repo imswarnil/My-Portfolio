@@ -1,0 +1,128 @@
+// ======================================================================
+// im/_layout.scss — IM CSS Framework structural layout
+// Containers, the row/column grid, and page sections.
+// ======================================================================
+@use "sass:math";
+
+// ---- Containers -------------------------------------------------------
+.im-container,
+.im-container-wide,
+.im-container-narrow {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--im-gutter);
+}
+.im-container        { max-width: calc(var(--im-container) + var(--im-gutter) * 2); }
+.im-container-wide   { max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2); }
+.im-container-narrow { max-width: calc(var(--im-container-narrow) + var(--im-gutter) * 2); }
+
+// Fluid container — full width with gutters only
+.im-container-fluid {
+  width: 100%;
+  padding-inline: var(--im-gutter);
+}
+
+// ---- Row / Column grid (12 columns, flexbox) --------------------------
+.im-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--im-gutter);
+}
+.im-row-tight  { gap: var(--im-space-3); }
+.im-row-loose  { gap: var(--im-space-6); }
+.im-row-nowrap { flex-wrap: nowrap; }
+.im-row-center { justify-content: center; align-items: center; }
+.im-row-middle { align-items: center; }
+.im-row-between{ justify-content: space-between; }
+
+// A column auto-grows to share space evenly by default.
+.im-col {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.im-col-auto { flex: 0 0 auto; width: auto; }
+
+// width helper: account for the row gap so N columns tile cleanly.
+@mixin im-col-width($n) {
+  flex: 0 0 auto;
+  width: calc(#{percentage(math.div($n, 12))} - var(--im-gutter) * #{math.div(12 - $n, 12)});
+}
+
+@for $i from 1 through 12 {
+  .im-col-#{$i} { @include im-col-width($i); }
+}
+
+// Responsive column spans: im-col-sm-6, im-col-md-4, im-col-lg-3 …
+$im-grid-breakpoints: (sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl);
+@each $name, $bp in $im-grid-breakpoints {
+  @media (min-width: $bp) {
+    .im-col-#{$name} { flex: 1 1 0%; min-width: 0; width: auto; }
+    @for $i from 1 through 12 {
+      .im-col-#{$name}-#{$i} { @include im-col-width($i); }
+    }
+  }
+}
+
+// ---- Auto grid (equal cards, no column maths) -------------------------
+.im-grid {
+  display: grid;
+  gap: var(--im-gutter);
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+.im-grid-2,
+.im-grid-3,
+.im-grid-4 { display: grid; gap: var(--im-gutter); grid-template-columns: 1fr; }
+@media (min-width: $bp-sm) {
+  .im-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .im-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .im-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: $bp-lg) {
+  .im-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .im-grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+// ---- Section (vertical page rhythm) -----------------------------------
+.im-section {
+  padding-block: var(--im-space-7);
+}
+.im-section-sm { padding-block: var(--im-space-5); }
+.im-section-lg { padding-block: var(--im-space-8); }
+
+// Surface section — a bordered, rounded panel
+.im-section-surface {
+  padding: var(--im-space-6);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-6);
+  background: var(--im-color-surface);
+  box-shadow: var(--im-shadow);
+}
+
+// Section heading block (eyebrow + title + lede)
+.im-section-head {
+  max-width: var(--im-container-narrow);
+  margin: 0 auto var(--im-space-6);
+  text-align: center;
+
+  .im-eyebrow {
+    display: inline-block;
+    margin-bottom: var(--im-space-2);
+    font-size: var(--im-text-xs);
+    font-weight: var(--im-fw-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--im-color-secondary);
+  }
+  .im-section-title {
+    margin: 0 0 var(--im-space-3);
+    font-size: clamp(var(--im-text-3xl), 4vw, var(--im-text-4xl));
+    letter-spacing: -0.02em;
+  }
+  .im-section-lede {
+    margin: 0 auto;
+    max-width: 40rem;
+    font-size: var(--im-text-lg);
+    color: var(--im-color-secondary);
+  }
+}
+.im-section-head-left { text-align: left; margin-inline: 0; }

@@ -1,195 +1,34 @@
-<!-- ====================================================================== -->
-<!--  FOOTER ISLAND – GRID LINES, AVATAR BRAND, RESPONSIVE 4-COL LAYOUT    -->
-<!-- ====================================================================== -->
+{%- comment -%} IM site footer {%- endcomment -%}
+<footer class="im-footer">
+  <div class="im-footer-inner">
+    <a class="im-footer-brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
 
-<div class="container footer-wrap">
-  <footer class="footer-island" role="contentinfo" aria-label="Site footer">
-    <div class="footer-inner">
+    <ul class="im-footer-nav">
+      {%- for item in site.navigation_footer -%}
+        <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+      {%- endfor -%}
+    </ul>
 
-      <!-- 1) ABOUT / BRAND -->
-      <section class="footer-col footer-about">
-        <div class="footer-brand">
-          <figure class="footer-avatar">
-            <img
-              src="/assets/Swarnil-Singhai.png"
-              alt="{{ site.resume.name | default: site.title }}"
-              loading="lazy"
-              width="80"
-              height="80">
-          </figure>
-          <div class="footer-brand-text">
-            <p class="footer-brand-name">
-              {{ site.resume.name | default: site.title | default: "Your Name" }}
-            </p>
-            <p class="footer-brand-role">
-              {{ site.resume.tagline | default: site.work.role | default: site.job_title }}
-            </p>
-          </div>
-        </div>
+    {%- if site.social_links -%}
+    <ul class="im-footer-social">
+      {%- for s in site.social_links -%}
+        {%- assign icon = 'link' -%}
+        {%- case s[0] -%}
+          {%- when 'Twitter'  -%}{%- assign icon = 'twitter-logo'  -%}
+          {%- when 'LinkedIn' -%}{%- assign icon = 'linkedin-logo' -%}
+          {%- when 'GitHub'   -%}{%- assign icon = 'github-logo'   -%}
+          {%- when 'RSS'      -%}{%- assign icon = 'rss'           -%}
+          {%- when 'YouTube'  -%}{%- assign icon = 'youtube-logo'  -%}
+        {%- endcase -%}
+        <li><a href="{{ s[1] }}" target="_blank" rel="me noopener" aria-label="{{ s[0] }}">
+          <i class="ph-bold ph-{{ icon }}" aria-hidden="true"></i>
+        </a></li>
+      {%- endfor -%}
+    </ul>
+    {%- endif -%}
 
-        <p class="footer-text">
-          {{ site.description | default: "A thoughtful, cinematic space for code, career and storytelling." }}
-        </p>
-
-        {% if site.social_links %}
-        <nav class="footer-social" aria-label="Social links">
-          {% if site.social_links.Twitter %}
-            <a href="{{ site.social_links.Twitter }}" aria-label="Twitter" target="_blank" rel="noopener">
-              <i class="ph-bold ph-twitter-logo"></i>
-            </a>
-          {% endif %}
-          {% if site.social_links.LinkedIn %}
-            <a href="{{ site.social_links.LinkedIn }}" aria-label="LinkedIn" target="_blank" rel="noopener">
-              <i class="ph-bold ph-linkedin-logo"></i>
-            </a>
-          {% endif %}
-          {% if site.social_links.GitHub %}
-            <a href="{{ site.social_links.GitHub }}" aria-label="GitHub" target="_blank" rel="noopener">
-              <i class="ph-bold ph-github-logo"></i>
-            </a>
-          {% endif %}
-          {% if site.social_links.RSS %}
-            <a href="{{ site.baseurl }}{{ site.social_links.RSS }}" aria-label="RSS">
-              <i class="ph-bold ph-rss"></i>
-            </a>
-          {% endif %}
-          {% if site.social_links.link %}
-            <a href="{{ site.social_links.link }}" aria-label="Website" target="_blank" rel="noopener">
-              <i class="ph-bold ph-link-simple"></i>
-            </a>
-          {% endif %}
-        </nav>
-        {% endif %}
-      </section>
-
-      <!-- 2) QUICK LINKS (nav from config) -->
-      <section class="footer-col footer-links">
-        <h4 class="footer-title">
-          <i class="ph-bold ph-compass"></i> Quick Links
-        </h4>
-        <ul class="footer-list">
-          {% assign nav_items = site.navigation_header %}
-          {% if nav_items and nav_items.size > 0 %}
-            {% for item in nav_items %}
-              {% assign href = item.url %}
-              {% assign is_external = false %}
-              {% if href contains '://' %}{% assign is_external = true %}{% endif %}
-              <li>
-                <a href="{% if is_external %}{{ href }}{% else %}{{ href | relative_url }}{% endif %}"
-                   {% if is_external %}target="_blank" rel="noopener"{% endif %}>
-                  <i class="ph-bold ph-{{ item.icon | default: 'dot-outline' }}"></i>
-                  {{ item.title }}
-                </a>
-              </li>
-            {% endfor %}
-          {% else %}
-            <li><a href="{{ '/' | relative_url }}"><i class="ph-bold ph-house"></i> Home</a></li>
-            <li><a href="{{ '/blog/' | relative_url }}"><i class="ph-bold ph-article"></i> Blog</a></li>
-            <li><a href="{{ '/categories/' | relative_url }}"><i class="ph-bold ph-tag"></i> Categories</a></li>
-            <li><a href="{{ '/search/' | relative_url }}"><i class="ph-bold ph-magnifying-glass"></i> Search</a></li>
-          {% endif %}
-        </ul>
-      </section>
-
-      <!-- 3) CONTACT & LEGAL -->
-      <section class="footer-col footer-contact">
-        <h4 class="footer-title">
-          <i class="ph-bold ph-map-pin"></i> Contact &amp; Legal
-        </h4>
-        <address class="footer-address">
-          <p>
-            <i class="ph-bold ph-buildings"></i>
-            {{ site.title | default: "Your Site" }}
-          </p>
-          <p>
-            <i class="ph-bold ph-map-trifold"></i>
-            {{ site.location | default: site.timezone | default: "Worldwide" }}
-          </p>
-          {% if site.email %}
-            <p>
-              <i class="ph-bold ph-envelope"></i>
-              <a href="mailto:{{ site.email }}">{{ site.email }}</a>
-            </p>
-          {% endif %}
-          {% if site.url %}
-            <p>
-              <i class="ph-bold ph-link-simple"></i>
-              <a href="{{ site.url | default: '/' }}" target="_blank" rel="noopener">
-                {{ site.url | default: "/" }}
-              </a>
-            </p>
-          {% endif %}
-        </address>
-
-        <ul class="footer-list footer-legal">
-          <li>
-            <a href="{{ '/privacy/' | relative_url }}">
-              <i class="ph-bold ph-lock-key"></i> Privacy
-            </a>
-          </li>
-          <li>
-            <a href="{{ '/terms/' | relative_url }}">
-              <i class="ph-bold ph-scale"></i> Terms
-            </a>
-          </li>
-          <li>
-            <a href="{{ site.repo | default: 'https://github.com' }}" target="_blank" rel="noopener">
-              <i class="ph-bold ph-github-logo"></i> Proudly open source
-            </a>
-          </li>
-          <li>
-            <a href="{{ '/sponsor/' | relative_url }}">
-              <i class="ph-bold ph-hand-heart"></i> Sponsor this site
-            </a>
-          </li>
-        </ul>
-      </section>
-
-      <!-- 4) NEWSLETTER / SUPPORT -->
-      <section class="footer-col footer-newsletter">
-        <h4 class="footer-title">
-          <i class="ph-bold ph-megaphone-simple"></i> Stay Connected
-        </h4>
-        <p class="footer-text">
-          One tight email a month with stories, projects &amp; behind-the-scenes.
-        </p>
-
-        <form class="footer-form" action="#" method="post" novalidate>
-          <div class="footer-form-row">
-            <label class="footer-field" aria-label="Email">
-              <i class="ph-bold ph-at"></i>
-              <input type="email" name="email" placeholder="Your email" required />
-            </label>
-
-            <button type="submit" class="footer-submit" aria-label="Subscribe">
-              <i class="ph-bold ph-paper-plane-tilt"></i>
-              <span>Subscribe</span>
-            </button>
-          </div>
-          <p class="footer-hint">No spam. Unsubscribe any time.</p>
-        </form>
-
-        <div class="footer-news-actions">
-          <button type="button" class="footer-cta-secondary" aria-label="Enable push notifications">
-            <i class="ph-bold ph-bell-ringing"></i>
-            <span>Enable push</span>
-          </button>
-          <a href="{{ '/sponsor/' | relative_url }}" class="footer-cta-primary">
-            <i class="ph-bold ph-hand-heart"></i>
-            <span>Become a sponsor</span>
-          </a>
-        </div>
-      </section>
-
-    </div>
-
-    <!-- Bottom strip -->
-    <div class="footer-bottom">
-      <p class="footer-credit">
-        © {{ "now" | date: "%Y" }}
-        {{ site.resume.name | default: site.title | default: "Your Name" }} ·
-        Built in Bengaluru · Powered by Jekyll.
-      </p>
-    </div>
-  </footer>
-</div>
+    <p class="im-footer-copyright">
+      © {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}. Built with Jekyll &amp; the IM CSS framework.
+    </p>
+  </div>
+</footer>

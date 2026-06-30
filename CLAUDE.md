@@ -9,11 +9,13 @@ Personal website/blog for Swarnil Singhai, served at `dev.imswarnil.com` (see `C
 ## Commands
 
 ```bash
-bundle install                 # install gems (first run / after Gemfile change)
-bundle exec jekyll serve       # local dev server with live reload at http://localhost:4000
-bundle exec jekyll build       # one-off build into _site/
-JEKYLL_ENV=production bundle exec jekyll build   # production build (matches CI)
+bin/serve                      # local dev server + livereload (recommended)
+bin/build                      # production build into _site/
 ```
+
+`bin/serve` / `bin/build` exist because the **macOS system Ruby (2.6, `/usr/bin/ruby`) cannot build this site** — `sass-embedded` / `google-protobuf` crash with `cannot load such file -- google/protobuf_c`. The scripts force the homebrew arm64 Ruby (`/opt/homebrew/opt/ruby/bin`) onto PATH and run `bundle install` if needed. To run Jekyll directly, prefix every command with `export PATH="/opt/homebrew/opt/ruby/bin:$PATH"` first. CI (Ruby 3.1) is unaffected. `Gemfile.lock` is gitignored, so the scripts delete any stale lock before installing.
+
+For a quick SCSS-only check without Jekyll: `npx --yes sass@1.77.8 --no-source-map _sass/main.scss /tmp/out.css`.
 
 There is no test suite, linter, or JS build step — content is plain Markdown/Liquid and Sass compiled by `jekyll-sass-converter`.
 
@@ -22,6 +24,16 @@ There is no test suite, linter, or JS build step — content is plain Markdown/L
 Pushing to `main` triggers `.github/workflows/jekyll.yml`, which runs `bundle exec jekyll build` (Ruby 3.1, production env) and deploys `_site/` to GitHub Pages. `Gemfile.lock` is gitignored (`.gitignore`), so CI resolves gem versions fresh each run.
 
 ## Architecture
+
+### IM CSS framework (`_sass/im/`)
+The styling is a self-contained, custom framework called **IM CSS**. All previous Alembic/Swarnil SCSS (`_base`, `_normalize`, `_variables`, `components/`, `elements/`, `layouts/`, `sections/`, `utility/`) has been **deleted** — do not look for it. `assets/styles.scss` → `_sass/main.scss` → `_sass/im/_index.scss`, which imports (in order): `_config` (build-time SCSS maps/breakpoints/mixins — the single source of truth), `_tokens` (emits all runtime `--im-*` CSS custom properties for light + `[data-color-scheme="dark"]`/system), `_base`, `_navbar`, `_layout`, `_hero`, `_components`, `_collection`, `_post`, `_home`, `_footer`, and `_utilities` last. Everything browser-facing is prefixed `im-` (classes `im-card`, `im-row`, `im-col-6`, `im-pcard--video`, helpers `im-padding-top-2`, `im-text-small`, …) and reads `var(--im-*)` tokens, so the whole site re-themes at runtime. Theme is set by an inline no-flash script in `head.html` writing `data-color-scheme` (light/dark/system) to `<html>`; the navbar toggle persists it to `localStorage` (`im-color-scheme`).
+
+### Collections & layouts
+Content lives in **seven content-typed collections** (no `_posts` / `posts` collection): `_guides`, `_reviews`, `_trips`, `_videos`, `_podcasts`, `_projects`, `_notes`. Each is declared in `_config.yml` `collections:` with custom keys `singular`, `icon`, `schema` (schema.org type) and `image` (fallback cover). `defaults` give every collection entry `layout: post` and pages `layout: page`. Only **three layouts** remain: `default`, `post`, `page` (archive/categories/home/note/project/resume were deleted).
+- `post.html` is collection-aware: it switches on `page.collection` to render type-specific lead media (YouTube embed for videos, `<audio>` for podcasts, star rating for reviews, fact bars for trips/projects).
+- `page.html` doubles as a collection index when front matter sets `list_collection: <label>` (see `guides.md`, `videos.md`, …); otherwise it's a plain page.
+- Cards: `_includes/utility/card.html` is a chooser that maps `item.collection` → a per-collection partial in `_includes/cards/` (`video.html`, `review.html`, …), each of which calls the shared `_includes/utility/pcard.html`. `_includes/utility/collection-list.html` renders a whole collection as an `im-cards` grid.
+- SEO: `_includes/seo/jsonld.html` emits per-collection JSON-LD (`@type` from the collection's `schema`), included from `head.html` for `layout: post` entries. Image fallback chain (`_includes/utility/image.html`): entry `image`/`cover` → collection `image` → `site.placeholder_image` (`/assets/img/placeholder.svg`). Per-collection covers live in `assets/img/covers/`.
 
 - **`_config.yml`** is the control center and is large. Beyond standard Jekyll settings it drives most of the custom UI via data: `navigation_header` / `navigation_footer` (menus + submenus + Phosphor icons), `header:` (sticky/search/avatar toggles), `social_links`, `sharing_links`, `adsense:` (placement slot IDs), `fonts:`, and an entire `resume:` object (experience, education, skills, projects, stats) that the resume layout/include renders. Restart `jekyll serve` after editing `_config.yml`.
 - **`_layouts/`** — page shells (`default`, `home`, `page`, `post`, `archive`, `categories`, `resume`). `home.html` renders the hero/landing from front matter in `index.md` (`hero_*`, `story_video_id`).

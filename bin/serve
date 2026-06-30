@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Local dev server. Uses the homebrew arm64 Ruby because the macOS system
+# Ruby 2.6 cannot load sass-embedded (see CLAUDE.md / memory).
+set -e
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+cd "$(dirname "$0")/.."
+[ -f Gemfile.lock ] && rm -f Gemfile.lock
+bundle check >/dev/null 2>&1 || bundle install
+exec bundle exec jekyll serve --livereload "$@"

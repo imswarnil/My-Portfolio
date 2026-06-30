@@ -28,3 +28,4 @@ gem "tzinfo-data", platforms: [:mingw, :x64_mingw, :mswin, :jruby]
 
 # Windows directory-watcher for `jekyll serve --watch`
 gem "wdm", "~> 0.1", platforms: [:mingw, :x64_mingw, :mswin]
+gem "ffi", "< 1.17.0"

@@ -1,0 +1,135 @@
+// ======================================================================
+// im/_navbar.scss — sticky site header / navigation
+// ======================================================================
+
+.im-navbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--im-z-header);
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-5);
+  min-height: var(--im-navbar-height);
+  padding-inline: var(--im-gutter);
+  background: color-mix(in srgb, var(--im-color-background) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--im-color-border);
+}
+
+.im-navbar-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-5);
+  width: 100%;
+  max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2);
+  margin-inline: auto;
+}
+
+.im-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  font-weight: var(--im-fw-bold);
+  font-size: var(--im-text-lg);
+  color: var(--im-color-contrast);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+
+  img { height: 1.5rem; width: auto; }
+}
+
+.im-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-1);
+  margin-left: auto;
+  list-style: none;
+  padding: 0;
+}
+
+.im-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  padding: var(--im-space-2) var(--im-space-3);
+  border-radius: var(--im-radius-2);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-fw-medium);
+  color: var(--im-color-foreground);
+  text-decoration: none;
+  transition: color var(--im-dur-1) var(--im-ease), background var(--im-dur-1) var(--im-ease);
+
+  &:hover,
+  &[aria-current="page"] { color: var(--im-color-contrast); background: var(--im-color-background-100); }
+
+  > i, > svg { font-size: 1.1em; }
+}
+
+.im-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  margin-left: var(--im-space-2);
+}
+
+// Theme toggle ----------------------------------------------------------
+.im-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--im-color-border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--im-color-contrast);
+  cursor: pointer;
+  transition: background var(--im-dur-1) var(--im-ease);
+
+  &:hover { background: var(--im-color-background-100); }
+  .im-icon-dark { display: none; }
+}
+:root[data-color-scheme="dark"] .im-theme-toggle {
+  .im-icon-light { display: none; }
+  .im-icon-dark  { display: inline-flex; }
+}
+
+// Mobile menu button ----------------------------------------------------
+.im-nav-toggle {
+  display: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-2);
+  background: transparent;
+  color: var(--im-color-contrast);
+  cursor: pointer;
+  margin-left: auto;
+}
+
+@include mq-down($bp-md) {
+  .im-nav-toggle { display: inline-flex; }
+  .im-nav-actions { margin-left: var(--im-space-1); }
+
+  .im-nav {
+    position: fixed;
+    inset: var(--im-navbar-height) 0 auto 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--im-space-1);
+    margin: 0;
+    padding: var(--im-space-4) var(--im-gutter);
+    background: var(--im-color-background);
+    border-bottom: 1px solid var(--im-color-border);
+    box-shadow: var(--im-shadow);
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--im-dur-1) var(--im-ease), transform var(--im-dur-1) var(--im-ease), visibility var(--im-dur-1);
+
+    &.is-open { transform: translateY(0); opacity: 1; visibility: visible; }
+  }
+  .im-nav-link { padding: var(--im-space-3) var(--im-space-3); }
+}

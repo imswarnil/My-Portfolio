@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="imswarnil">
+  <rect width="1200" height="675" fill="#ededed"/>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#f3f3f3"/><stop offset="1" stop-color="#dadada"/>
+  </linearGradient></defs>
+  <g fill="#b2b2b2" font-family="Geist, system-ui, sans-serif" text-anchor="middle">
+    <text x="600" y="350" font-size="64" font-weight="700" fill="#757575">imswarnil</text>
+    <text x="600" y="405" font-size="26">no image</text>
+  </g>
+</svg>
