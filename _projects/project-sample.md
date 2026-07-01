@@ -1,5 +1,5 @@
 ---
-title: "Cinematic Portfolio v3"
+title: "Chirag Portfolio v3"
 date: 2025-02-02
 category: project
 tags: [project, web, performance]
