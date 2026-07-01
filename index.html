@@ -7,6 +7,644 @@ hero_subtitle: "I build fast, cinematic and robust experiences — and write abo
 hero_image: /assets/Swarnil-Singhai.png
 ---
 
+
+<style>
+/* ============================================================
+   HOME ADDITIONS — everything below derives from your im-* tokens.
+   Same fonts (Geist), same monochrome palette, same radii/shadows,
+   light + dark automatically. No new colors introduced except
+   your existing success/warning/danger tokens.
+ 
+   Concept kept from the cinematic version, translated into your
+   language: scroll = playhead, sections = numbered scenes,
+   but rendered in your minimal, hairline, pill-buttoned style.
+============================================================ */
+ 
+/* ---------- Background: dot pattern + soft vignette ---------- */
+.hm-backdrop {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(1200px 500px at 50% -10%, var(--im-color-background-100), transparent 70%),
+    var(--im-color-background);
+}
+.hm-backdrop::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: radial-gradient(var(--im-color-border) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 85% 60% at 50% 0%, black 20%, transparent 80%);
+}
+ 
+/* ---------- Playhead progress bar ---------- */
+.hm-playhead {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  background: var(--im-color-accent);
+  z-index: var(--im-z-toast);
+}
+ 
+/* ---------- Timecode HUD ---------- */
+.hm-hud {
+  position: fixed; right: var(--im-gutter); bottom: var(--im-space-4);
+  z-index: var(--im-z-header);
+  display: flex; align-items: center; gap: var(--im-space-2);
+  padding: var(--im-space-2) var(--im-space-4);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-pill);
+  background: color-mix(in srgb, var(--im-color-background) 82%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--im-shadow-sm);
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  color: var(--im-color-secondary);
+}
+.hm-hud .hm-rec {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--im-color-danger);
+  animation: hm-blink 1.6s steps(2) infinite;
+}
+@keyframes hm-blink { 50% { opacity: 0.2; } }
+.hm-hud .hm-tc { color: var(--im-color-contrast); font-weight: var(--im-fw-medium); min-width: 8.5ch; font-variant-numeric: tabular-nums; }
+.hm-hud .hm-scn { text-transform: uppercase; letter-spacing: 0.08em; }
+@media (max-width: 640px) { .hm-hud .hm-scn { display: none; } }
+ 
+/* ---------- Scene slates (section headers, your hairline style) ---------- */
+.hm-slate {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--im-space-2) var(--im-space-4);
+  padding-top: var(--im-space-4);
+  margin-bottom: var(--im-space-6);
+  border-top: 1px solid var(--im-color-border);
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--im-color-mute);
+}
+.hm-slate .hm-num { color: var(--im-color-contrast); font-weight: var(--im-fw-semibold); }
+.hm-slate .hm-loc { color: var(--im-color-secondary); }
+.hm-slate .hm-take { margin-left: auto; }
+.hm-slate .hm-take::before { content: "◆ "; color: var(--im-color-contrast); }
+ 
+/* ---------- Scroll reveal ---------- */
+.hm-rv {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity var(--im-dur-2) var(--im-ease), transform 0.7s var(--im-ease);
+}
+.hm-rv.is-in { opacity: 1; transform: none; }
+.hm-rv-d1 { transition-delay: 80ms; }
+.hm-rv-d2 { transition-delay: 160ms; }
+.hm-rv-d3 { transition-delay: 240ms; }
+.hm-rv-d4 { transition-delay: 320ms; }
+ 
+/* ---------- Hero ---------- */
+.hm-hero {
+  min-height: calc(100svh - var(--im-navbar-height));
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative;
+  padding-block: var(--im-space-8) var(--im-space-7);
+}
+.hm-hero-title {
+  margin: 0;
+  font-size: clamp(var(--im-text-4xl), 9vw, 6.5rem);
+  line-height: 1.0; letter-spacing: -0.04em;
+  font-weight: var(--im-fw-bold);
+  color: var(--im-color-contrast);
+}
+.hm-hero-title .hm-line { display: block; }
+.hm-hero-title .hm-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--im-color-contrast);
+}
+.hm-hero-title .hm-muted { color: var(--im-color-mute); }
+.hm-hero-sub {
+  margin: var(--im-space-5) 0 0;
+  max-width: 34rem;
+  font-size: var(--im-text-lg);
+  color: var(--im-color-secondary);
+}
+.hm-hero-sub b { color: var(--im-color-contrast); font-weight: var(--im-fw-semibold); }
+.hm-scroll-cue {
+  position: absolute; bottom: var(--im-space-6); left: 0;
+  display: flex; align-items: center; gap: var(--im-space-3);
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--im-color-mute);
+}
+.hm-scroll-cue::after {
+  content: ""; width: 1px; height: 2.5rem;
+  background: linear-gradient(var(--im-color-mute), transparent);
+  animation: hm-cue 2s var(--im-ease) infinite;
+}
+@keyframes hm-cue { 0%,100% { transform: scaleY(0.4); opacity: 0.4; } 50% { transform: scaleY(1); opacity: 1; } }
+ 
+/* ---------- Ticker ---------- */
+.hm-ticker {
+  overflow: hidden; white-space: nowrap; user-select: none;
+  border-block: 1px solid var(--im-color-border);
+  padding-block: var(--im-space-3);
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--im-color-secondary);
+}
+.hm-ticker .hm-track { display: inline-block; animation: hm-tick 40s linear infinite; }
+.hm-ticker span { margin: 0 var(--im-space-5); }
+.hm-ticker .hm-sep { color: var(--im-color-mute); margin: 0; }
+@keyframes hm-tick { to { transform: translateX(-50%); } }
+ 
+/* ---------- Now row (your surface-cell style) ---------- */
+.hm-now { display: grid; gap: var(--im-gutter); grid-template-columns: 1fr; }
+@media (min-width: 768px) { .hm-now { grid-template-columns: repeat(3, 1fr); } }
+.hm-now-cell {
+  padding: var(--im-space-5);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-4);
+  background: var(--im-color-surface);
+  transition: transform var(--im-dur-1) var(--im-ease), border-color var(--im-dur-1) var(--im-ease);
+}
+.hm-now-cell:hover { transform: translateY(-3px); border-color: var(--im-color-contrast); }
+.hm-now-tag {
+  display: inline-flex; align-items: center; gap: var(--im-space-2);
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--im-color-secondary);
+}
+.hm-now-tag i {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--im-color-success);
+  animation: hm-blink 2.2s steps(2) infinite;
+}
+.hm-now-cell h3 { margin: var(--im-space-2) 0 0; font-size: var(--im-text-lg); }
+.hm-now-cell p { margin: var(--im-space-1) 0 0; font-size: var(--im-text-sm); color: var(--im-color-secondary); }
+ 
+/* ---------- Project frames (sprockets → your minimal edge dots) ---------- */
+.hm-reel { display: grid; gap: var(--im-gutter); grid-template-columns: 1fr; }
+@media (min-width: 860px) { .hm-reel { grid-template-columns: 1.55fr 1fr; } }
+.hm-frame {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; min-height: 19rem;
+  padding: var(--im-space-6) var(--im-space-6) var(--im-space-6) calc(var(--im-space-6) + 20px);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-5);
+  background: var(--im-color-surface);
+  box-shadow: var(--im-shadow);
+  text-decoration: none; color: var(--im-color-foreground);
+  transition: transform var(--im-dur-1) var(--im-ease), border-color var(--im-dur-1) var(--im-ease), box-shadow var(--im-dur-1) var(--im-ease);
+}
+.hm-frame:hover { transform: translateY(-4px); border-color: var(--im-color-contrast); box-shadow: var(--im-shadow-lg); }
+.hm-frame::before { /* sprocket edge */
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 20px;
+  border-right: 1px solid var(--im-color-border);
+  background-image: radial-gradient(circle at 50% 50%, var(--im-color-background-200) 3px, transparent 3.5px);
+  background-size: 20px 22px;
+}
+.hm-frame .hm-flabel {
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--im-color-secondary);
+}
+.hm-frame h3 {
+  margin: var(--im-space-3) 0 0;
+  font-size: clamp(var(--im-text-2xl), 3vw, var(--im-text-3xl));
+  letter-spacing: -0.02em;
+}
+.hm-frame p { margin: var(--im-space-3) 0 0; max-width: 34rem; color: var(--im-color-secondary); }
+.hm-frame .hm-fmeta {
+  margin-top: auto; padding-top: var(--im-space-5);
+  display: flex; flex-wrap: wrap; gap: var(--im-space-2);
+}
+.hm-frame .hm-go {
+  position: absolute; top: var(--im-space-5); right: var(--im-space-5);
+  color: var(--im-color-mute); font-size: var(--im-text-lg);
+  transition: transform var(--im-dur-1) var(--im-ease), color var(--im-dur-1) var(--im-ease);
+}
+.hm-frame:hover .hm-go { transform: translate(3px, -3px); color: var(--im-color-contrast); }
+ 
+/* ---------- Script list (blog) — builds on your numlist rhythm ---------- */
+.hm-script { border-top: 1px solid var(--im-color-border); }
+.hm-script a {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center;
+  gap: var(--im-space-5); padding: var(--im-space-5) var(--im-space-2);
+  border-bottom: 1px solid var(--im-color-border);
+  text-decoration: none; color: var(--im-color-contrast);
+  transition: background var(--im-dur-1) var(--im-ease), padding-left var(--im-dur-2) var(--im-ease);
+}
+.hm-script a:hover { background: var(--im-color-background-100); padding-left: var(--im-space-4); }
+.hm-script .hm-pg {
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.1em; color: var(--im-color-mute);
+  font-variant-numeric: tabular-nums;
+}
+.hm-script h3 { margin: 0; font-size: var(--im-text-xl); letter-spacing: -0.01em; }
+.hm-script .hm-log { margin: var(--im-space-1) 0 0; font-size: var(--im-text-sm); color: var(--im-color-secondary); max-width: 44rem; }
+.hm-script .hm-cut {
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--im-color-mute); white-space: nowrap;
+  transition: color var(--im-dur-1) var(--im-ease);
+}
+.hm-script a:hover .hm-cut { color: var(--im-color-contrast); }
+@media (max-width: 640px) {
+  .hm-script a { grid-template-columns: auto 1fr; }
+  .hm-script .hm-cut { display: none; }
+}
+ 
+/* ---------- Terminal cards (snippets / prompts) ---------- */
+.hm-duo { display: grid; gap: var(--im-gutter); grid-template-columns: 1fr; }
+@media (min-width: 860px) { .hm-duo { grid-template-columns: 1fr 1fr; } }
+.hm-term {
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-4);
+  background: var(--im-color-surface);
+  overflow: hidden;
+}
+.hm-term-head {
+  display: flex; align-items: center; gap: var(--im-space-3);
+  padding: var(--im-space-3) var(--im-space-4);
+  border-bottom: 1px solid var(--im-color-border);
+  background: var(--im-color-background-100);
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--im-color-secondary);
+}
+.hm-term-head .hm-dots { display: flex; gap: 5px; }
+.hm-term-head .hm-dots i {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--im-color-background-300);
+}
+.hm-term-head .hm-dots i:first-child { background: var(--im-color-contrast); }
+.hm-term ul { list-style: none; margin: 0; padding: 0; }
+.hm-term li a {
+  display: flex; align-items: baseline; gap: var(--im-space-3);
+  padding: var(--im-space-4);
+  font-family: var(--im-font-mono); font-size: var(--im-text-sm);
+  text-decoration: none; color: var(--im-color-contrast);
+  border-bottom: 1px solid var(--im-color-border);
+  transition: background var(--im-dur-1) var(--im-ease);
+}
+.hm-term li:last-child a { border-bottom: 0; }
+.hm-term li a:hover { background: var(--im-color-background-100); }
+.hm-term li a::before { content: "❯"; color: var(--im-color-mute); }
+.hm-term li .hm-d { margin-left: auto; font-size: var(--im-text-xs); color: var(--im-color-mute); white-space: nowrap; }
+ 
+/* ---------- About ---------- */
+.hm-about { display: grid; gap: var(--im-space-6); grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 860px) { .hm-about { grid-template-columns: 1.2fr 1fr; } }
+.hm-about-big {
+  margin: 0;
+  font-size: clamp(var(--im-text-xl), 2.6vw, var(--im-text-2xl));
+  line-height: 1.45; font-weight: var(--im-fw-medium);
+  color: var(--im-color-contrast); letter-spacing: -0.01em;
+}
+.hm-about-big em {
+  font-style: normal;
+  background: var(--im-color-accent); color: var(--im-color-accent-foreground);
+  padding: 0 0.3em; border-radius: var(--im-radius-1);
+}
+.hm-facts { margin: 0; }
+.hm-facts > div {
+  display: flex; justify-content: space-between; gap: var(--im-space-4);
+  padding: var(--im-space-3) var(--im-space-1);
+  border-bottom: 1px solid var(--im-color-border);
+}
+.hm-facts dt {
+  font-family: var(--im-font-mono); font-size: var(--im-text-xs);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--im-color-mute); align-self: center;
+}
+.hm-facts dd { margin: 0; font-size: var(--im-text-sm); font-weight: var(--im-fw-medium); color: var(--im-color-contrast); text-align: right; }
+ 
+/* ---------- CTA ---------- */
+.hm-cta { text-align: center; }
+.hm-cta h2 {
+  margin: 0;
+  font-size: clamp(var(--im-text-3xl), 7vw, var(--im-text-5xl));
+  line-height: 1.05; letter-spacing: -0.03em;
+}
+.hm-cta h2 span { color: transparent; -webkit-text-stroke: 1.5px var(--im-color-contrast); }
+.hm-cta p { margin: var(--im-space-4) auto var(--im-space-6); max-width: 30rem; color: var(--im-color-secondary); }
+.hm-cta .hm-cta-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--im-space-3); }
+ 
+/* ---------- Motion safety ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hm-rv { opacity: 1; transform: none; transition: none; }
+  .hm-ticker .hm-track, .hm-hud .hm-rec, .hm-now-tag i, .hm-scroll-cue::after { animation: none; }
+}
+</style>
+
+ 
+<div class="hm-backdrop" aria-hidden="true"></div>
+<div class="hm-playhead" id="hmPlayhead" aria-hidden="true"></div>
+ 
+<!-- Timecode HUD -->
+<div class="hm-hud" aria-hidden="true">
+  <span class="hm-rec"></span>
+  <span class="hm-tc" id="hmTimecode">00:00:00:00</span>
+  <span class="hm-scn" id="hmScene">Cold open</span>
+</div>
+ 
+<!-- ============ NAVBAR — your island navbar, unchanged ============ -->
+<header class="im-navbar im-navbar--island is-sticky is-blur">
+  <div class="im-navbar-inner">
+    <a class="im-brand" href="/">Swarnil<span class="im-text-muted">.S</span></a>
+    <nav class="im-nav-wrap" aria-label="Main">
+      <ul class="im-nav">
+        <li class="im-nav-item"><a class="im-nav-link" href="#projects">Projects</a></li>
+        <li class="im-nav-item"><a class="im-nav-link" href="#writing">Writing</a></li>
+        <li class="im-nav-item"><a class="im-nav-link" href="#lab">Lab</a></li>
+        <li class="im-nav-item"><a class="im-nav-link" href="#about">About</a></li>
+      </ul>
+    </nav>
+    <div class="im-nav-actions">
+      <button class="im-iconbtn" data-im-search-open aria-label="Search"><i class="ph-bold ph-magnifying-glass"></i></button>
+      <a class="im-btn im-btn-sm" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</header>
+ 
+<main class="main im-home im-page">
+ 
+  <!-- ============ SCENE 00 — HERO ============ -->
+  <section class="hm-hero" data-scene="Cold open">
+    <div class="hm-slate hm-rv" style="border-top:0; padding-top:0;">
+      <span class="hm-num">Scene 00</span>
+      <span class="hm-loc">Int. Studio — Night</span>
+      <span class="hm-take">Rolling</span>
+    </div>
+ 
+    <h1 class="hm-hero-title">
+      <span class="hm-line hm-rv">I write code</span>
+      <span class="hm-line hm-outline hm-rv hm-rv-d1">&amp; cut</span>
+      <span class="hm-line hm-rv hm-rv-d2">stories<span class="hm-muted">.</span></span>
+    </h1>
+ 
+    <p class="hm-hero-sub hm-rv hm-rv-d3">
+      I'm <b>Swarnil Singhai</b> — software engineer by trade, filmmaker by
+      obsession. Both crafts are the same job: hold attention, respect time,
+      ship the cut. This site is where they meet.
+    </p>
+ 
+    <div class="im-hero-actions hm-rv hm-rv-d4">
+      <a class="im-btn" href="#projects"><i class="ph-bold ph-play"></i> Roll projects</a>
+      <a class="im-btn im-btn-outline" href="#writing">Read the writing</a>
+      <a class="im-btn im-btn-ghost" href="/cv/"><i class="ph-bold ph-download-simple"></i> CV</a>
+    </div>
+ 
+    <span class="hm-scroll-cue">Scroll</span>
+  </section>
+ 
+  <!-- ============ TICKER ============ -->
+  <div class="hm-ticker" aria-hidden="true">
+    <div class="hm-track">
+      <span>TypeScript</span><span class="hm-sep">◆</span><span>Color grading</span><span class="hm-sep">◆</span>
+      <span>SAQL &amp; CRM Analytics</span><span class="hm-sep">◆</span><span>DaVinci Resolve</span><span class="hm-sep">◆</span>
+      <span>Node.js</span><span class="hm-sep">◆</span><span>Sound design</span><span class="hm-sep">◆</span>
+      <span>Design systems</span><span class="hm-sep">◆</span><span>Storyboarding</span><span class="hm-sep">◆</span>
+      <span>Performance budgets</span><span class="hm-sep">◆</span><span>24 fps</span><span class="hm-sep">◆</span>
+      <span>TypeScript</span><span class="hm-sep">◆</span><span>Color grading</span><span class="hm-sep">◆</span>
+      <span>SAQL &amp; CRM Analytics</span><span class="hm-sep">◆</span><span>DaVinci Resolve</span><span class="hm-sep">◆</span>
+      <span>Node.js</span><span class="hm-sep">◆</span><span>Sound design</span><span class="hm-sep">◆</span>
+      <span>Design systems</span><span class="hm-sep">◆</span><span>Storyboarding</span><span class="hm-sep">◆</span>
+      <span>Performance budgets</span><span class="hm-sep">◆</span><span>24 fps</span><span class="hm-sep">◆</span>
+    </div>
+  </div>
+ 
+  <!-- ============ SCENE 01 — NOW ============ -->
+  <section class="im-home-section" data-scene="Now">
+    <div class="hm-slate hm-rv">
+      <span class="hm-num">Scene 01</span>
+      <span class="hm-loc">Currently rolling</span>
+      <span class="hm-take">Live</span>
+    </div>
+    <div class="hm-now">
+      <article class="hm-now-cell hm-rv">
+        <span class="hm-now-tag"><i></i>Building</span>
+        <h3>CRM Analytics Academy</h3>
+        <p>Turning scattered SAQL knowledge into a structured, searchable learning path.</p>
+      </article>
+      <article class="hm-now-cell hm-rv hm-rv-d1">
+        <span class="hm-now-tag"><i></i>Editing</span>
+        <h3>Cinematic Reel 2025</h3>
+        <p>A year of frames, ninety seconds of story. Grading in progress.</p>
+      </article>
+      <article class="hm-now-cell hm-rv hm-rv-d2">
+        <span class="hm-now-tag"><i></i>Writing</span>
+        <h3>Lightweight theming guide</h3>
+        <p>Dark mode and design tokens with zero framework weight.</p>
+      </article>
+    </div>
+  </section>
+ 
+  <!-- ============ SCENE 02 — PROJECTS ============ -->
+  <section class="im-home-section" id="projects" data-scene="Projects">
+    <div class="hm-slate hm-rv">
+      <span class="hm-num">Scene 02</span>
+      <span class="hm-loc">Int. Terminal — Projects</span>
+      <span class="hm-take">Picture lock</span>
+    </div>
+ 
+    <div class="hm-reel">
+      <a class="hm-frame hm-rv" href="/projects/crm-analytics-academy/">
+        <span class="hm-go" aria-hidden="true"><i class="ph-bold ph-arrow-up-right"></i></span>
+        <span class="hm-flabel">Featured · Education platform</span>
+        <h3>CRM Analytics Academy</h3>
+        <p>SAQL is powerful and badly documented. I built the academy I wished existed:
+           structured lessons, searchable patterns, real dashboards to break and rebuild.</p>
+        <div class="hm-fmeta">
+          <span class="im-badge im-badge-outline">SAQL</span>
+          <span class="im-badge im-badge-outline">Salesforce</span>
+          <span class="im-badge im-badge-outline">Static-first</span>
+          <span class="im-badge im-badge-outline">Search</span>
+        </div>
+      </a>
+ 
+      <a class="hm-frame hm-rv hm-rv-d1" href="/projects/project-sample/">
+        <span class="hm-go" aria-hidden="true"><i class="ph-bold ph-arrow-up-right"></i></span>
+        <span class="hm-flabel">Client work · Portfolio</span>
+        <h3>Chirag Portfolio v3</h3>
+        <p>A photographer's portfolio that loads before you blink. Sub-second, no framework, all story.</p>
+        <div class="hm-fmeta">
+          <span class="im-badge im-badge-outline">Vanilla JS</span>
+          <span class="im-badge im-badge-outline">&lt;1s LCP</span>
+          <span class="im-badge im-badge-outline">A11y</span>
+        </div>
+      </a>
+    </div>
+  </section>
+ 
+  <!-- ============ SCENE 03 — WRITING ============ -->
+  <section class="im-home-section" id="writing" data-scene="Writing">
+    <div class="hm-slate hm-rv">
+      <span class="hm-num">Scene 03</span>
+      <span class="hm-loc">The script pages — Blog</span>
+      <span class="hm-take">3 drafts published</span>
+    </div>
+ 
+    <div class="hm-script">
+      <a class="hm-rv" href="/blog/why-cinematic-web/">
+        <span class="hm-pg">PG 01</span>
+        <div>
+          <h3>Why I build cinematic, fast web</h3>
+          <p class="hm-log">Speed and story aren't opposites. A cut that drags loses the audience — so does a page.</p>
+        </div>
+        <span class="hm-cut">Read → 6 min</span>
+      </a>
+      <a class="hm-rv hm-rv-d1" href="/blog/lightweight-theming/">
+        <span class="hm-pg">PG 02</span>
+        <div>
+          <h3>A guide to lightweight theming</h3>
+          <p class="hm-log">Dark mode, design tokens, zero JavaScript frameworks. The whole grade in one CSS file.</p>
+        </div>
+        <span class="hm-cut">Read → 9 min</span>
+      </a>
+      <a class="hm-rv hm-rv-d2" href="/blog/no-campus-job-lessons/">
+        <span class="hm-pg">PG 03</span>
+        <div>
+          <h3>I didn't get a job in college. Now what?</h3>
+          <p class="hm-log">A cinematic guide from Mahroni to Bangalore — the four real doors when campus placement doesn't happen.</p>
+        </div>
+        <span class="hm-cut">Read → 12 min</span>
+      </a>
+    </div>
+  </section>
+ 
+  <!-- ============ SCENE 04 — LAB ============ -->
+  <section class="im-home-section" id="lab" data-scene="The lab">
+    <div class="hm-slate hm-rv">
+      <span class="hm-num">Scene 04</span>
+      <span class="hm-loc">The lab — Snippets &amp; prompts</span>
+      <span class="hm-take">Copy-paste ready</span>
+    </div>
+ 
+    <div class="hm-duo">
+      <div class="hm-term hm-rv">
+        <div class="hm-term-head"><span class="hm-dots"><i></i><i></i><i></i></span> ~/snippets</div>
+        <ul>
+          <li><a href="/snippets/saql-windowing/">saql-windowing.md <span class="hm-d">Sep 02</span></a></li>
+          <li><a href="/snippets/debounce/">tiny-debounce.js <span class="hm-d">Apr 20</span></a></li>
+        </ul>
+      </div>
+      <div class="hm-term hm-rv hm-rv-d1">
+        <div class="hm-term-head"><span class="hm-dots"><i></i><i></i><i></i></span> ~/prompts</div>
+        <ul>
+          <li><a href="/prompts/pr-review-prompt/">adversarial-pr-review.txt <span class="hm-d">May 01</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ============ SCENE 05 — ABOUT ============ -->
+  <section class="im-home-section" id="about" data-scene="About">
+    <div class="hm-slate hm-rv">
+      <span class="hm-num">Scene 05</span>
+      <span class="hm-loc">Ext. Bangalore — Day</span>
+      <span class="hm-take">Director's statement</span>
+    </div>
+ 
+    <div class="hm-about">
+      <p class="hm-about-big hm-rv">
+        Small-town start, no campus offer, one stubborn belief:
+        <em>craft compounds</em>. Engineering taught me systems; film taught
+        me pacing. Now I use each to make the other sharper.
+      </p>
+      <dl class="hm-facts hm-rv hm-rv-d1">
+        <div><dt>Base</dt><dd>Bangalore, India</dd></div>
+        <div><dt>Day job</dt><dd>Software Engineer</dd></div>
+        <div><dt>Night job</dt><dd>Filmmaker &amp; editor</dd></div>
+        <div><dt>Frame rate</dt><dd>24 fps, always</dd></div>
+        <div><dt>Load budget</dt><dd>Under one second</dd></div>
+      </dl>
+    </div>
+  </section>
+ 
+  <!-- ============ SCENE 06 — CONTACT ============ -->
+  <section class="im-home-section hm-cta" id="contact" data-scene="Contact">
+    <div class="hm-slate hm-rv" style="text-align:left;">
+      <span class="hm-num">Scene 06</span>
+      <span class="hm-loc">Final scene</span>
+      <span class="hm-take">Roll credits</span>
+    </div>
+    <h2 class="hm-rv">Let's make<br><span>the next cut.</span></h2>
+    <p class="hm-rv hm-rv-d1">A product that needs to feel cinematic, or a story that needs to ship fast — either way, I'm interested.</p>
+    <div class="hm-cta-actions hm-rv hm-rv-d2">
+      <a class="im-btn im-btn-lg" href="mailto:hello@swarnil.dev"><i class="ph-bold ph-paper-plane-tilt"></i> hello@swarnil.dev</a>
+      <a class="im-btn im-btn-outline im-btn-lg" href="/cv/">Download CV</a>
+    </div>
+  </section>
+ 
+</main>
+ 
+<!-- ============ FOOTER — your minimal footer ============ -->
+<footer class="im-footer im-footer--minimal">
+  <div class="im-footer-inner">
+    <a class="im-footer-brand" href="/">Swarnil<span class="im-text-muted">.S</span></a>
+    <p class="im-footer-tagline">Shot on keyboard. Graded in CSS.</p>
+    <nav class="im-footer-inlinenav" aria-label="Footer">
+      <a class="im-flink" href="/blog/">Blog</a>
+      <a class="im-flink" href="/projects/">Projects</a>
+      <a class="im-flink" href="/videos/">Videos</a>
+      <a class="im-flink" href="/rss.xml">RSS</a>
+    </nav>
+    <ul class="im-footer-social">
+      <li><a href="https://github.com/" aria-label="GitHub"><i class="ph-bold ph-github-logo"></i></a></li>
+      <li><a href="https://youtube.com/" aria-label="YouTube"><i class="ph-bold ph-youtube-logo"></i></a></li>
+      <li><a href="https://x.com/" aria-label="X"><i class="ph-bold ph-x-logo"></i></a></li>
+    </ul>
+    <p class="im-footer-copyright">© 2026 Swarnil Singhai</p>
+  </div>
+</footer>
+ 
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ 
+  /* Scroll reveal */
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.hm-rv').forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('.hm-rv').forEach(function (el) { el.classList.add('is-in'); });
+  }
+ 
+  /* Playhead + timecode HUD (scroll → HH:MM:SS:FF at 24fps) */
+  var playhead = document.getElementById('hmPlayhead');
+  var tc = document.getElementById('hmTimecode');
+  var scn = document.getElementById('hmScene');
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('[data-scene]'));
+  var FILM_SECONDS = 120;
+ 
+  function pad(n) { return String(n).padStart(2, '0'); }
+ 
+  function onScroll() {
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+ 
+    playhead.style.width = (p * 100) + '%';
+ 
+    var total = p * FILM_SECONDS;
+    var s = Math.floor(total);
+    var f = Math.floor((total - s) * 24);
+    tc.textContent = pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s / 60) % 60) + ':' + pad(s % 60) + ':' + pad(f);
+ 
+    var mid = window.scrollY + window.innerHeight * 0.4;
+    var current = scenes[0];
+    scenes.forEach(function (el) {
+      if (el.getBoundingClientRect().top + window.scrollY <= mid) current = el;
+    });
+    var name = current.getAttribute('data-scene');
+    if (scn.textContent !== name) scn.textContent = name;
+  }
+ 
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(function () { onScroll(); ticking = false; });
+    }
+  }, { passive: true });
+  onScroll();
+})();
+</script>
 <section class="im-home im-page">
   <div class="im-hero">
     <div class="im-hero-content">
