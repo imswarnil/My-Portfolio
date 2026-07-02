@@ -17,7 +17,7 @@ const buildContentBlob = () => {
         "{{ page.url | relative_url }}",
       {%- endunless -%}
     {%- endfor -%}
-      "{{ site.logo | relative_url }}", "{{ site.baseurl }}/assets/default-offline-image.png", "{{ site.baseurl }}/assets/scripts/fetch.js"
+      "{{ site.logo | relative_url }}", "{{ site.baseurl }}/assets/default-offline-image.png"
   ]
 }
 
