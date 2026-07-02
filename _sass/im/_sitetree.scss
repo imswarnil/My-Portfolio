@@ -1,0 +1,103 @@
+// ======================================================================
+// im/_sitetree.scss — /sitemap/ tree-style page listing
+// Classic connector-line file-tree pattern, built on <ul>/<li> + <details>.
+// ======================================================================
+
+.im-sitetree,
+.im-sitetree ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 1.5rem;
+}
+.im-sitetree { padding-left: 0; }
+
+.im-sitetree li {
+  position: relative;
+  padding: var(--im-space-1) 0 var(--im-space-1) var(--im-space-6);
+}
+.im-sitetree ul > li::before,
+.im-sitetree ul > li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  border-left: 1px solid var(--im-color-border);
+}
+.im-sitetree ul > li::before {
+  top: 0;
+  height: 1.2rem;
+  width: var(--im-space-5);
+  border-bottom: 1px solid var(--im-color-border);
+}
+.im-sitetree ul > li::after {
+  top: 1.2rem;
+  bottom: 0;
+}
+.im-sitetree ul > li:last-child::after { display: none; }
+
+// Root item (site name) has no connector of its own.
+.im-sitetree > li { padding-left: 0; &::before, &::after { display: none; } }
+
+.im-sitetree-root {
+  font-size: var(--im-text-lg);
+  font-weight: var(--im-fw-bold);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--im-space-2);
+}
+
+.im-sitetree-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  color: var(--im-color-foreground);
+  text-decoration: none;
+  cursor: pointer;
+
+  &, & a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--im-color-contrast); text-decoration: underline; }
+  > i { color: var(--im-color-mute); flex: 0 0 auto; }
+}
+a.im-sitetree-link:hover { color: var(--im-color-contrast); text-decoration: underline; }
+
+.im-sitetree-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding-inline: var(--im-space-1);
+  border-radius: var(--im-radius-pill);
+  background: var(--im-color-background-100);
+  color: var(--im-color-secondary);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-semibold);
+}
+
+.im-sitetree-date {
+  margin-left: var(--im-space-2);
+  font-size: var(--im-text-xs);
+  color: var(--im-color-mute);
+}
+
+// <details>/<summary> used for collapsible branches
+.im-sitetree details > summary {
+  list-style: none;
+  &::-webkit-details-marker { display: none; }
+}
+.im-sitetree summary.im-sitetree-link {
+  position: relative;
+  padding-left: var(--im-space-5);
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 5px solid var(--im-color-mute);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform var(--im-dur-1) var(--im-ease);
+  }
+}
+.im-sitetree details[open] > summary.im-sitetree-link::before { transform: translateY(-50%) rotate(90deg); }

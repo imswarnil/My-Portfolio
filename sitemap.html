@@ -1,0 +1,108 @@
+---
+layout: default
+title: Sitemap
+permalink: /sitemap/
+description: "Every page on this site, in one tree."
+ad_rails: false
+sidebar: false
+---
+{%- comment -%}
+  Human-facing, tree-style sitemap. NOT the XML sitemap (that's
+  jekyll-sitemap's /sitemap.xml, for search engines). This page also emits
+  JSON-LD (WebSite + SiteNavigationElement + ItemList) describing the same
+  structure for crawlers that read structured data.
+{%- endcomment -%}
+{%- assign static_pages = site.pages | where_exp: "p", "p.sitemap != false" | where_exp: "p", "p.list_collection == nil" -%}
+
+<section class="im-home im-page">
+  <header class="im-collection-head im-bg-dots im-reveal">
+    <span class="im-collection-icon"><i class="ph-bold ph-tree-structure" aria-hidden="true"></i></span>
+    <h1 class="im-collection-title">Sitemap</h1>
+    <p class="im-collection-desc">Every page on this site, in one tree. Looking for the machine-readable version? <a class="im-flink" href="{{ '/sitemap.xml' | relative_url }}">/sitemap.xml</a>.</p>
+  </header>
+
+  <ul class="im-sitetree im-reveal">
+    <li>
+      <a class="im-sitetree-link im-sitetree-root" href="{{ '/' | relative_url }}"><i class="ph-bold ph-house" aria-hidden="true"></i> {{ site.title }}</a>
+
+      <ul>
+        {%- comment -%} Collections, each with its docs nested underneath {%- endcomment -%}
+        {%- for c in site.collections -%}
+          {%- if c.docs.size > 0 -%}
+          <li>
+            <details open>
+              <summary class="im-sitetree-link"><i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i> <a href="{{ c.landing | default: c.url | relative_url }}">{{ c.title }}</a> <span class="im-sitetree-count">{{ c.docs.size }}</span></summary>
+              <ul>
+                {%- assign sorted_docs = c.docs | sort: "date" | reverse -%}
+                {%- for doc in sorted_docs -%}
+                <li><a class="im-sitetree-link" href="{{ doc.url | relative_url }}">{{ doc.title }}</a>{% if doc.date %}<span class="im-sitetree-date">{{ doc.date | date: "%b %Y" }}</span>{% endif %}</li>
+                {%- endfor -%}
+              </ul>
+            </details>
+          </li>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Standalone pages {%- endcomment -%}
+        <li>
+          <details open>
+            <summary class="im-sitetree-link"><i class="ph-bold ph-file-text" aria-hidden="true"></i> Pages <span class="im-sitetree-count">{{ static_pages.size }}</span></summary>
+            <ul>
+              {%- for p in static_pages -%}
+                {%- if p.url != "/" and p.title -%}
+                <li><a class="im-sitetree-link" href="{{ p.url | relative_url }}">{{ p.title }}</a></li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+{%- comment -%} ── JSON-LD: WebSite + primary nav + full page list ── {%- endcomment -%}
+{%- assign nav_elements = "" | split: "" -%}
+{%- for item in site.navigation_header -%}
+  {%- capture el -%}{"@type":"SiteNavigationElement","name":{{ item.title | jsonify }},"url":{{ item.url | absolute_url | jsonify }}}{%- endcapture -%}
+  {%- assign nav_elements = nav_elements | push: el -%}
+{%- endfor -%}
+
+{%- assign page_list = "" | split: "" -%}
+{%- assign position = 0 -%}
+{%- for c in site.collections -%}
+  {%- assign sorted_docs = c.docs | sort: "date" | reverse -%}
+  {%- for doc in sorted_docs -%}
+    {%- assign position = position | plus: 1 -%}
+    {%- capture el -%}{"@type":"ListItem","position":{{ position }},"url":{{ doc.url | absolute_url | jsonify }},"name":{{ doc.title | jsonify }}}{%- endcapture -%}
+    {%- assign page_list = page_list | push: el -%}
+  {%- endfor -%}
+{%- endfor -%}
+{%- for p in static_pages -%}
+  {%- if p.title -%}
+    {%- assign position = position | plus: 1 -%}
+    {%- capture el -%}{"@type":"ListItem","position":{{ position }},"url":{{ p.url | absolute_url | jsonify }},"name":{{ p.title | jsonify }}}{%- endcapture -%}
+    {%- assign page_list = page_list | push: el -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": {{ site.title | jsonify }},
+      "url": {{ "/" | absolute_url | jsonify }},
+      "hasPart": [ {{ nav_elements | join: "," }} ]
+    },
+    {
+      "@type": "ItemList",
+      "name": "Full sitemap",
+      "url": {{ page.url | absolute_url | jsonify }},
+      "numberOfItems": {{ page_list.size }},
+      "itemListElement": [ {{ page_list | join: "," }} ]
+    }
+  ]
+}
+</script>
