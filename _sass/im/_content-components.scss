@@ -298,8 +298,14 @@ a.card {
   }
 }
 .timeline__date  { display: block; font-size: var(--im-text-xs); font-weight: var(--im-fw-semibold); letter-spacing: 0.03em; text-transform: uppercase; color: var(--im-color-secondary); margin-bottom: var(--im-space-1); }
-.timeline__title { margin: 0 0 var(--im-space-2); font-size: var(--im-text-base); font-weight: var(--im-fw-semibold); }
-.timeline__body  { color: var(--im-color-foreground); > :last-child { margin-bottom: 0; } }
+.timeline__title {
+  margin: 0 0 var(--im-space-2);
+  font-size: var(--im-text-base);
+  font-weight: var(--im-fw-semibold);
+  a { color: inherit; text-decoration: none; &:hover { color: var(--im-color-contrast); text-decoration: underline; } }
+}
+.timeline__body { color: var(--im-color-foreground); > :last-child { margin-bottom: 0; } }
+.timeline__item > .badge { margin-top: var(--im-space-2); }
 
 // ---- Accordion (native <details>) ----------------------------------------
 .accordion { display: flex; flex-direction: column; gap: var(--im-space-3); margin-block: var(--im-space-6); }

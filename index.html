@@ -13,11 +13,20 @@ hero_image: /assets/Swarnil-Singhai.png
       <span class="im-hero-eyebrow"><i class="ph-bold ph-sparkle"></i> Software Engineer &amp; Filmmaker</span>
       <h1 class="im-hero-title">{{ page.hero_title }}</h1>
       <p class="im-hero-subtitle">{{ page.hero_subtitle }}</p>
+
+      <ul class="im-hero-meta">
+        {%- if site.work.role -%}<li><i class="ph-bold ph-briefcase" aria-hidden="true"></i> {{ site.work.role }}{% if site.work.company %} · {{ site.work.company }}{% endif %}</li>{%- endif -%}
+        {%- if site.location -%}<li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location }}</li>{%- endif -%}
+        <li class="im-hero-status"><span class="im-hero-status-dot" aria-hidden="true"></span> Open to interesting problems</li>
+      </ul>
+
       <div class="im-hero-actions">
         <a class="im-btn" href="{{ '/projects/' | relative_url }}"><i class="ph-bold ph-rocket-launch"></i> See projects</a>
         <a class="im-btn im-btn-outline" href="{{ '/about/' | relative_url }}">About me</a>
         <button class="im-btn im-btn-icon im-btn-outline" data-im-search-open aria-label="Search (press /)" title="Search (press /)"><i class="ph-bold ph-magnifying-glass"></i></button>
       </div>
+
+      {% include footer-social.html %}
     </div>
     {%- if page.hero_image -%}
     <figure class="im-hero-media"><img src="{{ page.hero_image | relative_url }}" alt="{{ site.author | default: site.title }}" width="900" height="700"></figure>

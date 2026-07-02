@@ -5,5 +5,7 @@ category: portfolio
 tags: [film, edit]
 image: /assets/img/covers/portfolio.svg
 excerpt: "A 90-second showcase of color, motion and rhythm."
+timeline: true
+timeline_note: "Cut a 90-second reel of recent film and motion work — graded for mood, paced for rhythm."
 ---
 A selected reel of recent film and motion work — graded for mood, cut for pace.

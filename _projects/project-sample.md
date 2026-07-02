@@ -9,6 +9,8 @@ facts:
   - { label: "Stack", value: "Jekyll, SCSS" }
   - { label: "Core time", value: "3 weeks" }
 aside: true
+timeline: true
+timeline_note: "Shipped a fast, clean portfolio rebuild — Jekyll + hand-written SCSS."
 ---
 
 ## Overview

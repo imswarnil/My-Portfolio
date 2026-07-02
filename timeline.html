@@ -1,0 +1,44 @@
+---
+layout: default
+title: Timeline
+permalink: /timeline/
+description: "Everything worth marking, across every collection, most recent first."
+ad_rails: false
+---
+{%- comment -%}
+  Cross-collection timeline: any collection entry with `timeline: true` in
+  its front matter shows up here, most-recent-first. Optional `timeline_note`
+  overrides the excerpt/description shown under the title.
+{%- endcomment -%}
+{%- assign timeline_items = "" | split: "" -%}
+{%- for c in site.collections -%}
+  {%- assign timeline_items = timeline_items | concat: c.docs -%}
+{%- endfor -%}
+{%- assign timeline_items = timeline_items | where_exp: "d", "d.timeline == true" | sort: "date" | reverse -%}
+
+<section class="im-home im-page">
+  <header class="im-collection-head im-bg-dots im-reveal">
+    <span class="im-collection-icon"><i class="ph-bold ph-clock-counter-clockwise" aria-hidden="true"></i></span>
+    <h1 class="im-collection-title">Timeline</h1>
+    <p class="im-collection-desc">Everything worth marking, across every collection — most recent first.</p>
+    {%- if timeline_items.size > 0 -%}
+    <div class="im-collection-stats"><span><strong>{{ timeline_items.size }}</strong> milestones</span></div>
+    {%- endif -%}
+  </header>
+
+  {%- if timeline_items.size > 0 -%}
+  <ol class="timeline im-reveal">
+    {%- for it in timeline_items -%}
+    <li class="timeline__item">
+      {%- if it.date %}<span class="timeline__date">{{ it.date | date: "%b %-d, %Y" }}</span>{% endif -%}
+      <h3 class="timeline__title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+      {%- assign snip = it.timeline_note | default: it.excerpt | default: it.description -%}
+      {%- if snip %}<div class="timeline__body"><p>{{ snip | strip_html | truncate: 160 }}</p></div>{% endif -%}
+      {%- if it.collection %}<span class="badge">{{ it.collection }}</span>{% endif -%}
+    </li>
+    {%- endfor -%}
+  </ol>
+  {%- else -%}
+  <p class="text-muted">Nothing marked for the timeline yet — add <code>timeline: true</code> to a post's front matter to show it here.</p>
+  {%- endif -%}
+</section>

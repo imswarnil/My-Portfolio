@@ -9,17 +9,7 @@
 {%- unless flayout == "minimal" %}{% assign flayout = "columns" %}{% endunless -%}
 
 <footer class="im-footer im-footer--{{ flayout }}{% if f.boxed %} is-boxed{% endif %}">
-  <div class="im-footer-inner im-bg-dots">
-
-  {%- if flayout != "minimal" -%}
-    <div class="im-footer-cta">
-      <div>
-        <p class="im-footer-cta-eyebrow">Have an idea?</p>
-        <h2 class="im-footer-cta-title">Let's build something worth shipping.</h2>
-      </div>
-      <a class="im-btn im-btn-lg" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-chat-circle" aria-hidden="true"></i> Get in touch</a>
-    </div>
-  {%- endif -%}
+  <div class="im-footer-inner">
 
   {%- if flayout == "minimal" -%}
     <a class="im-footer-brand" href="{{ '/' | relative_url }}">
@@ -40,15 +30,8 @@
     <p class="im-footer-copyright">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}</p>
 
   {%- else -%}
+    {%- comment -%} "Big typographic" — link columns + meta on top, a huge faint wordmark with social icons overlaid below. {%- endcomment -%}
     <div class="im-footer-top">
-      <div class="im-footer-brandcol">
-        <a class="im-footer-brand" href="{{ '/' | relative_url }}">
-          {%- if site.logo %}<img src="{{ site.logo | relative_url }}" alt="">{% endif %}<span>{{ site.title }}</span>
-        </a>
-        {%- if f.tagline %}<p class="im-footer-tagline">{{ f.tagline }}</p>{% endif -%}
-        {%- include footer-social.html -%}
-      </div>
-
       <div class="im-footer-cols">
         {%- if f.show_collections != false -%}
         <nav class="im-footer-col" aria-label="Explore">
@@ -81,11 +64,16 @@
         </div>
         {%- endif -%}
       </div>
+
+      <div class="im-footer-meta">
+        <p class="im-footer-copyright">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}</p>
+        <a class="im-footer-top-link" href="#top">Back to top <i class="ph-bold ph-arrow-up"></i></a>
+      </div>
     </div>
 
-    <div class="im-footer-bottom">
-      <p class="im-footer-copyright">© {{ site.time | date: '%Y' }} {{ site.author | default: site.title }}. Built with the IM CSS framework.</p>
-      <a class="im-footer-top-link" href="#top">Back to top <i class="ph-bold ph-arrow-up"></i></a>
+    <div class="im-footer-wordmark-wrap">
+      <a class="im-footer-wordmark" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">{{ site.title }}</a>
+      {%- include footer-social.html -%}
     </div>
   {%- endif -%}
 

@@ -162,6 +162,10 @@ navigation_header:
         url: /now/
         icon: clock
         sub: What I'm focused on
+      - title: Timeline
+        url: /timeline/
+        icon: clock-counter-clockwise
+        sub: Milestones, newest first
       - title: Contact
         url: /contact/
         icon: chat-circle

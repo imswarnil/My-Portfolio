@@ -11,6 +11,8 @@ author: "Raja Swarnil Singhai"
 reading_time: 9
 canonical_url: "/blog/failed-college-placements-what-next"
 date: 2017-07-10
+timeline: true
+timeline_note: "No campus offer — mapped out the B.T.C., pre-employment test, Bangalore walk-in, and YouTube paths."
 ---
 
 > **TL;DR**: No campus offer? You’ve still got four real doors: **B.T.C. + Govt teacher (stable)**, **pre-employment tests + upskilling (predictable)**, **Bangalore walk-ins (high variance, high reward)**, and **YouTube + personal brand (long game)**. Pick based on your risk, runway, and *why*. Below is how I evaluated each, the mistakes I made, and the steps I’d repeat.
