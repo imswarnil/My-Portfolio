@@ -1,0 +1,24 @@
+{%- comment -%}
+  One collection rendered as a bento grid block, for /explore/.
+  Params: collection (label), limit (default 6)
+{%- endcomment -%}
+{%- assign coll = site.collections | where: "label", include.collection | first -%}
+{%- assign docs = coll.docs | sort: "date" | reverse -%}
+{%- assign limit = include.limit | default: 6 -%}
+{%- if docs.size > 0 -%}
+<section class="im-explore-block im-reveal">
+  <div class="im-home-section-head">
+    <h2><i class="ph-bold ph-{{ coll.icon | default: 'folder' }}" aria-hidden="true"></i> {{ coll.title }}</h2>
+    <a class="im-home-section-link" href="{{ coll.landing | default: coll.url | relative_url }}">All {{ coll.title | downcase }} ({{ docs.size }}) →</a>
+  </div>
+  <div class="im-bento">
+    {%- for it in docs limit: limit -%}
+    {%- assign bcover = it.image | default: it.cover -%}{%- capture burl -%}{% include utility/image.html image=bcover collection=it.collection %}{%- endcapture -%}
+    <a class="im-bento-item{% if forloop.first %} is-feature{% endif %}" href="{{ it.url | relative_url }}">
+      <img src="{{ burl }}" alt="" loading="lazy">
+      <span class="im-bento-body"><span class="im-bento-title">{{ it.title }}</span>{% if it.excerpt %}<span class="im-bento-sub">{{ it.excerpt | strip_html | truncate: 90 }}</span>{% endif %}</span>
+    </a>
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}

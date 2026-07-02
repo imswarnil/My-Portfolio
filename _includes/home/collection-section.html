@@ -1,16 +1,16 @@
 {%- comment -%}
   Render one collection on the homepage in its signature style.
   Params: collection (label), style, limit, title (optional)
-  styles: featured | media-list | numbered | rating | gallery | bento | compact
+  styles: featured | ranked | media-list | numbered | rating | gallery | bento | compact
 {%- endcomment -%}
 {%- assign coll = site.collections | where: "label", include.collection | first -%}
 {%- assign docs = coll.docs | sort: "date" | reverse -%}
 {%- assign limit = include.limit | default: 4 -%}
 {%- if docs.size > 0 -%}
-<section class="im-home-section im-home-{{ include.style }}">
+<section class="im-home-section im-home-{{ include.style }} im-reveal">
   <div class="im-home-section-head">
     <h2><i class="ph-bold ph-{{ coll.icon }}" aria-hidden="true"></i> {{ include.title | default: coll.title }}</h2>
-    <a class="im-home-section-link" href="{{ coll.permalink | default: coll.url | relative_url }}">All {{ coll.title | downcase }} →</a>
+    <a class="im-home-section-link" href="{{ coll.landing | default: coll.url | relative_url }}">All {{ coll.title | downcase }} →</a>
   </div>
 
   {%- case include.style -%}
@@ -28,6 +28,23 @@
         {%- for it in docs offset: 1 limit: 3 -%}{% include utility/card.html item=it %}{%- endfor -%}
       </div>
     </div>
+
+  {%- when "ranked" -%}
+    {%- comment -%} Netflix-style "top picks" list — big number, thumbnail, title. Order = collection doc order (latest first); set `rank:` in front matter to override the displayed number. {%- endcomment -%}
+    <ol class="im-ranklist">
+      {%- for it in docs limit: limit -%}
+      {%- assign rcover = it.image | default: it.cover -%}{%- capture rurl -%}{% include utility/image.html image=rcover collection=it.collection %}{%- endcapture -%}
+      <li class="im-ranklist-row">
+        <span class="im-ranklist-num">{{ it.rank | default: forloop.index }}</span>
+        <a class="im-ranklist-thumb" href="{{ it.url | relative_url }}"><img src="{{ rurl }}" alt="" loading="lazy"><span class="im-pcard-play"><i class="ph-bold ph-play"></i></span></a>
+        <div class="im-ranklist-body">
+          <h3 class="im-ranklist-title"><a href="{{ it.url | relative_url }}">{{ it.title }}</a></h3>
+          {%- if it.excerpt %}<p class="im-ranklist-excerpt">{{ it.excerpt | strip_html | truncate: 100 }}</p>{% endif -%}
+          {%- if it.duration %}<span class="im-ranklist-duration">{{ it.duration }}</span>{% endif -%}
+        </div>
+      </li>
+      {%- endfor -%}
+    </ol>
 
   {%- when "media-list" -%}
     <ul class="im-medialist">

@@ -16,7 +16,7 @@ hero_image: /assets/Swarnil-Singhai.png
       <div class="im-hero-actions">
         <a class="im-btn" href="{{ '/projects/' | relative_url }}"><i class="ph-bold ph-rocket-launch"></i> See projects</a>
         <a class="im-btn im-btn-outline" href="{{ '/about/' | relative_url }}">About me</a>
-        <button class="im-btn im-btn-ghost" data-im-search-open><i class="ph-bold ph-magnifying-glass"></i> Search <kbd class="im-search-esc">/</kbd></button>
+        <button class="im-btn im-btn-icon im-btn-outline" data-im-search-open aria-label="Search (press /)" title="Search (press /)"><i class="ph-bold ph-magnifying-glass"></i></button>
       </div>
     </div>
     {%- if page.hero_image -%}
@@ -24,13 +24,21 @@ hero_image: /assets/Swarnil-Singhai.png
     {%- endif -%}
   </div>
 
+  {%- if site.resume.stats.size > 0 -%}
+  <div class="stats im-hero-stats im-reveal">
+    {%- for s in site.resume.stats -%}
+    {% include components/stat.html value=s.v label=s.k icon=s.icon %}
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+
   {%- comment -%} Quick links to every collection {%- endcomment -%}
-  <section class="im-home-section">
+  <section class="im-home-section im-reveal">
     <div class="im-home-section-head"><h2>Explore</h2></div>
     <div class="im-home-collections">
       {%- for c in site.collections -%}
         {%- if c.docs.size > 0 -%}
-        <a class="im-home-collection" href="{{ c.permalink | default: c.url | relative_url }}">
+        <a class="im-home-collection" href="{{ c.landing | default: c.url | relative_url }}">
           <i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i>
           <span class="im-home-collection-name">{{ c.title | default: c.label }}</span>
           <span class="im-home-collection-count">{{ c.docs | size }} {{ c.title | default: c.label | downcase }}</span>
@@ -41,8 +49,8 @@ hero_image: /assets/Swarnil-Singhai.png
   </section>
 
   {%- comment -%} Each collection in its signature style {%- endcomment -%}
-  {% include home/collection-section.html collection="videos"    style="featured" title="Watch" %}
-  {% include home/collection-section.html collection="blog"      style="numbered" title="From the blog" %}
+  {% include home/collection-section.html collection="videos"    style="ranked"   title="Top picks" %}
+  {% include home/collection-section.html collection="posts"     style="numbered" title="From the blog" %}
   {% include home/collection-section.html collection="projects"  style="bento"    title="Projects" %}
   {% include home/collection-section.html collection="portfolio" style="gallery"  title="Portfolio" %}
 

@@ -9,7 +9,8 @@
   padding-inline: var(--im-gutter);
 }
 
-.im-home-section { margin-block: var(--im-space-8); }
+.im-home-section,
+.im-explore-block { margin-block: var(--im-space-8); }
 
 .im-home-section-head {
   display: flex;
@@ -118,6 +119,44 @@
 .im-numlist-title { margin: 0; font-size: var(--im-text-lg); a { text-decoration: none; color: var(--im-color-contrast); } }
 .im-numlist-excerpt { margin: var(--im-space-1) 0 0; font-size: var(--im-text-sm); color: var(--im-color-secondary); }
 .im-numlist-arrow { margin-left: auto; color: var(--im-color-mute); transition: transform var(--im-dur-1) var(--im-ease), color var(--im-dur-1) var(--im-ease); }
+
+// ---- ranked (Netflix-style "top picks") --------------------------------
+.im-ranklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--im-space-3); }
+.im-ranklist-row {
+  display: flex;
+  align-items: center;
+  gap: var(--im-space-4);
+  padding: var(--im-space-3) var(--im-space-2);
+  border-radius: var(--im-radius-4);
+  transition: background-color var(--im-dur-1) var(--im-ease);
+  &:hover { background: var(--im-color-background-100); }
+  &:hover .im-ranklist-thumb img { transform: scale(1.05); }
+}
+.im-ranklist-num {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: var(--im-fw-bold);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-align: center;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--im-color-mute);
+  font-variant-numeric: tabular-nums;
+}
+.im-ranklist-thumb {
+  position: relative;
+  flex: 0 0 auto;
+  width: 7rem;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--im-radius-3);
+  overflow: hidden;
+  img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--im-dur-2) var(--im-ease); }
+}
+.im-ranklist-body { min-width: 0; }
+.im-ranklist-title { margin: 0; font-size: var(--im-text-base); a { text-decoration: none; color: var(--im-color-contrast); } }
+.im-ranklist-excerpt { margin: var(--im-space-1) 0 0; font-size: var(--im-text-sm); color: var(--im-color-secondary); }
+.im-ranklist-duration { font-size: var(--im-text-xs); color: var(--im-color-mute); }
 
 // ---- rating (reviews) ------------------------------------------------
 .im-ratelist { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--im-gutter); grid-template-columns: 1fr; }

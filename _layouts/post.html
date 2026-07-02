@@ -58,9 +58,14 @@ layout: default
       {%- comment -%} In-article ad after the lead {%- endcomment -%}
       {%- if site.adsense.enabled and page.ads != false %}{% include ad.html type="in_article" %}{% endif -%}
 
-      <div class="im-prose">
+      <div class="im-prose"{% if page.collection == "posts" and site.adsense.enabled and page.ads != false %} data-im-inline-ads="3"{% endif %}>
         {{ content }}
       </div>
+
+      {%- if page.collection == "posts" and site.adsense.enabled and page.ads != false -%}
+      {%- comment -%} Template cloned by custom.js and inserted after every Nth paragraph — see data-im-inline-ads above. {%- endcomment -%}
+      <template id="im-inline-ad-tpl">{% include ad.html type="in_article" class="im-ad--inline" %}</template>
+      {%- endif -%}
 
       {%- if page.tags and page.tags != empty -%}
       <ul class="im-tags">{%- for tag in page.tags %}<li><a href="{{ '/tags/' | append: tag | slugify | relative_url }}">#{{ tag }}</a></li>{% endfor -%}</ul>

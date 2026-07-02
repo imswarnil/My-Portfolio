@@ -9,11 +9,12 @@
   :root { scroll-behavior: smooth; }
 }
 
-html { height: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html { height: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: hidden; }
 
 body {
   margin: 0;
   min-height: 100%;
+  overflow-x: hidden;    // belt-and-braces: no embed (ads, iframes) can ever push a horizontal scrollbar
   font-family: var(--im-font-body);
   font-size: 16px;
   font-weight: var(--im-fw-regular);
@@ -26,7 +27,7 @@ body {
   word-break: break-word;
 }
 
-img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
+img, svg, video, canvas, iframe { display: block; max-width: 100%; height: auto; }
 img { border-style: none; }
 svg:not([fill]) { fill: currentColor; }
 

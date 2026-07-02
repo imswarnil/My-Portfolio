@@ -1,0 +1,21 @@
+---
+layout: default
+title: Explore everything
+permalink: /explore/
+description: "Every collection on the site — blog, projects, portfolio, videos, snippets and prompts — in one bento grid."
+ad_rails: false
+---
+<section class="im-home im-page">
+  <header class="im-collection-head im-bg-dots im-reveal">
+    <span class="im-collection-icon"><i class="ph-bold ph-squares-four" aria-hidden="true"></i></span>
+    <h1 class="im-collection-title">Explore everything</h1>
+    <p class="im-collection-desc">Every collection on the site, grouped by type. Pick a lane, or just scroll.</p>
+  </header>
+
+  {% include home/bento-block.html collection="posts" limit=6 %}
+  {% include home/bento-block.html collection="projects" limit=6 %}
+  {% include home/bento-block.html collection="portfolio" limit=6 %}
+  {% include home/bento-block.html collection="videos" limit=6 %}
+  {% include home/bento-block.html collection="snippets" limit=6 %}
+  {% include home/bento-block.html collection="prompts" limit=6 %}
+</section>

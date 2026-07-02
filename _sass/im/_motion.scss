@@ -1,0 +1,120 @@
+// ======================================================================
+// im/_motion.scss — background patterns, scroll-reveal, page transitions
+// ----------------------------------------------------------------------
+// Motion conventions: reuse --im-dur-1/2 + --im-ease for all timing (see
+// _config.scss). Every animated effect here is either inert until
+// `prefers-reduced-motion: no-preference`, or explicitly killed by the
+// global reduced-motion guard at the bottom of this file.
+// ======================================================================
+
+// ---- Background patterns -------------------------------------------------
+// Subtle, theme-aware dot-grid — reads var(--im-color-contrast) so it's
+// legible (and dim) in both light and dark without extra tokens.
+.im-bg-dots {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(var(--im-color-contrast) 1px, transparent 1px);
+    background-size: 22px 22px;
+    opacity: 0.06;
+    mask-image: radial-gradient(ellipse 80% 60% at 70% 20%, #000 40%, transparent 100%);
+  }
+}
+
+.im-bg-grid {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(var(--im-color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--im-color-border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.5;
+    mask-image: linear-gradient(to bottom, #000, transparent);
+  }
+}
+
+// Hero gets the dot pattern + a soft entrance by default.
+.im-hero { position: relative; isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -10% -5%;
+    z-index: -1;
+    background-image: radial-gradient(var(--im-color-contrast) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.05;
+    mask-image: radial-gradient(ellipse 70% 70% at 80% 10%, #000 40%, transparent 100%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .im-hero-content > * {
+    animation: im-fade-up var(--im-dur-2) var(--im-ease) both;
+  }
+  .im-hero-content > *:nth-child(1) { animation-delay: 0ms; }
+  .im-hero-content > *:nth-child(2) { animation-delay: 60ms; }
+  .im-hero-content > *:nth-child(3) { animation-delay: 120ms; }
+  .im-hero-content > *:nth-child(4) { animation-delay: 180ms; }
+  .im-hero-media { animation: im-fade-up var(--im-dur-2) var(--im-ease) 120ms both; }
+}
+
+@keyframes im-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ---- Scroll reveal ------------------------------------------------------
+// Paired with the IntersectionObserver in assets/scripts/custom.js, which
+// adds `.is-revealed` when an `.im-reveal` element enters the viewport.
+// If JS never runs (disabled/error), content stays visible — see the
+// `.no-js`-equivalent fallback: the base state is only ever applied when
+// `prefers-reduced-motion: no-preference` AND JS confirms support.
+.im-reveal.js-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--im-dur-2) var(--im-ease), transform var(--im-dur-2) var(--im-ease);
+
+  &.is-revealed { opacity: 1; transform: translateY(0); }
+}
+
+// ---- Native page transitions (progressive enhancement) --------------------
+// Supported in Chromium-based browsers today; a no-op elsewhere. No JS,
+// no dependency — the browser cross-fades the outgoing/incoming page.
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--im-dur-2);
+    animation-timing-function: var(--im-ease);
+  }
+}
+
+// ---- Global reduced-motion guard -----------------------------------------
+// Belt-and-braces on top of the per-effect `no-preference` gates above —
+// kills any transition/animation duration outright when the user opts out.
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

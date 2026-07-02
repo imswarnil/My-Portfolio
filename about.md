@@ -22,7 +22,7 @@ journey:
 
 ## What I do
 
-<div class="card-grid">
+<div class="card-grid im-reveal">
   {% include components/card.html icon="ph-chart-bar" title="Analytics Engineering" text="CRM Analytics, SAQL, and CPQ flows that sales and finance teams actually use." %}
   {% include components/card.html icon="ph-code" title="Web Craft" text="Jekyll, Next.js, and a hand-built CSS framework powering this very site." %}
   {% include components/card.html icon="ph-film-slate" title="Filmmaking" text="Hook-first storytelling, thumbnail systems, and narrative pacing." %}
@@ -30,7 +30,7 @@ journey:
 
 ## By the numbers
 
-<div class="stats">
+<div class="stats im-reveal">
   {% include components/stat.html value="28%" label="Faster quote-to-cash" icon="ph-rocket-launch" %}
   {% include components/stat.html value="50+" label="Dashboards shipped" icon="ph-chart-line-up" %}
   {% include components/stat.html value="20+" label="Films produced" icon="ph-video" %}

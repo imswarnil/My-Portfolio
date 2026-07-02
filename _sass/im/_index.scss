@@ -14,10 +14,13 @@
 @import "layout";       // im-container / im-row / im-col / im-section
 @import "hero";         // im-hero
 @import "components";   // im-btn / im-card / im-badge / im-alert
+@import "content-components"; // unprefixed shortcode components (card, badge, callout…)
 @import "collection";   // collection list pages + per-type cards
 @import "post";         // single post / page article + toc
 @import "shell";        // content shell + sidebar + toc + ad rails/units
 @import "search";       // command palette + search page
 @import "home";         // homepage composition
 @import "footer";       // site footer
+@import "resume";       // /resume/ page
+@import "motion";       // background patterns, scroll-reveal, page-transitions, reduced-motion guard
 @import "utilities";    // spacing / text / flex helpers (must stay last)

@@ -82,7 +82,7 @@ header:
     repo: imswarnil/imswarnil.github.io   # owner/repo — live star count
     show_stars: true
   sponsor:
-    enabled: true
+    enabled: false
     url: https://github.com/sponsors/imswarnil
     label: Sponsor
   cta:
@@ -93,7 +93,7 @@ header:
 # Drives _includes/footer.html.
 footer:
   layout: columns           # columns | minimal   ← switch footer style
-  boxed: false              # true = wrap footer in a rounded island card
+  boxed: true               # true = wrap footer in a rounded island card
   tagline: "Engineering meets storytelling — built fast, cinematic, robust."
   show_collections: true    # auto column linking every collection
   show_nav: true            # navigation_footer links
@@ -114,6 +114,12 @@ layout:
 # - "children" renders as submenu (desktop + mobile)
 # -------------------------------------------------
 navigation_header:
+  - title: Home
+    url: /
+    icon: house
+  - title: Explore
+    url: /explore/
+    icon: squares-four
   - title: Blog
     url: /blog/
     icon: pen-nib
@@ -143,12 +149,31 @@ navigation_header:
   - title: About
     url: /about/
     icon: user
+    children:
+      - title: About me
+        url: /about/
+        icon: user
+        sub: Who I am
+      - title: Resume
+        url: /resume/
+        icon: identification-card
+        sub: Experience & skills
+      - title: Now
+        url: /now/
+        icon: clock
+        sub: What I'm focused on
+      - title: Contact
+        url: /contact/
+        icon: chat-circle
+        sub: Get in touch
 
 navigation_footer:
   - title: Home
     url: /
   - title: About
     url: /about/
+  - title: Resume
+    url: /resume/
   - title: Blog
     url: /blog/
   - title: Projects
@@ -191,7 +216,7 @@ fonts:
 resume:
   name: Raja Swarnil Singhai
   tagline: Software Engineer • Filmmaker • Creator
-  avatar: /assets/avatar.jpg
+  avatar: /assets/Swarnil-Singhai.png
 
   contact:
     location: Bangalore, India
@@ -326,7 +351,7 @@ resume:
 
   projects:
     - title: CRM Analytics Academy
-      cover: /assets/projects/academy.jpg
+      cover: /assets/img/placeholder.svg
       meta: Site • Curriculum
       desc: Membership-ready pages with compact tables and code blocks.
       tags: [Web, Analytics]
@@ -335,7 +360,7 @@ resume:
       time: May 2025
 
     - title: Docs Theme (Island UI)
-      cover: /assets/projects/docs.jpg
+      cover: /assets/img/placeholder.svg
       meta: Jekyll • Islands
       desc: Sticky header, fixed mobile bar, bento panel with keyboard escape.
       tags: [Web, Jekyll]
@@ -343,7 +368,7 @@ resume:
       time: Aug 2025
 
     - title: Quote-to-Agreement UX
-      cover: /assets/projects/qta.jpg
+      cover: /assets/img/placeholder.svg
       meta: Flow • UX
       desc: Guided steps with compact controls and accessible validation.
       tags: [App, UX]
@@ -362,12 +387,13 @@ excerpt_separator: <!-- more -->    # Marks end of excerpt in posts
 # are read by the IM card + JSON-LD includes. `image` is the collection's
 # fallback cover used when an entry has no `image` of its own.
 collections:
-  blog:
+  posts:
     output: true
     title: Blog
     singular: Post
     description: "Essays, how-tos and field notes on engineering & craft."
-    permalink: /blog/:name/
+    permalink: /blog/:title/
+    landing: /blog/          # actual listing-page URL (permalink above is a per-doc pattern, not a link target)
     icon: pen-nib
     schema: BlogPosting
     style: numbered
@@ -378,6 +404,7 @@ collections:
     singular: Project
     description: "Things I've designed, built and shipped."
     permalink: /projects/:name/
+    landing: /projects/
     icon: rocket-launch
     schema: CreativeWork
     style: bento
@@ -388,6 +415,7 @@ collections:
     singular: Work
     description: "Selected work — film, design and product."
     permalink: /portfolio/:name/
+    landing: /portfolio/
     icon: images
     schema: CreativeWork
     style: gallery
@@ -398,6 +426,7 @@ collections:
     singular: Video
     description: "Films, edits and video essays."
     permalink: /videos/:name/
+    landing: /videos/
     icon: video
     schema: VideoObject
     style: featured
@@ -408,6 +437,7 @@ collections:
     singular: Snippet
     description: "Short, copy-pasteable code snippets and TILs."
     permalink: /snippets/:name/
+    landing: /snippets/
     icon: code
     schema: TechArticle
     style: compact
@@ -418,6 +448,7 @@ collections:
     singular: Prompt
     description: "Battle-tested AI prompts you can copy and run."
     permalink: /prompts/:name/
+    landing: /prompts/
     icon: sparkle
     schema: CreativeWork
     style: cards
@@ -453,7 +484,7 @@ plugins:
 # jekyll-paginate-v2 — paginates the blog collection listing
 pagination:
   enabled: true
-  collection: blog
+  collection: posts
   per_page: 6
   permalink: "/page/:num/"
   sort_field: "date"

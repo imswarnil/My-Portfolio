@@ -9,6 +9,31 @@
   border-top: 1px solid var(--im-color-border);
   background: var(--im-color-background);
 }
+
+.im-footer-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--im-space-5);
+  padding-bottom: var(--im-space-7);
+  margin-bottom: var(--im-space-7);
+  border-bottom: 1px solid var(--im-color-border);
+}
+.im-footer-cta-eyebrow {
+  margin: 0 0 var(--im-space-1);
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--im-color-secondary);
+}
+.im-footer-cta-title {
+  margin: 0;
+  font-size: var(--im-text-2xl);
+  letter-spacing: -0.02em;
+  max-width: 26ch;
+}
 .im-footer-inner {
   width: 100%;
   max-width: calc(var(--im-container-wide) + var(--im-gutter) * 2);

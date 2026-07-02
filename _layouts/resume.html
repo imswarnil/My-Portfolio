@@ -1,0 +1,139 @@
+---
+layout: default
+---
+{%- assign r = site.resume -%}
+<article class="im-resume im-container-wide im-page im-reveal">
+
+  <header class="im-resume-head">
+    <img class="im-resume-avatar" src="{{ r.avatar | relative_url }}" alt="{{ r.name }}" width="96" height="96">
+    <div class="im-resume-head-body">
+      <h1 class="im-resume-name">{{ r.name }}</h1>
+      <p class="im-resume-tagline">{{ r.tagline }}</p>
+      <ul class="im-resume-contact">
+        {%- if r.contact.location %}<li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ r.contact.location }}</li>{% endif -%}
+        {%- if r.contact.email %}<li><a href="mailto:{{ r.contact.email }}"><i class="ph-bold ph-envelope" aria-hidden="true"></i> {{ r.contact.email }}</a></li>{% endif -%}
+        {%- if r.contact.site %}<li><a href="https://{{ r.contact.site }}"><i class="ph-bold ph-globe" aria-hidden="true"></i> {{ r.contact.site }}</a></li>{% endif -%}
+      </ul>
+    </div>
+    <div class="im-resume-actions im-no-print">
+      <button type="button" class="im-btn im-btn-outline" data-im-print><i class="ph-bold ph-printer" aria-hidden="true"></i> Save as PDF</button>
+      <a class="im-btn" href="{{ '/contact/' | relative_url }}"><i class="ph-bold ph-chat-circle" aria-hidden="true"></i> Get in touch</a>
+    </div>
+  </header>
+
+  {%- if r.stats.size > 0 -%}
+  <div class="stats im-resume-stats">
+    {%- for s in r.stats -%}
+    {% include components/stat.html value=s.v label=s.k icon=s.icon %}
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+
+  <div class="im-resume-grid">
+    <div class="im-resume-main">
+
+      {%- if r.experience.size > 0 -%}
+      <section class="im-resume-section">
+        <h2 class="im-resume-heading"><i class="ph-bold ph-briefcase" aria-hidden="true"></i> Experience</h2>
+        <ol class="timeline">
+          {%- for e in r.experience -%}
+          <li class="timeline__item">
+            <span class="timeline__date">{{ e.when }}</span>
+            <h3 class="timeline__title">{{ e.role }} · {{ e.org }}{% if e.where %} <span class="im-resume-where">— {{ e.where }}</span>{% endif %}</h3>
+            <div class="timeline__body">
+              <p>{{ e.body | markdownify }}</p>
+              {%- if e.points.size > 0 -%}
+              <ul class="im-resume-points">{%- for p in e.points -%}<li>{{ p }}</li>{%- endfor -%}</ul>
+              {%- endif -%}
+              {%- if e.tags.size > 0 -%}
+              <p class="im-resume-tags">{%- for t in e.tags -%}<span class="badge">{{ t }}</span>{%- endfor -%}</p>
+              {%- endif -%}
+            </div>
+          </li>
+          {%- endfor -%}
+        </ol>
+      </section>
+      {%- endif -%}
+
+      {%- if r.education.size > 0 -%}
+      <section class="im-resume-section">
+        <h2 class="im-resume-heading"><i class="ph-bold ph-graduation-cap" aria-hidden="true"></i> Education</h2>
+        <ol class="timeline">
+          {%- for ed in r.education -%}
+          <li class="timeline__item">
+            <span class="timeline__date">{{ ed.when }}</span>
+            <h3 class="timeline__title">{{ ed.degree }} · {{ ed.school }}{% if ed.where %} <span class="im-resume-where">— {{ ed.where }}</span>{% endif %}</h3>
+            <div class="timeline__body"><p>{{ ed.body | markdownify }}</p></div>
+          </li>
+          {%- endfor -%}
+        </ol>
+      </section>
+      {%- endif -%}
+
+      {%- if r.projects.size > 0 -%}
+      <section class="im-resume-section">
+        <h2 class="im-resume-heading"><i class="ph-bold ph-rocket-launch" aria-hidden="true"></i> Selected projects</h2>
+        <div class="card-grid">
+          {%- for p in r.projects -%}
+          <div class="card">
+            <div class="im-resume-project-cover"><img src="{% include utility/image.html image=p.cover %}" alt="" loading="lazy"></div>
+            <h3 class="card__title">{{ p.title }}</h3>
+            <p class="card__text">{{ p.desc }}</p>
+            {%- if p.tags.size > 0 -%}<p class="im-resume-tags">{%- for t in p.tags -%}<span class="badge">{{ t }}</span>{%- endfor -%}</p>{%- endif -%}
+            <span class="card__footer">
+              {%- if p.demo %}<a class="readmore" href="{{ p.demo }}">Demo <i class="ph-bold ph-arrow-square-out"></i></a>{% endif -%}
+              {%- if p.repo %}<a class="readmore" href="{{ p.repo }}">Code <i class="ph-bold ph-arrow-square-out"></i></a>{% endif -%}
+            </span>
+          </div>
+          {%- endfor -%}
+        </div>
+      </section>
+      {%- endif -%}
+    </div>
+
+    <aside class="im-resume-aside">
+      {%- if r.skills.size > 0 -%}
+      <section class="im-resume-section">
+        <h2 class="im-resume-heading"><i class="ph-bold ph-gauge" aria-hidden="true"></i> Skills</h2>
+        <ul class="im-resume-skills">
+          {%- for s in r.skills -%}
+          <li>
+            <div class="im-resume-skill-label"><span>{{ s.name }}</span><span>{{ s.level }}</span></div>
+            <div class="im-resume-skill-bar"><span style="width: {{ s.percent }}%"></span></div>
+          </li>
+          {%- endfor -%}
+        </ul>
+      </section>
+      {%- endif -%}
+
+      {%- if r.awards.size > 0 -%}
+      <section class="im-resume-section">
+        <h2 class="im-resume-heading"><i class="ph-bold ph-trophy" aria-hidden="true"></i> Awards</h2>
+        <ul class="im-resume-awards">
+          {%- for a in r.awards -%}
+          <li><i class="ph-bold {{ a.icon }}" aria-hidden="true"></i> <span><strong>{{ a.title }}</strong><br>{{ a.meta }}</span></li>
+          {%- endfor -%}
+        </ul>
+      </section>
+      {%- endif -%}
+
+      {%- if r.lines.size > 0 -%}
+      <section class="im-resume-section">
+        <h2 class="im-resume-heading"><i class="ph-bold ph-star" aria-hidden="true"></i> Highlights</h2>
+        <ul class="im-resume-lines">{%- for l in r.lines -%}<li>{{ l }}</li>{%- endfor -%}</ul>
+      </section>
+      {%- endif -%}
+
+      {%- if r.links.size > 0 -%}
+      <section class="im-resume-section im-no-print">
+        <h2 class="im-resume-heading"><i class="ph-bold ph-link" aria-hidden="true"></i> Elsewhere</h2>
+        <ul class="im-resume-links">
+          {%- for l in r.links -%}
+          <li><a href="{{ l.href }}"><i class="ph-bold {{ l.icon }}" aria-hidden="true"></i> {{ l.label }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </section>
+      {%- endif -%}
+    </aside>
+  </div>
+</article>

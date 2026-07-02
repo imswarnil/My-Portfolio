@@ -32,5 +32,8 @@
       {%- if include.score %}<span class="im-pcard-score">★ {{ include.score }}/5</span>{% endif -%}
       {%- if it.read_time %}<span>· {{ it.read_time }} min</span>{% endif -%}
     </div>
+    {%- if it.tags.size > 0 -%}
+    <div class="im-pcard-tagrow">{%- for t in it.tags limit: 3 -%}<span class="im-pcard-tag">#{{ t }}</span>{%- endfor -%}</div>
+    {%- endif -%}
   </div>
 </article>

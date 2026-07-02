@@ -4,9 +4,15 @@ layout: default
 {%- if page.list_collection -%}
   {%- assign coll = site.collections | where: "label", page.list_collection | first -%}
   <section class="im-collection im-page">
-    <header class="im-collection-head">
+    <header class="im-collection-head im-bg-dots im-reveal">
+      <span class="im-collection-icon"><i class="ph-bold ph-{{ coll.icon | default: 'folder' }}" aria-hidden="true"></i></span>
       <h1 class="im-collection-title">{{ page.title | default: coll.title }}</h1>
       {%- if coll.description %}<p class="im-collection-desc">{{ coll.description }}</p>{% endif -%}
+      <div class="im-collection-stats">
+        <span><strong>{{ coll.docs.size }}</strong> {{ coll.title | downcase }}</span>
+        {%- assign latest = coll.docs | sort: "date" | last -%}
+        {%- if latest.date %}<span>Updated <strong>{{ latest.date | date: "%b %Y" }}</strong></span>{% endif -%}
+      </div>
     </header>
     {%- if page.content != "" -%}<div class="im-prose im-margin-bottom-5">{{ content }}</div>{%- endif -%}
     {% include utility/collection-list.html collection=page.list_collection %}

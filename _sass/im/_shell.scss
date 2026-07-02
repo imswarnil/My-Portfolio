@@ -127,18 +127,30 @@
 @media (min-width: 992px) { .im-toc-mobile { display: none; } }
 
 // ---- Ad unit ----------------------------------------------------------
+// AdSense's auto-format script sets its own inline width/height on the
+// `ins`/iframe it injects — cap them at the container's box no matter what
+// Google decides to set, so a slow-to-detect container width can never
+// blow out the layout or cause horizontal page scroll.
 .im-ad {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--im-space-2);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: var(--im-space-3);
   border: 1px solid var(--im-color-border);
   border-radius: var(--im-radius-3);
   background: var(--im-color-background-100);
   overflow: hidden;
+  contain: layout;
 
-  ins { display: block; width: 100%; }
+  ins, ins.adsbygoogle, iframe {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 .im-ad-label {
   align-self: flex-start;
@@ -160,7 +172,45 @@
 .im-ad--horizontal .im-ad-placeholder,
 .im-ad--in_article .im-ad-placeholder { min-height: 5.5rem; }
 .im-ad--vertical .im-ad-placeholder { min-height: 30rem; }
-.im-ad--in_article { margin-block: var(--im-space-6); }
+.im-ad--in_article,
+.im-ad--inline { margin-block: var(--im-space-6); }
+
+// ---- Floating bottom leaderboard (728x90) ------------------------------
+// Desktop only — a small ad on a phone screen just eats the viewport.
+.im-sticky-ad {
+  display: none;
+  position: fixed;
+  left: 50%;
+  bottom: var(--im-space-4);
+  z-index: $z-toast;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 750px;
+  padding-right: 2.5rem;
+
+  .im-ad { margin: 0; box-shadow: var(--im-shadow-lg); }
+  .im-ad-placeholder { min-height: 90px; }
+
+  @media (min-width: 768px) { &:not([hidden]) { display: block; } }
+}
+.im-sticky-ad-close {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--im-color-border);
+  border-radius: 50%;
+  background: var(--im-color-surface);
+  color: var(--im-color-secondary);
+  cursor: pointer;
+  transition: color var(--im-dur-1) var(--im-ease), background-color var(--im-dur-1) var(--im-ease);
+  &:hover { color: var(--im-color-contrast); background: var(--im-color-background-100); }
+}
 
 // ---- Prompt box (prompts collection) ---------------------------------
 .im-promptbox {
