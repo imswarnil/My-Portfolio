@@ -101,3 +101,146 @@ a.im-sitetree-link:hover { color: var(--im-color-contrast); text-decoration: und
   }
 }
 .im-sitetree details[open] > summary.im-sitetree-link::before { transform: translateY(-50%) rotate(90deg); }
+
+// ======================================================================
+// Visual tree diagram (.im-orgtree) — the classic pure-CSS org-chart
+// pattern: nested <ul>, connector lines drawn on ::before/::after. Shown
+// on md+ screens only; the plain .im-sitetree-list above is always
+// rendered (mobile view + guaranteed-crawlable text for SEO).
+// ======================================================================
+.im-sitetree-list { display: block; margin-top: var(--im-space-8); }
+
+.im-orgtree-wrap {
+  display: none;
+  overflow-x: auto;
+  padding: var(--im-space-6) var(--im-space-4) var(--im-space-4);
+  margin-top: var(--im-space-7);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-6);
+  background: var(--im-color-background-100);
+}
+
+@media (min-width: $bp-lg) {
+  .im-orgtree-wrap { display: block; }
+  .im-sitetree-list {
+    // keep it in the DOM (text content, SEO) but visually tucked away
+    // under a labelled disclosure once the diagram is available.
+    margin-top: var(--im-space-8);
+  }
+}
+
+.im-orgtree,
+.im-orgtree ul {
+  display: flex;
+  padding-top: var(--im-space-6);
+  position: relative;
+  width: fit-content;
+  min-width: 100%;
+  justify-content: center;
+}
+.im-orgtree ul { padding-top: var(--im-space-6); }
+
+.im-orgtree li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  position: relative;
+  padding: var(--im-space-6) var(--im-space-3) 0;
+}
+
+// Connector lines: each li gets a line up to its parent's shared bus.
+.im-orgtree li::before,
+.im-orgtree li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  width: 50%;
+  height: var(--im-space-6);
+  border-top: 1px solid var(--im-color-border);
+}
+.im-orgtree li::after {
+  right: auto;
+  left: 50%;
+  border-left: 1px solid var(--im-color-border);
+}
+.im-orgtree li:only-child::before,
+.im-orgtree li:only-child::after { display: none; }
+.im-orgtree li:only-child { padding-top: 0; }
+.im-orgtree li:first-child::before,
+.im-orgtree li:last-child::after { border-color: transparent; }
+.im-orgtree li:last-child::before { border-right: 1px solid var(--im-color-border); border-radius: 0 var(--im-radius-2) 0 0; }
+.im-orgtree li:first-child::after { border-radius: var(--im-radius-2) 0 0 0; }
+
+// Root has no incoming connector.
+.im-orgtree > li::before,
+.im-orgtree > li::after { display: none; }
+.im-orgtree > li { padding-top: 0; }
+
+// Drop-line from a parent node down to its children's shared bus.
+.im-orgtree ul::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 1px solid var(--im-color-border);
+  width: 0;
+  height: var(--im-space-6);
+}
+.im-orgtree > li > ul::before { display: none; }
+
+.im-orgnode {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--im-space-2);
+  width: 6.5rem;
+  padding: var(--im-space-3) var(--im-space-2);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-4);
+  background: var(--im-color-surface);
+  text-decoration: none;
+  color: var(--im-color-foreground);
+  box-shadow: var(--im-shadow);
+  transition: transform var(--im-dur-1) var(--im-ease), border-color var(--im-dur-1) var(--im-ease), box-shadow var(--im-dur-1) var(--im-ease);
+
+  &:hover { transform: translateY(-3px); border-color: var(--im-color-contrast); box-shadow: var(--im-shadow-lg); }
+}
+.im-orgnode-thumb {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--im-radius-3);
+  overflow: hidden;
+  background: var(--im-color-background-200);
+  color: var(--im-color-secondary);
+  font-size: var(--im-text-lg);
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+.im-orgnode-label {
+  font-size: var(--im-text-xs);
+  font-weight: var(--im-fw-semibold);
+  text-align: center;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.im-orgnode-root {
+  width: 8rem;
+  background: var(--im-color-contrast);
+  border-color: var(--im-color-contrast);
+  color: var(--im-color-background);
+  .im-orgnode-thumb { background: color-mix(in srgb, var(--im-color-background) 18%, transparent); color: inherit; }
+  .im-orgnode-label { font-size: var(--im-text-sm); }
+  &:hover { border-color: var(--im-color-contrast); }
+}
+.im-orgnode-leaf { width: 5.5rem; .im-orgnode-thumb { width: 3rem; height: 3rem; } }
+.im-orgnode-more { opacity: 0.75; border-style: dashed; }
+.im-orgnode .im-sitetree-count { margin-top: calc(var(--im-space-1) * -1); }

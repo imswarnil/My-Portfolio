@@ -11,9 +11,24 @@
   {% include ad.html type="square" class="im-widget" %}
   {%- endif -%}
 
+  {%- assign coll = site.collections | where: "label", page.collection | first -%}
+  {%- assign related = coll.docs | where_exp: "d", "d.url != page.url" | sort: "date" | reverse -%}
+  {%- if related.size > 0 -%}
   <section class="im-widget">
-    <h2 class="im-widget-title"><i class="ph-bold ph-user" aria-hidden="true"></i> {{ site.author | default: site.title }}</h2>
+    <h2 class="im-widget-title"><i class="ph-bold ph-{{ coll.icon | default: 'folder' }}" aria-hidden="true"></i> More {{ coll.title | downcase }}</h2>
+    <ul class="im-widget-list">
+      {%- for it in related limit: 3 -%}
+      <li><a href="{{ it.url | relative_url }}">{{ it.title }}</a></li>
+      {%- endfor -%}
+    </ul>
+  </section>
+  {%- endif -%}
+
+  <section class="im-widget im-widget-author">
+    <img class="im-widget-avatar" src="{{ site.avatarurl | relative_url }}" alt="" width="44" height="44">
+    <h2 class="im-widget-title">{{ site.author | default: site.title }}</h2>
     <p class="im-widget-text">{{ site.description | strip_html | truncate: 130 }}</p>
+    {% include footer-social.html %}
     <a class="im-btn im-btn-sm im-btn-outline im-w-full" href="{{ '/about/' | relative_url }}">About me</a>
   </section>
 

@@ -99,6 +99,7 @@
       </button>
     </div>
   </div>
+  {%- if page.collection == "posts" -%}<div class="im-readprogress" data-im-readprogress aria-hidden="true"></div>{%- endif -%}
 </header>
 
 {%- if h.search != false %}{% include search-modal.html %}{% endif -%}

@@ -2,31 +2,111 @@
 layout: default
 title: Sitemap
 permalink: /sitemap/
-description: "Every page on this site, in one tree."
+description: "Every page on this site, in one tree — blog, projects, portfolio, videos, snippets, prompts and every standalone page."
 ad_rails: false
 sidebar: false
 ---
 {%- comment -%}
-  Human-facing, tree-style sitemap. NOT the XML sitemap (that's
-  jekyll-sitemap's /sitemap.xml, for search engines). This page also emits
-  JSON-LD (WebSite + SiteNavigationElement + ItemList) describing the same
-  structure for crawlers that read structured data.
+  Human-facing sitemap: a visual, connector-line tree diagram (desktop) with
+  a plain nested list underneath (always rendered — mobile view + the real,
+  fully-crawlable text content for SEO). NOT the XML sitemap (that's
+  jekyll-sitemap's /sitemap.xml, for search engines). Also emits JSON-LD
+  (BreadcrumbList + WebSite + SiteNavigationElement + a full ItemList of
+  every page) describing the same structure for crawlers.
 {%- endcomment -%}
 {%- assign static_pages = site.pages | where_exp: "p", "p.sitemap != false" | where_exp: "p", "p.list_collection == nil" -%}
+{%- assign leaf_cap = 8 -%}
 
 <section class="im-home im-page">
+  <nav class="im-breadcrumb" aria-label="Breadcrumb">
+    <a href="{{ '/' | relative_url }}">Home</a><span aria-hidden="true">/</span><span>Sitemap</span>
+  </nav>
+
   <header class="im-collection-head im-bg-dots im-reveal">
     <span class="im-collection-icon"><i class="ph-bold ph-tree-structure" aria-hidden="true"></i></span>
     <h1 class="im-collection-title">Sitemap</h1>
-    <p class="im-collection-desc">Every page on this site, in one tree. Looking for the machine-readable version? <a class="im-flink" href="{{ '/sitemap.xml' | relative_url }}">/sitemap.xml</a>.</p>
+    <p class="im-collection-desc">Every page on this site, in one tree — blog, projects, portfolio, videos, snippets, prompts and every standalone page. Looking for the machine-readable version? <a class="im-flink" href="{{ '/sitemap.xml' | relative_url }}">/sitemap.xml</a>.</p>
+    <div class="im-collection-stats">
+      <span><strong>{{ site.collections.size }}</strong> collections</span>
+      <span><strong>{{ static_pages.size }}</strong> pages</span>
+    </div>
   </header>
 
-  <ul class="im-sitetree im-reveal">
+  {%- comment -%} ── Visual tree diagram (desktop only — see .im-orgtree-wrap CSS) ── {%- endcomment -%}
+  <h2 class="im-visually-hidden">Site tree diagram</h2>
+  <div class="im-orgtree-wrap im-reveal">
+    <ul class="im-orgtree">
+      <li>
+        <a class="im-orgnode im-orgnode-root" href="{{ '/' | relative_url }}">
+          <span class="im-orgnode-thumb"><i class="ph-bold ph-house" aria-hidden="true"></i></span>
+          <span class="im-orgnode-label">{{ site.title }}</span>
+        </a>
+
+        <ul>
+          {%- for c in site.collections -%}
+            {%- if c.docs.size > 0 -%}
+            {%- assign sorted_docs = c.docs | sort: "date" | reverse -%}
+            <li>
+              <a class="im-orgnode" href="{{ c.landing | default: c.url | relative_url }}">
+                <span class="im-orgnode-thumb"><i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i></span>
+                <span class="im-orgnode-label">{{ c.title }}</span>
+                <span class="im-sitetree-count">{{ c.docs.size }}</span>
+              </a>
+              <ul>
+                {%- for doc in sorted_docs limit: leaf_cap -%}
+                {%- assign dcover = doc.image | default: doc.cover -%}
+                {%- capture durl -%}{% include utility/image.html image=dcover collection=doc.collection %}{%- endcapture -%}
+                <li>
+                  <a class="im-orgnode im-orgnode-leaf" href="{{ doc.url | relative_url }}">
+                    <span class="im-orgnode-thumb"><img src="{{ durl }}" alt="" loading="lazy" width="48" height="48"></span>
+                    <span class="im-orgnode-label">{{ doc.title | truncate: 24 }}</span>
+                  </a>
+                </li>
+                {%- endfor -%}
+                {%- if sorted_docs.size > leaf_cap -%}
+                <li>
+                  <a class="im-orgnode im-orgnode-more" href="{{ c.landing | default: c.url | relative_url }}">
+                    <span class="im-orgnode-thumb"><i class="ph-bold ph-dots-three" aria-hidden="true"></i></span>
+                    <span class="im-orgnode-label">+{{ sorted_docs.size | minus: leaf_cap }} more</span>
+                  </a>
+                </li>
+                {%- endif -%}
+              </ul>
+            </li>
+            {%- endif -%}
+          {%- endfor -%}
+
+          <li>
+            <a class="im-orgnode" href="{{ '/sitemap/' | relative_url }}">
+              <span class="im-orgnode-thumb"><i class="ph-bold ph-file-text" aria-hidden="true"></i></span>
+              <span class="im-orgnode-label">Pages</span>
+              <span class="im-sitetree-count">{{ static_pages.size }}</span>
+            </a>
+            <ul>
+              {%- for p in static_pages limit: leaf_cap -%}
+                {%- if p.url != "/" and p.title -%}
+                <li>
+                  <a class="im-orgnode im-orgnode-leaf" href="{{ p.url | relative_url }}">
+                    <span class="im-orgnode-thumb"><i class="ph-bold ph-{{ p.nav_icon | default: 'file' }}" aria-hidden="true"></i></span>
+                    <span class="im-orgnode-label">{{ p.title | truncate: 24 }}</span>
+                  </a>
+                </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  {%- comment -%} ── Plain nested list — always rendered: mobile view + fully-crawlable text ── {%- endcomment -%}
+  <h2 class="im-visually-hidden">Site tree, list view</h2>
+  <ul class="im-sitetree im-sitetree-list im-reveal">
     <li>
       <a class="im-sitetree-link im-sitetree-root" href="{{ '/' | relative_url }}"><i class="ph-bold ph-house" aria-hidden="true"></i> {{ site.title }}</a>
 
       <ul>
-        {%- comment -%} Collections, each with its docs nested underneath {%- endcomment -%}
         {%- for c in site.collections -%}
           {%- if c.docs.size > 0 -%}
           <li>
@@ -43,7 +123,6 @@ sidebar: false
           {%- endif -%}
         {%- endfor -%}
 
-        {%- comment -%} Standalone pages {%- endcomment -%}
         <li>
           <details open>
             <summary class="im-sitetree-link"><i class="ph-bold ph-file-text" aria-hidden="true"></i> Pages <span class="im-sitetree-count">{{ static_pages.size }}</span></summary>
@@ -61,7 +140,7 @@ sidebar: false
   </ul>
 </section>
 
-{%- comment -%} ── JSON-LD: WebSite + primary nav + full page list ── {%- endcomment -%}
+{%- comment -%} ── JSON-LD: Breadcrumb + WebSite + primary nav + full page list ── {%- endcomment -%}
 {%- assign nav_elements = "" | split: "" -%}
 {%- for item in site.navigation_header -%}
   {%- capture el -%}{"@type":"SiteNavigationElement","name":{{ item.title | jsonify }},"url":{{ item.url | absolute_url | jsonify }}}{%- endcapture -%}
@@ -90,6 +169,13 @@ sidebar: false
 {
   "@context": "https://schema.org",
   "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ "/" | absolute_url | jsonify }} },
+        { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": {{ page.url | absolute_url | jsonify }} }
+      ]
+    },
     {
       "@type": "WebSite",
       "name": {{ site.title | jsonify }},

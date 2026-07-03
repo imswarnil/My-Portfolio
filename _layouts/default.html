@@ -43,6 +43,24 @@
           try { localStorage.setItem('im-color-scheme', next); } catch (e) {}
         });
       }
+      // Scroll shadow + reading-progress bar
+      var scrollTicking = false;
+      var progressBar = document.querySelector('[data-im-readprogress]');
+      function onScroll() {
+        if (navbar) { navbar.classList.toggle('is-scrolled', window.scrollY > 8); }
+        if (progressBar) {
+          var doc = document.documentElement;
+          var max = doc.scrollHeight - doc.clientHeight;
+          var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+          progressBar.style.width = Math.min(100, Math.max(0, pct)) + '%';
+        }
+        scrollTicking = false;
+      }
+      onScroll();
+      window.addEventListener('scroll', function () {
+        if (!scrollTicking) { window.requestAnimationFrame(onScroll); scrollTicking = true; }
+      }, { passive: true });
+
       // Live GitHub star count
       var gh = document.querySelector('[data-im-ghstars]');
       if (gh) {

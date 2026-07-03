@@ -25,8 +25,25 @@
 // ---- Full-width bar ---------------------------------------------------
 .im-navbar--full {
   background: color-mix(in srgb, var(--im-color-background) 88%, transparent);
-  border-bottom: 1px solid var(--im-color-border);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--im-dur-2) var(--im-ease), box-shadow var(--im-dur-2) var(--im-ease), background-color var(--im-dur-2) var(--im-ease);
   &.is-blur { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  &.is-scrolled {
+    border-bottom-color: var(--im-color-border);
+    box-shadow: var(--im-shadow);
+    background: color-mix(in srgb, var(--im-color-background) 96%, transparent);
+  }
+}
+
+// Slim reading-progress bar, only meaningful (and only shown) on post pages.
+.im-readprogress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 0%;
+  background: var(--im-color-accent);
+  transition: width 80ms linear;
 }
 
 // ---- Floating island --------------------------------------------------
@@ -41,8 +58,10 @@
     border-radius: var(--im-radius-6);
     background: color-mix(in srgb, var(--im-color-background) 82%, transparent);
     box-shadow: var(--im-shadow);
+    transition: box-shadow var(--im-dur-2) var(--im-ease);
   }
   &.is-blur .im-navbar-inner { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  &.is-scrolled .im-navbar-inner { box-shadow: var(--im-shadow-lg); }
 }
 
 // ---- Brand ------------------------------------------------------------
