@@ -33,12 +33,29 @@
     {%- comment -%} "Big typographic" — link columns + meta on top, a huge faint wordmark with social icons overlaid below. {%- endcomment -%}
     <div class="im-footer-top">
       <div class="im-footer-cols">
+
+        {%- if f.show_details != false -%}
+        <div class="im-footer-col im-footer-details">
+          <a class="im-footer-brand" href="{{ '/' | relative_url }}">
+            {%- if site.logo %}<img src="{{ site.logo | relative_url }}" alt="">{% endif %}<span>{{ site.title }}</span>
+          </a>
+          {%- if f.tagline %}<p class="im-footer-tagline">{{ f.tagline }}</p>{% endif -%}
+          <ul class="im-footer-meta-list">
+            {%- if site.location -%}<li><i class="ph-bold ph-map-pin" aria-hidden="true"></i> {{ site.location }}</li>{%- endif -%}
+            {%- if site.email -%}<li><a class="im-flink" href="mailto:{{ site.email }}"><i class="ph-bold ph-envelope-simple" aria-hidden="true"></i> {{ site.email }}</a></li>{%- endif -%}
+          </ul>
+          {%- include footer-social.html -%}
+        </div>
+        {%- endif -%}
+
         {%- if f.show_collections != false -%}
         <nav class="im-footer-col" aria-label="Explore">
           <h3 class="im-footer-title">Explore</h3>
-          <ul class="im-footer-links">
+          <ul class="im-footer-cloud">
             {%- for c in site.collections -%}
-              {%- if c.docs.size > 0 -%}<li><a class="im-flink" href="{{ c.landing | default: c.url | relative_url }}">{{ c.title | default: c.label }}</a></li>{%- endif -%}
+              {%- if c.docs.size > 0 -%}
+              <li><a class="im-footer-cloud-item" href="{{ c.landing | default: c.url | relative_url }}"><i class="ph-bold ph-{{ c.icon | default: 'folder' }}" aria-hidden="true"></i> {{ c.title | default: c.label }}</a></li>
+              {%- endif -%}
             {%- endfor -%}
           </ul>
         </nav>
@@ -48,8 +65,14 @@
         <nav class="im-footer-col" aria-label="Site">
           <h3 class="im-footer-title">Site</h3>
           <ul class="im-footer-links">
-            {%- for item in site.navigation_footer -%}<li><a class="im-flink" href="{{ item.url | relative_url }}">{{ item.title }}</a></li>{%- endfor -%}
+            {%- assign nav_limit = f.nav_limit | default: 7 -%}
+            {%- for item in site.navigation_footer limit: nav_limit -%}<li><a class="im-flink" href="{{ item.url | relative_url }}">{{ item.title }}</a></li>{%- endfor -%}
           </ul>
+          {%- if f.show_legal != false and site.navigation_legal -%}
+          <ul class="im-footer-links im-footer-legal">
+            {%- for item in site.navigation_legal -%}<li><a class="im-flink" href="{{ item.url | relative_url }}">{{ item.title }}</a></li>{%- endfor -%}
+          </ul>
+          {%- endif -%}
         </nav>
         {%- endif -%}
 
@@ -59,7 +82,7 @@
           <p class="im-footer-tagline">New posts &amp; videos, no spam.</p>
           <form class="im-footer-form" action="{{ f.newsletter.action }}" method="post">
             <input type="email" name="email" placeholder="{{ f.newsletter.placeholder | default: 'you@email.com' }}" required aria-label="Email">
-            <button class="im-btn im-btn-sm" type="submit"><i class="ph-bold ph-paper-plane-tilt"></i></button>
+            <button class="im-btn im-btn-sm" type="submit" aria-label="Subscribe"><i class="ph-bold ph-paper-plane-tilt"></i></button>
           </form>
         </div>
         {%- endif -%}
@@ -73,7 +96,6 @@
 
     <div class="im-footer-wordmark-wrap">
       <a class="im-footer-wordmark" href="{{ '/' | relative_url }}" aria-label="{{ site.title }}">{{ site.title }}</a>
-      {%- include footer-social.html -%}
     </div>
   {%- endif -%}
 

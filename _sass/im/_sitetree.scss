@@ -103,30 +103,71 @@ a.im-sitetree-link:hover { color: var(--im-color-contrast); text-decoration: und
 .im-sitetree details[open] > summary.im-sitetree-link::before { transform: translateY(-50%) rotate(90deg); }
 
 // ======================================================================
-// Visual tree diagram (.im-orgtree) — the classic pure-CSS org-chart
-// pattern: nested <ul>, connector lines drawn on ::before/::after. Shown
-// on md+ screens only; the plain .im-sitetree-list above is always
-// rendered (mobile view + guaranteed-crawlable text for SEO).
+// View toggle — lets the user switch between the tree diagram and the
+// plain list. Both are always in the DOM (guaranteed-crawlable text for
+// SEO); [data-sitemap-views] just controls which one is visible. Before
+// JS runs, both are hidden via [data-sitemap-views]:not([data-view]) so
+// there's no flash of both stacked — the inline script in sitemap.html
+// sets data-view synchronously on load.
 // ======================================================================
-.im-sitetree-list { display: block; margin-top: var(--im-space-8); }
+// Hidden until JS has picked a view (see below) — no point toggling before then.
+.im-sitemap-toggle {
+  display: none;
+  gap: var(--im-space-1);
+  padding: var(--im-space-1);
+  margin-top: var(--im-space-6);
+  border: 1px solid var(--im-color-border);
+  border-radius: var(--im-radius-pill);
+  background: var(--im-color-background-100);
+
+  &.is-ready { display: inline-flex; }
+}
+.im-sitemap-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--im-space-2);
+  padding: var(--im-space-2) var(--im-space-4);
+  border: 0;
+  border-radius: var(--im-radius-pill);
+  background: transparent;
+  color: var(--im-color-secondary);
+  font-family: var(--im-font-body);
+  font-size: var(--im-text-sm);
+  font-weight: var(--im-fw-semibold);
+  cursor: pointer;
+  transition: background var(--im-dur-1) var(--im-ease), color var(--im-dur-1) var(--im-ease);
+
+  &:hover { color: var(--im-color-contrast); }
+  &.is-active {
+    background: var(--im-color-contrast);
+    color: var(--im-color-background);
+  }
+}
+
+[data-sitemap-views] {
+  .im-orgtree-wrap,
+  .im-sitetree-list { display: none; }
+
+  &[data-view="tree"] .im-orgtree-wrap { display: block; }
+  &[data-view="list"] .im-sitetree-list { display: block; }
+
+  // No-JS fallback: show the always-crawlable list.
+  &:not([data-view]) .im-sitetree-list { display: block; }
+}
+
+// ======================================================================
+// Visual tree diagram (.im-orgtree) — the classic pure-CSS org-chart
+// pattern: nested <ul>, connector lines drawn on ::before/::after.
+// ======================================================================
+.im-sitetree-list { margin-top: var(--im-space-8); }
 
 .im-orgtree-wrap {
-  display: none;
   overflow-x: auto;
   padding: var(--im-space-6) var(--im-space-4) var(--im-space-4);
   margin-top: var(--im-space-7);
   border: 1px solid var(--im-color-border);
   border-radius: var(--im-radius-6);
   background: var(--im-color-background-100);
-}
-
-@media (min-width: $bp-lg) {
-  .im-orgtree-wrap { display: block; }
-  .im-sitetree-list {
-    // keep it in the DOM (text content, SEO) but visually tucked away
-    // under a labelled disclosure once the diagram is available.
-    margin-top: var(--im-space-8);
-  }
 }
 
 .im-orgtree,

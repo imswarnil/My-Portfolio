@@ -107,11 +107,62 @@
   }
 
   .im-footer-cols {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: var(--im-space-7);
+    width: 100%;
+
+    @include mq($bp-sm) { grid-template-columns: repeat(2, 1fr); }
+    @include mq($bp-lg) { grid-template-columns: repeat(4, 1fr); }
   }
-  .im-footer-news { flex-basis: 100%; @include mq($bp-sm) { flex-basis: auto; } }
+  .im-footer-col { min-width: 0; }
+
+  // Column 1 — brand, tagline, location/email, social.
+  .im-footer-details {
+    .im-footer-brand { margin-bottom: 0; }
+  }
+  .im-footer-meta-list {
+    list-style: none;
+    margin: var(--im-space-3) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--im-space-2);
+    font-size: var(--im-text-sm);
+    color: var(--im-color-secondary);
+    i { margin-right: var(--im-space-1); color: var(--im-color-mute); }
+  }
+  .im-footer-details .im-footer-social { margin-top: var(--im-space-4); }
+
+  // Column 2 — collection cloud: compact icon pills instead of a tall list.
+  .im-footer-cloud {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-wrap: wrap; gap: var(--im-space-2);
+  }
+  .im-footer-cloud-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--im-space-2);
+    padding: var(--im-space-2) var(--im-space-3);
+    border: 1px solid var(--im-color-border);
+    border-radius: var(--im-radius-pill);
+    font-size: var(--im-text-sm);
+    color: var(--im-color-foreground);
+    text-decoration: none;
+    transition: color var(--im-dur-1) var(--im-ease), border-color var(--im-dur-1) var(--im-ease), background var(--im-dur-1) var(--im-ease);
+    i { color: var(--im-color-mute); }
+    &:hover { color: var(--im-color-contrast); border-color: var(--im-color-contrast); background: var(--im-color-background-100); }
+  }
+
+  // Column 3 — site nav (capped) + legal links underneath.
+  .im-footer-legal {
+    margin-top: var(--im-space-5);
+    padding-top: var(--im-space-5);
+    border-top: 1px solid var(--im-color-border);
+    font-size: var(--im-text-xs);
+  }
+
+  .im-footer-news { min-width: 0; }
 
   .im-footer-meta {
     display: flex;

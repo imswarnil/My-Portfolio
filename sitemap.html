@@ -32,7 +32,18 @@ sidebar: false
     </div>
   </header>
 
-  {%- comment -%} ── Visual tree diagram (desktop only — see .im-orgtree-wrap CSS) ── {%- endcomment -%}
+  <div class="im-sitemap-toggle im-reveal" role="group" aria-label="Sitemap view">
+    <button type="button" class="im-sitemap-toggle-btn" data-sitemap-view-btn="tree">
+      <i class="ph-bold ph-tree-structure" aria-hidden="true"></i> Tree
+    </button>
+    <button type="button" class="im-sitemap-toggle-btn" data-sitemap-view-btn="list">
+      <i class="ph-bold ph-list-bullets" aria-hidden="true"></i> List
+    </button>
+  </div>
+
+  <div class="im-sitemap-views" data-sitemap-views>
+
+  {%- comment -%} ── Visual tree diagram — connector-line org chart ── {%- endcomment -%}
   <h2 class="im-visually-hidden">Site tree diagram</h2>
   <div class="im-orgtree-wrap im-reveal">
     <ul class="im-orgtree">
@@ -138,6 +149,35 @@ sidebar: false
       </ul>
     </li>
   </ul>
+
+  </div>
+
+  <script>
+  (function () {
+    var KEY = "im-sitemap-view";
+    var root = document.querySelector("[data-sitemap-views]");
+    var btns = document.querySelectorAll("[data-sitemap-view-btn]");
+    if (!root || !btns.length) return;
+
+    function setView(view, persist) {
+      root.setAttribute("data-view", view);
+      btns.forEach(function (btn) {
+        btn.classList.toggle("is-active", btn.getAttribute("data-sitemap-view-btn") === view);
+        btn.setAttribute("aria-pressed", btn.getAttribute("data-sitemap-view-btn") === view);
+      });
+      if (persist) { try { localStorage.setItem(KEY, view); } catch (e) {} }
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    setView(saved || (window.innerWidth >= 992 ? "tree" : "list"), false);
+    document.querySelector(".im-sitemap-toggle").classList.add("is-ready");
+
+    btns.forEach(function (btn) {
+      btn.addEventListener("click", function () { setView(btn.getAttribute("data-sitemap-view-btn"), true); });
+    });
+  })();
+  </script>
 </section>
 
 {%- comment -%} ── JSON-LD: Breadcrumb + WebSite + primary nav + full page list ── {%- endcomment -%}

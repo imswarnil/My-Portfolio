@@ -95,12 +95,23 @@
   margin-inline: auto;
   justify-self: end;
 
+  // Mobile: image leads (above the text), and reads as a square.
+  order: -1;
+
   img,
   video {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     border-radius: var(--im-radius-6);
     box-shadow: var(--im-shadow-lg);
     object-fit: cover;
+  }
+
+  @include mq($bp-lg) {
+    // Desktop two-column layout: image sits on the right, in its own column.
+    order: 0;
+
+    img,
+    video { aspect-ratio: 4 / 5; }
   }
 }

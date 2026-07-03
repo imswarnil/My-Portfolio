@@ -95,12 +95,15 @@ footer:
   layout: columns           # columns | minimal   ← switch footer style
   boxed: true               # true = wrap footer in a rounded island card
   tagline: "Engineering meets storytelling — built fast, cinematic, robust."
-  show_collections: true    # auto column linking every collection
+  show_details: true        # site details column (brand, location, email, social)
+  show_collections: true    # collection cloud — icon pill per collection
   show_nav: true            # navigation_footer links
+  nav_limit: 7              # cap the "Site" column so it doesn't grow tall
+  show_legal: true          # navigation_legal links (privacy, terms)
   show_social: true
   newsletter:
-    enabled: false
-    action: ""              # form POST endpoint (Buttondown/Mailchimp/etc.)
+    enabled: true
+    action: ""              # form POST endpoint (Buttondown/Mailchimp/etc.) — fill in before going live
     placeholder: "you@email.com"
 
 # Reading layout: narrower content column + right sidebar + optional ad rails.
@@ -171,29 +174,31 @@ navigation_header:
         icon: chat-circle
         sub: Get in touch
 
+# Kept short on purpose — the footer caps this list (site.footer.nav_limit)
+# so the "Site" column doesn't grow tall with every collection/page. The
+# collection cloud already links every collection with an icon.
 navigation_footer:
-  - title: Home
-    url: /
   - title: About
     url: /about/
   - title: Resume
     url: /resume/
   - title: Blog
     url: /blog/
-  - title: Projects
-    url: /projects/
-  - title: Portfolio
-    url: /portfolio/
-  - title: Videos
-    url: /videos/
-  - title: Snippets
-    url: /snippets/
-  - title: Prompts
-    url: /prompts/
+  - title: Now
+    url: /now/
+  - title: Timeline
+    url: /timeline/
   - title: Contact
     url: /contact/
   - title: Sitemap
     url: /sitemap/
+
+# Legal / policy links — rendered in their own footer row.
+navigation_legal:
+  - title: Privacy Policy
+    url: /privacy/
+  - title: Terms of Use
+    url: /terms/
 
 
 
