@@ -18,6 +18,7 @@ url: "https://dev.imswarnil.com"    # Site url, also used in jekyll-seo-tag
 baseurl: ""                     # Base URL (for GitHub Pages etc.)
 logo: "/assets/logos/logo.svg"  # Site logo (also jekyll-seo-tag)
 avatarurl: "/assets/logos/logo@512px.png"
+hero_video: "jNQXAC9IP4o"        # demo YouTube id → shows a "Watch" CTA + play overlay on the hero. Replace with your own, or set to "" to hide. Per-page front matter `hero_video:` overrides.
 email: "contact@imswarnil.com"
 location: "Bengaluru, India"
 repo: "https://github.com/imswarnil.github.io"
@@ -68,15 +69,17 @@ social_links:
 # -------------------------------------------------
 # Drives _includes/header.html. Mix and match freely.
 header:
-  layout: full            # island | full   (island = floating centered pill)
+  layout: island          # island | full   (island = floating rounded pill)
   sticky: true              # stick to top on scroll
   blur: true                # frosted-glass backdrop
   brand: both               # both | logo | title
   show_icons: true          # Phosphor icons inside nav links
-  dropdowns: true           # render item.children as a dropdown
-  megamenu: true            # items with `megamenu: true` open a wide panel
+  dropdowns: true           # render item.children as a dropdown (supports nested children)
+  megamenu: true            # items with `megamenu: true` + `groups:` open a large panel
+  progress: true            # thin page/reading-progress bar along the navbar edge
   search: true              # search button (opens command palette, key: /)
   dark_toggle: true         # light/dark switch
+  # Action order in the bar (left→right): search · theme · github star
   github:
     enabled: true
     repo: imswarnil/imswarnil.github.io   # owner/repo — live star count
@@ -116,39 +119,64 @@ layout:
 # - "sub" shows as subtitle in mobile cards
 # - "children" renders as submenu (desktop + mobile)
 # -------------------------------------------------
+# Three menu shapes are demonstrated below:
+#   • Work    → a simple one-level dropdown (item.children, flat)
+#   • Library → a large grouped megamenu (megamenu: true + groups: + featured:)
+#   • About   → a two-level nested dropdown (a child that has its own children)
 navigation_header:
   - title: Home
     url: /
     icon: house
-  - title: Explore
-    url: /explore/
-    icon: squares-four
   - title: Blog
     url: /blog/
     icon: pen-nib
-  - title: Projects
+  # ── one-level dropdown ──
+  - title: Work
     url: /projects/
     icon: rocket-launch
-  - title: Portfolio
-    url: /portfolio/
-    icon: images
-  - title: Videos
-    url: /videos/
-    icon: video
+    children:
+      - title: Projects
+        url: /projects/
+        icon: rocket-launch
+      - title: Portfolio
+        url: /portfolio/
+        icon: images
+      - title: Videos
+        url: /videos/
+        icon: video
+  # ── large grouped megamenu ──
   - title: Library
     url: /snippets/
     icon: stack
     megamenu: true
-    blurb: "Reusable code and AI prompts you can copy and run."
-    children:
-      - title: Snippets
-        url: /snippets/
-        icon: code
-        sub: Copy-paste code
-      - title: Prompts
-        url: /prompts/
-        icon: sparkle
-        sub: AI prompts
+    blurb: "Reusable code and AI prompts — copy, paste, and run."
+    groups:
+      - title: Code
+        items:
+          - title: Snippets
+            url: /snippets/
+            icon: code
+            sub: Copy-paste code
+          - title: SAQL windowing
+            url: /snippets/saql-windowing/
+            icon: function
+            sub: Analytics recipe
+      - title: AI
+        items:
+          - title: Prompts
+            url: /prompts/
+            icon: sparkle
+            sub: Battle-tested prompts
+          - title: PR review prompt
+            url: /prompts/pr-review-prompt/
+            icon: git-pull-request
+            sub: Ship better reviews
+    featured:
+      title: Explore everything
+      text: Every collection in one big bento grid.
+      url: /explore/
+      icon: squares-four
+  # ── two-level nested dropdown ──
   - title: About
     url: /about/
     icon: user
@@ -156,23 +184,21 @@ navigation_header:
       - title: About me
         url: /about/
         icon: user
-        sub: Who I am
       - title: Resume
         url: /resume/
         icon: identification-card
-        sub: Experience & skills
-      - title: Now
-        url: /now/
-        icon: clock
-        sub: What I'm focused on
-      - title: Timeline
-        url: /timeline/
-        icon: clock-counter-clockwise
-        sub: Milestones, newest first
-      - title: Contact
-        url: /contact/
-        icon: chat-circle
-        sub: Get in touch
+      - title: More
+        icon: dots-three-outline
+        children:
+          - title: Now
+            url: /now/
+            icon: clock
+          - title: Timeline
+            url: /timeline/
+            icon: clock-counter-clockwise
+          - title: Contact
+            url: /contact/
+            icon: chat-circle
 
 # Kept short on purpose — the footer caps this list (site.footer.nav_limit)
 # so the "Site" column doesn't grow tall with every collection/page. The
@@ -222,6 +248,7 @@ fonts:
     - https://fonts.gstatic.com
   font_urls:
     - https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap
+    - https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap
 
 # Resume content (global)
 resume:
@@ -553,8 +580,11 @@ exclude:
   - CONTRIBUTING.md
   - screenshot.png
   - LICENSE
-  - CNAME
   - Gemfile
   - Gemfile.lock
   - alembic-jekyll-theme.gemspec
   - .jekyll-cache
+  - bin
+  - vendor
+# NOTE: CNAME must NOT be excluded — Jekyll needs to copy it into _site so the
+# GitHub Pages (Actions) deploy keeps the custom domain (dev.imswarnil.com).

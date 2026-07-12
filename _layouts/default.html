@@ -20,69 +20,7 @@
   {% if site.service_worker != false %}{% include site-sw.html %}{% endif %}
   {% include site-before-end.html %}
 
-  <script>
-    // Mobile nav + theme toggle (no dependencies)
-    (function () {
-      var navBtn = document.querySelector('[data-im-nav-toggle]');
-      var navbar = document.querySelector('.im-navbar');
-      if (navBtn && navbar) {
-        navBtn.addEventListener('click', function () {
-          var open = navbar.classList.toggle('is-nav-open');
-          navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-      }
-      var themeBtn = document.querySelector('[data-im-theme-toggle]');
-      if (themeBtn) {
-        themeBtn.addEventListener('click', function () {
-          var el = document.documentElement;
-          var cur = el.getAttribute('data-color-scheme');
-          var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = cur === 'dark' || (cur === 'system' && sysDark);
-          var next = isDark ? 'light' : 'dark';
-          el.setAttribute('data-color-scheme', next);
-          try { localStorage.setItem('im-color-scheme', next); } catch (e) {}
-        });
-      }
-      // Scroll shadow + reading-progress bar
-      var scrollTicking = false;
-      var progressBar = document.querySelector('[data-im-readprogress]');
-      function onScroll() {
-        if (navbar) { navbar.classList.toggle('is-scrolled', window.scrollY > 8); }
-        if (progressBar) {
-          var doc = document.documentElement;
-          var max = doc.scrollHeight - doc.clientHeight;
-          var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
-          progressBar.style.width = Math.min(100, Math.max(0, pct)) + '%';
-        }
-        scrollTicking = false;
-      }
-      onScroll();
-      window.addEventListener('scroll', function () {
-        if (!scrollTicking) { window.requestAnimationFrame(onScroll); scrollTicking = true; }
-      }, { passive: true });
-
-      // Live GitHub star count
-      var gh = document.querySelector('[data-im-ghstars]');
-      if (gh) {
-        var repo = gh.getAttribute('data-im-ghstars');
-        var countEl = gh.querySelector('.im-ghstar-count');
-        var cached = null;
-        try { cached = JSON.parse(localStorage.getItem('im-ghstars-' + repo) || 'null'); } catch (e) {}
-        function show(n) { if (countEl) { countEl.textContent = n >= 1000 ? (n / 1000).toFixed(1) + 'k' : n; countEl.hidden = false; } }
-        if (cached && (Date.now() - cached.t) < 86400000) { show(cached.n); }
-        else {
-          fetch('https://api.github.com/repos/' + repo)
-            .then(function (r) { return r.json(); })
-            .then(function (d) {
-              if (typeof d.stargazers_count === 'number') {
-                show(d.stargazers_count);
-                try { localStorage.setItem('im-ghstars-' + repo, JSON.stringify({ n: d.stargazers_count, t: Date.now() })); } catch (e) {}
-              }
-            }).catch(function () {});
-        }
-      }
-    })();
-  </script>
+  <script src="{{ '/assets/scripts/navbar.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/scripts/custom.js' | relative_url }}"></script>
 </body>
 </html>

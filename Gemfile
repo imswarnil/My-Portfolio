@@ -24,8 +24,8 @@ gem "jekyll-sass-converter", "~> 3.0"
 gem "webrick", "~> 1.8"
 
 # Timezone data — bundled on Windows/JRuby where the OS lacks a tz database
-gem "tzinfo-data", platforms: [:mingw, :x64_mingw, :mswin, :jruby]
+gem "tzinfo-data", platforms: [:windows, :jruby]
 
 # Windows directory-watcher for `jekyll serve --watch`
-gem "wdm", "~> 0.1", platforms: [:mingw, :x64_mingw, :mswin]
+gem "wdm", "~> 0.1", platforms: [:windows]
 gem "ffi", "< 1.17.0"

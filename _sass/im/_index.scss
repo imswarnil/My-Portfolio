@@ -1,27 +1,36 @@
 // ======================================================================
 // im/_index.scss — IM CSS Framework entry point
 // ----------------------------------------------------------------------
-// The `im-*` framework: runtime --im-* tokens, structural layout, hero,
-// core components and utility classes. Import order matters — tokens
-// first (so every layer can read them), utilities last (so their
-// !important helpers win).
+// Files are organised into folders for readability:
+//   abstracts/   build-time SCSS only (maps, breakpoints, mixins)
+//   tokens/      runtime --im-* custom properties (light + dark)
+//   base/        reset, element typography, motion/background patterns
+//   layout/      containers, navbar, hero, content shell, footer
+//   components/  buttons, cards, collections, post, home, search, …
+//   utilities/   spacing / text / flex helpers
+//
+// This uses @import (one shared global scope), so ORDER still matters:
+// abstracts first (every layer reads its mixins), tokens next, utilities
+// last (their !important helpers win). The sequence below is unchanged
+// from the original flat layout — only the paths moved.
 // ======================================================================
 
-@import "config";       // SCSS maps, breakpoints, mixins (build-time only)
-@import "tokens";       // --im-* custom properties (light + dark)
-@import "base";         // reset + element typography
-@import "navbar";       // site header / navigation
-@import "layout";       // im-container / im-row / im-col / im-section
-@import "hero";         // im-hero
-@import "components";   // im-btn / im-card / im-badge / im-alert
-@import "content-components"; // unprefixed shortcode components (card, badge, callout…)
-@import "collection";   // collection list pages + per-type cards
-@import "post";         // single post / page article + toc
-@import "shell";        // content shell + sidebar + toc + ad rails/units
-@import "search";       // command palette + search page
-@import "home";         // homepage composition
-@import "footer";       // site footer
-@import "resume";       // /resume/ page
-@import "sitetree";     // /sitemap/ page
-@import "motion";       // background patterns, scroll-reveal, page-transitions, reduced-motion guard
-@import "utilities";    // spacing / text / flex helpers (must stay last)
+@import "abstracts/config";              // build-time maps / breakpoints / mixins
+@import "tokens/tokens";                  // canonical scales + :root light theme
+@import "tokens/dark-mode";               // [data-color-scheme] dark overrides
+@import "base/elements";                  // reset + element typography
+@import "layout/navbar";                  // site header / navigation
+@import "layout/containers";              // im-container / im-row / im-col / im-section
+@import "layout/hero";                    // im-hero
+@import "components/components";           // im-btn / im-card / im-badge / im-alert
+@import "components/content-components";   // unprefixed shortcode components (card, badge…)
+@import "components/collection";           // collection list pages + per-type cards
+@import "components/post";                 // single post / page article + toc
+@import "layout/shell";                    // content shell + sidebar + toc + ad rails/units
+@import "components/search";               // command palette + search page
+@import "components/home";                 // homepage composition
+@import "layout/footer";                   // site footer
+@import "components/resume";               // /resume/ page
+@import "components/sitetree";             // /sitemap/ page
+@import "base/motion";                     // background patterns, scroll-reveal, transitions
+@import "utilities/utilities";             // spacing / text / flex helpers (stays last)

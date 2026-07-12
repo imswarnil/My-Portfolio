@@ -1,0 +1,26 @@
+// ======================================================================
+// im/tokens/_dark-mode.scss — dark theme token overrides
+// ----------------------------------------------------------------------
+// Emitted after tokens/_tokens.scss. The `im-dark-tokens` mixin re-maps
+// the runtime --im-color-* / shadow tokens to the dark palette; it is
+// applied explicitly via [data-color-scheme="dark"] and to
+// [data-color-scheme="system"] under prefers-color-scheme: dark.
+// Sourced from the $theme-dark map in abstracts/_config.scss.
+// ======================================================================
+
+// ---- Dark theme overrides ---------------------------------------------
+@mixin im-dark-tokens {
+  @each $key, $val in $theme-dark {
+    --im-color-#{$key}: #{$val};
+  }
+  --im-color-accent-foreground: #{tone(black, dark)};
+  --im-shadow:    #{$shadow-dark};
+  --im-shadow-lg: 0 24px 60px -12px rgba(0,0,0,0.55), 0 8px 24px -10px rgba(0,0,0,0.5);
+  color-scheme: dark;
+}
+
+:root[data-color-scheme="dark"] { @include im-dark-tokens; }
+
+@media (prefers-color-scheme: dark) {
+  :root[data-color-scheme="system"] { @include im-dark-tokens; }
+}

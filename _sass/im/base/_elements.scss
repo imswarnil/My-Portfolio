@@ -9,12 +9,15 @@
   :root { scroll-behavior: smooth; }
 }
 
-html { height: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: hidden; }
+// NOTE: use `overflow-x: clip`, NOT `hidden`. `hidden` turns html/body into a
+// scroll container, which breaks `position: sticky` on the navbar. `clip`
+// prevents horizontal scrollbars the same way but keeps sticky working.
+html { height: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: clip; }
 
 body {
   margin: 0;
   min-height: 100%;
-  overflow-x: hidden;    // belt-and-braces: no embed (ads, iframes) can ever push a horizontal scrollbar
+  overflow-x: clip;      // clip (not hidden) so the sticky navbar keeps working
   font-family: var(--im-font-body);
   font-size: 16px;
   font-weight: var(--im-fw-regular);

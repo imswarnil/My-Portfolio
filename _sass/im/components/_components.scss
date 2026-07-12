@@ -32,10 +32,15 @@
   background: var(--im-color-accent);
   color: var(--im-color-accent-foreground);
 
-  // Keep the accent text colour on hover — the global `a:hover` rule in
-  // _base.scss otherwise swaps it to var(--im-color-accent), which is the
-  // same colour as this button's own background (e.g. black-on-black).
-  &:hover { color: var(--im-color-accent-foreground); transform: translateY(-2px); box-shadow: var(--im-shadow); }
+  // Keep readable on hover: darken the accent fill a touch and force the
+  // accent-foreground text (the global `a:hover` rule in _base.scss would
+  // otherwise swap the text to var(--im-color-accent) → same as the fill).
+  &:hover {
+    background: color-mix(in srgb, var(--im-color-accent) 88%, #000);
+    color: var(--im-color-accent-foreground);
+    transform: translateY(-2px);
+    box-shadow: var(--im-shadow);
+  }
   &:active { transform: translateY(0); }
   &:disabled,
   &[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -47,7 +52,10 @@
   background: transparent;
   border-color: var(--im-color-border);
   color: var(--im-color-contrast);
-  &:hover { background: var(--im-color-background-100); border-color: var(--im-color-contrast); }
+  // Force the text colour on hover so it never inherits the accent colour
+  // from the global `a:hover` rule (which caused low-contrast text).
+  &:hover,
+  &:hover:focus { background: var(--im-color-background-100); border-color: var(--im-color-contrast); color: var(--im-color-contrast); }
 }
 .im-btn-ghost {
   background: transparent;

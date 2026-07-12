@@ -4,15 +4,25 @@
 
 .im-hero {
   display: grid;
-  gap: var(--im-space-7);
+  gap: var(--im-space-6);
   align-items: center;
-  padding-block: var(--im-space-7);
+  // Uniform, compact hero height across pages.
+  padding-block: var(--im-space-6);
 
-  // Two-column split once there's room (text-led, image smaller on the right)
+  // Two-column split once there's room (text-led, square image on the right)
   @media (min-width: $bp-lg) {
-    grid-template-columns: 1.5fr 0.85fr;
-    padding-block: var(--im-space-8);
+    grid-template-columns: 1.5fr 0.8fr;
+    padding-block: var(--im-space-7);
   }
+}
+
+// Image-led variant: bigger picture on the left, left-aligned copy on the right.
+.im-hero--media-first {
+  @media (min-width: $bp-lg) {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: var(--im-space-8);
+  }
+  .im-hero-content { text-align: left; align-items: flex-start; }
 }
 .im-hero-center { text-align: center; justify-items: center; }
 .im-hero-stats { margin-bottom: var(--im-space-7); }
@@ -90,16 +100,20 @@
 .im-hero-center .im-hero-actions { justify-content: center; }
 
 .im-hero-media {
+  position: relative;
   margin: 0;
   max-width: 22rem;
   margin-inline: auto;
-  justify-self: end;
+  justify-self: center;
+  overflow: visible;   // let the annotations sit outside the picture
 
-  // Mobile: image leads (above the text), and reads as a square.
+  // Mobile: image leads (above the text).
   order: -1;
 
+  // Always a clean square with rounded corners (matches the island look).
   img,
   video {
+    display: block;
     width: 100%;
     aspect-ratio: 1 / 1;
     border-radius: var(--im-radius-6);
@@ -108,10 +122,103 @@
   }
 
   @include mq($bp-lg) {
-    // Desktop two-column layout: image sits on the right, in its own column.
     order: 0;
-
-    img,
-    video { aspect-ratio: 4 / 5; }
+    max-width: 28rem;         // bigger, leading image
+    justify-self: start;
   }
+}
+
+// Gentle float on the picture itself (entrance fade is on .im-hero-media).
+@media (prefers-reduced-motion: no-preference) {
+  .im-hero-img { animation: im-hero-img-float 5.5s var(--im-ease) infinite alternate; }
+}
+@keyframes im-hero-img-float {
+  from { transform: translateY(0) rotate(-0.6deg); }
+  to   { transform: translateY(-10px) rotate(0.6deg); }
+}
+
+// ---- Handwritten annotations -----------------------------------------
+// "that's me!" tag with a hand-drawn arrow pointing at the picture.
+.im-hero-tag {
+  position: absolute;
+  top: -2rem;
+  left: -1.25rem;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--im-color-accent);
+  transform: rotate(-7deg);
+  pointer-events: none;
+}
+.im-hero-tag-text {
+  font-family: "Caveat", ui-rounded, cursive;
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.im-hero-tag-arrow { width: 3rem; height: auto; margin: -0.15rem 0 0 1.6rem; }
+
+// Handwritten quote near the picture (leads the copy column).
+.im-hero-quote {
+  align-self: flex-start;
+  font-family: "Caveat", ui-rounded, cursive;
+  font-weight: 600;
+  font-size: 1.7rem;
+  line-height: 1.05;
+  color: var(--im-color-secondary);
+  transform: rotate(-1.5deg);
+}
+
+// Signature at the bottom of the picture.
+.im-hero-sign {
+  position: absolute;
+  right: 0.9rem;
+  bottom: -0.7rem;
+  z-index: 3;
+  font-family: "Caveat", ui-rounded, cursive;
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: var(--im-color-contrast);
+  transform: rotate(-6deg);
+  pointer-events: none;
+  text-shadow: 0 1px 0 var(--im-color-background), 0 0 6px var(--im-color-background);
+}
+
+// Lightbox for the hero video (opened by the "Watch" CTA)
+.im-videolb {
+  position: fixed;
+  inset: 0;
+  z-index: var(--im-z-modal, 100);
+  display: none;
+  place-items: center;
+  padding: var(--im-gutter);
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(4px);
+  &.is-open { display: grid; }
+}
+.im-videolb-frame {
+  position: relative;
+  width: min(60rem, 100%);
+  aspect-ratio: 16 / 9;
+  border-radius: var(--im-radius-5);
+  overflow: hidden;
+  box-shadow: var(--im-shadow-lg);
+  background: #000;
+  iframe { width: 100%; height: 100%; border: 0; }
+}
+.im-videolb-close {
+  position: absolute;
+  top: calc(-1 * var(--im-space-6));
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem; height: 2.5rem;
+  border: 0; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: #fff; cursor: pointer;
+  font-size: 1.2rem;
+  &:hover { background: rgba(255,255,255,0.3); }
 }

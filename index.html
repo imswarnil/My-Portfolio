@@ -7,9 +7,25 @@ hero_subtitle: "I build fast, cinematic and robust experiences — and write abo
 hero_image: /assets/Swarnil-Singhai.png
 ---
 
+{%- assign hero_video = page.hero_video | default: site.hero_video -%}
 <section class="im-home im-page">
-  <div class="im-hero">
+  <div class="im-hero im-hero--media-first">
+    {%- if page.hero_image -%}
+    <figure class="im-hero-media">
+      <span class="im-hero-tag">
+        <span class="im-hero-tag-text">that's me!</span>
+        <svg class="im-hero-tag-arrow" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+          <path d="M4 6c14 2 34 10 40 30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <path d="M44 36l3-12M44 36l-12-2" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <img class="im-hero-img" src="{{ page.hero_image | relative_url }}" alt="{{ site.author | default: site.title }}" width="900" height="900">
+      <span class="im-hero-sign">{{ site.author | split: ' ' | first }}</span>
+    </figure>
+    {%- endif -%}
+
     <div class="im-hero-content">
+      <span class="im-hero-quote">“Build fast. Keep it cinematic.”</span>
       <span class="im-hero-eyebrow"><i class="ph-bold ph-sparkle"></i> Software Engineer &amp; Filmmaker</span>
       <h1 class="im-hero-title">{{ page.hero_title }}</h1>
       <p class="im-hero-subtitle">{{ page.hero_subtitle }}</p>
@@ -22,16 +38,42 @@ hero_image: /assets/Swarnil-Singhai.png
 
       <div class="im-hero-actions">
         <a class="im-btn" href="{{ '/projects/' | relative_url }}"><i class="ph-bold ph-rocket-launch"></i> See projects</a>
+        {%- if hero_video and hero_video != "" -%}
+        <button class="im-btn im-btn-outline" data-im-video-open aria-label="Watch the intro video"><i class="ph-bold ph-play-circle"></i> Watch</button>
+        {%- else -%}
         <a class="im-btn im-btn-outline" href="{{ '/about/' | relative_url }}">About me</a>
+        {%- endif -%}
         <button class="im-btn im-btn-icon im-btn-outline" data-im-search-open aria-label="Search (press /)" title="Search (press /)"><i class="ph-bold ph-magnifying-glass"></i></button>
       </div>
 
       {% include footer-social.html %}
     </div>
-    {%- if page.hero_image -%}
-    <figure class="im-hero-media"><img src="{{ page.hero_image | relative_url }}" alt="{{ site.author | default: site.title }}" width="900" height="700"></figure>
-    {%- endif -%}
   </div>
+
+  {%- if hero_video and hero_video != "" -%}
+  <div class="im-videolb" data-im-video-lb aria-hidden="true">
+    <div class="im-videolb-frame">
+      <button class="im-videolb-close" data-im-video-close aria-label="Close video"><i class="ph-bold ph-x"></i></button>
+      <div data-im-video-slot data-video-id="{{ hero_video }}"></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var lb = document.querySelector('[data-im-video-lb]');
+      if (!lb) return;
+      var slot = lb.querySelector('[data-im-video-slot]');
+      var id = slot.getAttribute('data-video-id');
+      function open() {
+        slot.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1" title="Video" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+        lb.classList.add('is-open'); lb.setAttribute('aria-hidden', 'false');
+      }
+      function close() { lb.classList.remove('is-open'); lb.setAttribute('aria-hidden', 'true'); slot.innerHTML = ''; }
+      document.querySelectorAll('[data-im-video-open]').forEach(function (b) { b.addEventListener('click', open); });
+      lb.addEventListener('click', function (e) { if (e.target === lb || e.target.closest('[data-im-video-close]')) close(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
+  </script>
+  {%- endif -%}
 
   {%- if site.resume.stats.size > 0 -%}
   <div class="stats im-hero-stats im-reveal">
